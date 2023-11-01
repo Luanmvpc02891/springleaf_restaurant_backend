@@ -18,7 +18,7 @@ public class WebConfig {
 
     @Bean
     public FilterRegistrationBean corsFilter() {
-        System.out.println("bruh");
+        System.out.println("Wellcome to Backend!");
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
