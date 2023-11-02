@@ -1,5 +1,5 @@
-// package com.springleaf_restaurant_backend.security.token;
+package com.springleaf_restaurant_backend.security.token;
 
-// public enum TokenType {
-//   BEARER
-// }
+public enum TokenType {
+  BEARER
+}
