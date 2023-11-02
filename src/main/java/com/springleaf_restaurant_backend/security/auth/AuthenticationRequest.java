@@ -1,16 +1,16 @@
-// package com.springleaf_restaurant_backend.security.auth;
+package com.springleaf_restaurant_backend.security.auth;
 
-// import lombok.AllArgsConstructor;
-// import lombok.Builder;
-// import lombok.Data;
-// import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-// @Data
-// @Builder
-// @AllArgsConstructor
-// @NoArgsConstructor
-// public class AuthenticationRequest {
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuthenticationRequest {
 
-//   private String userName;
-//   String password;
-// }
+  private String userName;
+  String password;
+}
