@@ -51,15 +51,12 @@ public class AuthenticationController {
   }
 
   @PostMapping("/username")
-    public Optional<User> getUsername(@RequestBody String token) {
-        String username = jwtService.extractUsername(token);
-
-        if (username != null) {
-            Optional<User> user = userRepository.findByUsername(username);
-            return user;
-        } else {
-            return Optional.empty();
-        }
+    public ResponseEntity<AuthenticationResponse> getUsername(@RequestBody AutoAuthenticationRequest tokenData) {
+        String accessToken = tokenData.accessToken;
+        String refreshToken = tokenData.refreshToken;
+        System.out.println("Access:" + accessToken + " Refesh: " + refreshToken );
+        AuthenticationResponse response = service.authenticateAutoByToken(accessToken, refreshToken);
+        return ResponseEntity.ok(response);
     }
 
 }

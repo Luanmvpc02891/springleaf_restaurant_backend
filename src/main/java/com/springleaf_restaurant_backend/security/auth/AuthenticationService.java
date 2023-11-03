@@ -18,6 +18,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
@@ -39,6 +41,7 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final UserDetailsService userDetailsService;
 
   @Autowired
   RoleRepository roleRepository;
@@ -74,8 +77,6 @@ public class AuthenticationService {
     }
   }
 
-
-
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
@@ -99,6 +100,30 @@ public class AuthenticationService {
         .refreshToken(refreshToken)
         .user(user)
       .build();
+  }
+
+  public AuthenticationResponse authenticateAutoByToken(String jwtToken, String refreshToken) {
+    UserDetails userDetailsFromToken = userDetailsService.loadUserByUsername(jwtService.extractUsername(jwtToken));
+    if(jwtService.isTokenValid(jwtToken, userDetailsFromToken)){
+      var user = userRepository.findByUsername(userDetailsFromToken.getUsername())
+        .orElseThrow();
+      if(user != null){
+        Integer roleId = user.getRoleId();
+        String roleName = roleRepository.findRoleSaByRoleId(roleId);
+        user.setRoleName(roleName);
+      }
+      return AuthenticationResponse.builder()
+        .accessToken(jwtToken)
+        .refreshToken(refreshToken)
+        .user(user)
+      .build();
+    }else {
+      return AuthenticationResponse.builder()
+        .accessToken(jwtToken)
+        .refreshToken(refreshToken)
+        .user(null)
+      .build();
+    }
   }
 
   private void saveUserToken(User user, String jwtToken) {
