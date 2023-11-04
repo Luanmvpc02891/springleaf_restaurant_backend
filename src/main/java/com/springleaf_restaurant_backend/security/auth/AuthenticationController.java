@@ -4,20 +4,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springleaf_restaurant_backend.security.config.JwtService;
-import com.springleaf_restaurant_backend.security.repositories.UserRepository;
-import com.springleaf_restaurant_backend.user.entities.User;
-
 import java.io.IOException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -25,8 +19,6 @@ import java.util.Optional;
 public class AuthenticationController {
   
   private final AuthenticationService service;
-  private final JwtService jwtService;
-  private final UserRepository userRepository;
 
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
@@ -50,13 +42,10 @@ public class AuthenticationController {
     service.refreshToken(request, response);
   }
 
-  @PostMapping("/username")
-    public ResponseEntity<AuthenticationResponse> getUsername(@RequestBody AutoAuthenticationRequest tokenData) {
-        String accessToken = tokenData.accessToken;
-        String refreshToken = tokenData.refreshToken;
-        System.out.println("Access:" + accessToken + " Refesh: " + refreshToken );
-        AuthenticationResponse response = service.authenticateAutoByToken(accessToken, refreshToken);
-        return ResponseEntity.ok(response);
+  @PostMapping("/auto-login")
+    public ResponseEntity<AuthenticationResponse> getUsername(@RequestHeader("Authorization") String authorizationHeader) 
+    throws Exception {
+        return ResponseEntity.ok(service.authenticateAutoByToken(authorizationHeader));
     }
 
 }

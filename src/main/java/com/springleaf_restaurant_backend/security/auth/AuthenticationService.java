@@ -9,6 +9,7 @@ import com.springleaf_restaurant_backend.security.token.Token;
 import com.springleaf_restaurant_backend.security.token.TokenType;
 import com.springleaf_restaurant_backend.user.entities.User;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -102,29 +103,41 @@ public class AuthenticationService {
       .build();
   }
 
-  public AuthenticationResponse authenticateAutoByToken(String jwtToken, String refreshToken) {
-    UserDetails userDetailsFromToken = userDetailsService.loadUserByUsername(jwtService.extractUsername(jwtToken));
-    if(jwtService.isTokenValid(jwtToken, userDetailsFromToken)){
-      var user = userRepository.findByUsername(userDetailsFromToken.getUsername())
-        .orElseThrow();
-      if(user != null){
-        Integer roleId = user.getRoleId();
-        String roleName = roleRepository.findRoleSaByRoleId(roleId);
-        user.setRoleName(roleName);
-      }
-      return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
-        .refreshToken(refreshToken)
-        .user(user)
-      .build();
-    }else {
-      return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
-        .refreshToken(refreshToken)
-        .user(null)
-      .build();
+  public AuthenticationResponse authenticateAutoByToken(String authorizationHeader) {
+    if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        String accessToken = authorizationHeader.substring(7);
+        try {
+            if (jwtService.isTokenExpired(accessToken)) {
+                return AuthenticationResponse.builder()
+                    .error("Session has expired")
+                    .build();
+            } else {
+                var user = userRepository.findByUsername(this.jwtService.extractUsername(accessToken))
+                    .orElseThrow();
+                if (user != null) {
+                    Integer roleId = user.getRoleId();
+                    String roleName = roleRepository.findRoleSaByRoleId(roleId);
+                    user.setRoleName(roleName);
+                }
+                return AuthenticationResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(accessToken)
+                    .user(user)
+                    .build();
+            }
+        } catch (ExpiredJwtException e) {
+            // Xử lý ngoại lệ hoặc trả về thông báo lỗi tùy ý
+            return AuthenticationResponse.builder()
+                .error("Session has expired")
+                .build();
+        }
+    } else {
+        return AuthenticationResponse.builder()
+            .error("Token was wrong")
+            .build();
     }
-  }
+}
+
 
   private void saveUserToken(User user, String jwtToken) {
     var token = Token.builder()
