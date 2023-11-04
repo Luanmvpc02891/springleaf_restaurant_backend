@@ -53,7 +53,7 @@ public class SecurityConfiguration {
         .permitAll()
 
 
-        //.requestMatchers("/api/products").hasAnyRole("ADMIN", "MANAGER")
+        .requestMatchers("/admin/**").hasAnyAuthority( "ADMIN","MANAGE")
         
         .anyRequest()
           .authenticated()

@@ -17,7 +17,8 @@ public class AdminCheckRestController {
     MenuItemRepository menuItemRepository;
 
     @GetMapping("/products")
-    public List<MenuItem> getCategories() {
-        return menuItemRepository.findAll();
+    public String getCategories() {
+        String reponse = "OK";
+        return reponse;
     }
 }
