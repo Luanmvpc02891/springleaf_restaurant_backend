@@ -4,6 +4,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Data
@@ -29,8 +31,10 @@ public class MenuItem {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @Column(name = "category_id")
-    private Long categoryId;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category categoryId;
 
     @Column(name = "status")
     private Boolean status;

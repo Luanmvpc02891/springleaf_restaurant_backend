@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springleaf_restaurant_backend.user.entities.Category;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrderDetail;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
@@ -44,7 +45,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/category/{id}/products")
-    public List<MenuItem> getProductByCategoryId(@PathVariable("id") Long categoryId) {
+    public List<MenuItem> getProductByCategoryId(@PathVariable("id") Category categoryId) {
         List<MenuItem> menuItems = menuItemRepository.findByCategoryId(categoryId);
         return menuItems;
     }
