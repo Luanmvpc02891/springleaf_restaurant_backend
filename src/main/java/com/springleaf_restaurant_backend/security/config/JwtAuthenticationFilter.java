@@ -46,7 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @NonNull FilterChain filterChain
   ) throws ServletException, IOException {
     // Bỏ qua url nếu là đường dẫn đăng nhập
-    if (request.getServletPath().contains("/api/v1/auth")) {
+    if (request.getServletPath().contains("/auth")) {
       filterChain.doFilter(request, response);
       return;
     }

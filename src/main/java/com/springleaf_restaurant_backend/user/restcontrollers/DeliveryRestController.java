@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.Delivery;
 import com.springleaf_restaurant_backend.user.repositories.DeliveryRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class DeliveryRestController {
     @Autowired
     private DeliveryRepository deliveryRepository;

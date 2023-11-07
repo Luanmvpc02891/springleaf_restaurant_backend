@@ -13,7 +13,7 @@ import com.springleaf_restaurant_backend.user.entities.TableStatus;
 import com.springleaf_restaurant_backend.user.repositories.TableStatusRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class TableStatusRestController {
     @Autowired
     private TableStatusRepository TableStatusRepository;

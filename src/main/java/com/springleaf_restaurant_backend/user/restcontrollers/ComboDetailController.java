@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.ComboDetail;
 import com.springleaf_restaurant_backend.user.repositories.ComboDetailRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class ComboDetailController {
     @Autowired
     private ComboDetailRepository comboDetailRepository;

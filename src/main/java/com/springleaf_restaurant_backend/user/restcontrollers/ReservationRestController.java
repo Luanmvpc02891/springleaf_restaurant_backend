@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.Reservation;
 import com.springleaf_restaurant_backend.user.repositories.ReservationRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class ReservationRestController {
     @Autowired
     private ReservationRepository reservationRepository;

@@ -13,7 +13,7 @@ import com.springleaf_restaurant_backend.user.entities.TableType;
 import com.springleaf_restaurant_backend.user.repositories.TableTypeRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class TableTypeRestController {
 
   @Autowired

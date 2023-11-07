@@ -33,27 +33,24 @@ public class SecurityConfiguration {
   @Autowired
   RoleRepository roleRepository;
 
+  
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    List<Role> allRoles = roleRepository.findAll();
-    List<String> roleNames = allRoles.stream()
-            .map(Role::getRoleSa)
-            .collect(Collectors.toList());
     http
         .csrf()
         .disable()
         
         .authorizeHttpRequests()
-        .requestMatchers(
-          "/api/**",
-          "https://accounts.google.com/**",
-          "https://drive.google.com/**",
-          "https://springleafrestaurant.onrender.com/**"
-        )
-        .permitAll()
+          .requestMatchers(
+            "/api/public/**",
+            "https://accounts.google.com/**",
+            "https://drive.google.com/**",
+            "https://springleafrestaurant.onrender.com/**",
+            "/auth/**"
+          )
+            .permitAll()
 
-
-        .requestMatchers("/admin/**").hasAnyAuthority( "ADMIN","MANAGE")
+        .requestMatchers("/admin/**").hasAnyAuthority( "MANAGE")
         
         .anyRequest()
           .authenticated()

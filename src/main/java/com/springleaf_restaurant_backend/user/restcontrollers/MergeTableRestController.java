@@ -8,12 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springleaf_restaurant_backend.user.entities.MergeTable;
-import com.springleaf_restaurant_backend.user.entities.Rating;
 import com.springleaf_restaurant_backend.user.repositories.MergeTableRepository;
-import com.springleaf_restaurant_backend.user.repositories.RatingRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class MergeTableRestController {
     @Autowired
     private MergeTableRepository mergeTableRepository;

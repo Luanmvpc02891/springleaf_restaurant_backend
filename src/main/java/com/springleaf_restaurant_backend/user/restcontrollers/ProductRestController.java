@@ -23,7 +23,7 @@ import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderReposito
 import com.springleaf_restaurant_backend.user.repositories.MenuItemRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class ProductRestController {
 
     @Autowired

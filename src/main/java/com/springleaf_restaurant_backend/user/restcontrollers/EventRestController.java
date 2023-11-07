@@ -8,11 +8,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springleaf_restaurant_backend.user.entities.Event;
-import com.springleaf_restaurant_backend.user.entities.InventoryBranch;
 import com.springleaf_restaurant_backend.user.repositories.EventRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class EventRestController {
     @Autowired
     private EventRepository eventRepository;

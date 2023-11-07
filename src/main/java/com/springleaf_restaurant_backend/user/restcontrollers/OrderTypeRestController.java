@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.OrderType;
 import com.springleaf_restaurant_backend.user.repositories.OrderTypeRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class OrderTypeRestController {
     @Autowired
     OrderTypeRepository orderTypeRepository;

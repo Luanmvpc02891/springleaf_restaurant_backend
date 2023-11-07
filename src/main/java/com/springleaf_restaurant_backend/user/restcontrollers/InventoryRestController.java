@@ -17,7 +17,7 @@ import com.springleaf_restaurant_backend.user.entities.Inventory;
 import com.springleaf_restaurant_backend.user.repositories.InventoryRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class InventoryRestController {
     @Autowired
     private InventoryRepository inventoryRepository;

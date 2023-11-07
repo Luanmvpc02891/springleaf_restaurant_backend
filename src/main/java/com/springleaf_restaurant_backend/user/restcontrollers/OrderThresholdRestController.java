@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springleaf_restaurant_backend.user.entities.OrderThreshold;
-import com.springleaf_restaurant_backend.user.entities.OrderType;
 import com.springleaf_restaurant_backend.user.repositories.OrderThresholdRepository;
-import com.springleaf_restaurant_backend.user.repositories.OrderTypeRepository;
 
 @RestController
 @RequestMapping("/api")

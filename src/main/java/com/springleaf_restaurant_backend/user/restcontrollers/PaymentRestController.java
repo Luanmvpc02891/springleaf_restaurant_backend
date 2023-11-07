@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.Payment;
 import com.springleaf_restaurant_backend.user.repositories.PaymentRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class PaymentRestController {
     @Autowired
     PaymentRepository paymentRepository;

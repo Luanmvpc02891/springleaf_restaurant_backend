@@ -10,7 +10,7 @@ import com.springleaf_restaurant_backend.user.entities.Category;
 import com.springleaf_restaurant_backend.user.repositories.CategoryRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class CategoryRestController {
     @Autowired
     private CategoryRepository categoryRepository;

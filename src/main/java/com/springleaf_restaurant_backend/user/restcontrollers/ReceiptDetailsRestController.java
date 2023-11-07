@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.ReceiptDetails;
 import com.springleaf_restaurant_backend.user.repositories.ReceiptDetailsRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class ReceiptDetailsRestController {
     @Autowired
     private ReceiptDetailsRepository receiptDetailsRepository;

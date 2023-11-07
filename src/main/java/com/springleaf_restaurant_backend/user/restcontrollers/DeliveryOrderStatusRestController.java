@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.DeliveryOrderStatus;
 import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderStatusRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class DeliveryOrderStatusRestController {
     @Autowired
     DeliveryOrderStatusRepository deliveryOrderStatusRepository;

@@ -13,7 +13,7 @@ import com.springleaf_restaurant_backend.user.entities.Restaurant;
 import com.springleaf_restaurant_backend.user.repositories.RestaurantRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class RestaurantRestController {
     @Autowired
     private RestaurantRepository restaurantRepository;

@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.Rating;
 import com.springleaf_restaurant_backend.user.repositories.RatingRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class RatingRestController {
     @Autowired
     private RatingRepository ratingRepository;

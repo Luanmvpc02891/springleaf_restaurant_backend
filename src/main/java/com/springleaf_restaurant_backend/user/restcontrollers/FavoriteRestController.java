@@ -11,7 +11,7 @@ import com.springleaf_restaurant_backend.user.entities.Favorite;
 import com.springleaf_restaurant_backend.user.repositories.FavoriteRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class FavoriteRestController {
     @Autowired
     private FavoriteRepository favoriteRepository;

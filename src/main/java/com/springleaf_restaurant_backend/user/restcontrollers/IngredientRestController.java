@@ -17,7 +17,7 @@ import com.springleaf_restaurant_backend.user.entities.Ingredient;
 import com.springleaf_restaurant_backend.user.repositories.IngredientRepository;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/public")
 public class IngredientRestController {
     @Autowired
     private IngredientRepository ingredientRepository;
