@@ -3,21 +3,42 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Event;
-import com.springleaf_restaurant_backend.user.repositories.EventRepository;
+import com.springleaf_restaurant_backend.user.service.EventService;
 
 @RestController
-@RequestMapping("/api/public")
 public class EventRestController {
     @Autowired
-    private EventRepository eventRepository;
+    private EventService eventService;
 
-    @GetMapping("/events")
-    public List<Event> getInventoryBranchs() {
-        return eventRepository.findAll();
+    @GetMapping("/public/events")
+    public List<Event> getEvents() {
+        return eventService.getAllEvents();
+    }
+
+    @GetMapping("/public/event/{eventId}")
+    public Event getOneEvent(@PathVariable("eventId") Long eventId) {
+        return eventService.getEventById(eventId);
+    }
+
+    @PostMapping("/public/create/event")
+    public Event createEvent(@RequestBody Event event){
+        return eventService.saveEvent(event);
+    }
+
+    @PutMapping("/public/update/event")
+    public Event updateEvent(@RequestBody Event event){
+        if(eventService.getEventById(event.getEventId()) != null){
+            return eventService.saveEvent(event);
+        }else{
+            return null;
+        }
+    }
+
+    @DeleteMapping("/public/delete/event/{eventId}")
+    public void delelteEvent(@PathVariable("eventId") Long eventId){
+        eventService.deleteEvent(eventId);
     }
 }

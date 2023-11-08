@@ -1,55 +1,44 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Inventory;
-import com.springleaf_restaurant_backend.user.repositories.InventoryRepository;
+import com.springleaf_restaurant_backend.user.service.InventoryService;
 
 @RestController
-@RequestMapping("/api/public")
 public class InventoryRestController {
     @Autowired
-    private InventoryRepository inventoryRepository;
+    private InventoryService inventoryService;
 
-    @GetMapping("/inventories")
+    @GetMapping("/public/inventories")
     public List<Inventory> getInventoryInfo() {
-        // return inventoryRepository.getInventoryInfo();
-        return inventoryRepository.findAll();
+        return inventoryService.getAllInventories();
     }
 
-    @PostMapping("/inventory")
+    @GetMapping("/public/inventory/{inventoryId}")
+    public Inventory getOneInventoryInfo(@PathVariable("invetoryId") Long invetoryId) {
+        return inventoryService.getInventoryById(invetoryId);
+    }
+
+    @PostMapping("/public/create/inventory")
     public Inventory createInventory(@RequestBody Inventory inventory) {
-        return inventoryRepository.save(inventory);
+        return inventoryService.saveInventory(inventory);
     }
 
-    @PutMapping("/inventory/{inventoryId}")
-    public Inventory updateInventory(@PathVariable("inventoryId") Long inventoryId,
-            @RequestBody Inventory updatedInventory) {
-        Optional<Inventory> database = inventoryRepository.findById(inventoryId);
-        if (database.isPresent()) {
-            Inventory existing = database.get();
-            existing.setInventoryId(updatedInventory.getInventoryId());
-            existing.setIngredientId(updatedInventory.getIngredientId());
-            existing.setSupplierId(updatedInventory.getSupplierId());
-            return inventoryRepository.save(existing);
+    @PutMapping("/public/update/inventory")
+    public Inventory updateInventory(@RequestBody Inventory updatedInventory) {
+        if (inventoryService.getInventoryById(updatedInventory.getInventoryId()) != null) {
+            return inventoryService.saveInventory(updatedInventory);
         } else {
             return null;
         }
     }
 
-    @DeleteMapping("/inventory/{invetoryId}")
+    @DeleteMapping("/public/delete/inventory/{invetoryId}")
     public void deleteInventory(@PathVariable("invetoryId") Long invetoryId) {
-        inventoryRepository.deleteById(invetoryId);
+        inventoryService.deleteInventory(invetoryId);
     }
 }

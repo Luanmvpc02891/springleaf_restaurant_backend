@@ -42,7 +42,7 @@ public class SecurityConfiguration {
         
         .authorizeHttpRequests()
           .requestMatchers(
-            "/api/public/**",
+            "/public/**",
             "https://accounts.google.com/**",
             "https://drive.google.com/**",
             "https://springleafrestaurant.onrender.com/**",

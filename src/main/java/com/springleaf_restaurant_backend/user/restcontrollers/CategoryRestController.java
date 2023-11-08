@@ -1,53 +1,44 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Category;
-import com.springleaf_restaurant_backend.user.repositories.CategoryRepository;
+import com.springleaf_restaurant_backend.user.service.CategoryService;
 
 @RestController
-@RequestMapping("/api/public")
 public class CategoryRestController {
     @Autowired
-    private CategoryRepository categoryRepository;
+    private CategoryService categoryService;
 
-    @GetMapping("/categories")
+    @GetMapping("/public/categories")
     public List<Category> getCategories() {
-        return categoryRepository.findAll();
+        return categoryService.getAllCategories();
     }
 
-    @GetMapping("/category/{categoryId}")
-    public Optional<Category> getCategoryById(@PathVariable("categoryId") Long categoryId) {
-        return categoryRepository.findById(categoryId);
+    @GetMapping("/public/category/{categoryId}")
+    public Category getCategoryById(@PathVariable("categoryId") Long categoryId) {
+        return categoryService.getCategoryById(categoryId);
     }
 
-    @PostMapping("/category")
-    public Category getCategoryById(@RequestBody Category category) {
-        return categoryRepository.save(category);
+    @PostMapping("/public/create/category")
+    public Category createCategory(@RequestBody Category category) {
+        return categoryService.saveCategory(category);
     }
 
-    @DeleteMapping("/category/{categoryId}")
-    public void deleteCategory(@PathVariable("categoryId") Long categoryId) {
-        categoryRepository.deleteById(categoryId);
-    }
-
-    @PutMapping("/category/{categoryId}")
-    public Category updateCategory(@PathVariable("categoryId") Long categoryId, @RequestBody Category updatedCategory) {
-        Optional<Category> databaseCategory = categoryRepository.findById(categoryId);
-        if (databaseCategory.isPresent()) {
-            Category existingCategory = databaseCategory.get();
-            existingCategory.setCategoryId(updatedCategory.getCategoryId());
-            existingCategory.setName(updatedCategory.getName());
-            existingCategory.setActive(updatedCategory.getActive());
-            existingCategory.setDescription(updatedCategory.getDescription());
-            return categoryRepository.save(existingCategory);
+    @PutMapping("/public/update/category")
+    public Category updateCategory(@RequestBody Category updatedCategory) {
+        if (categoryService.getCategoryById(updatedCategory.getCategoryId()) != null) {
+            return categoryService.saveCategory(updatedCategory);
         } else {
             return null;
         }
     }
 
+    @DeleteMapping("/public/delete/category/{categoryId}")
+    public void deleteCategory(@PathVariable("categoryId") Long categoryId) {
+        categoryService.deleteCategory(categoryId);
+    }
 }

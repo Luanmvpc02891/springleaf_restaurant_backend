@@ -3,21 +3,42 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Receipt;
-import com.springleaf_restaurant_backend.user.repositories.ReceiptRepository;
+import com.springleaf_restaurant_backend.user.service.ReceiptService;
 
 @RestController
-@RequestMapping("/api/public")
 public class ReceiptRestController {
     @Autowired
-    private ReceiptRepository receiptRepository;
+    private ReceiptService receiptService;
 
-    @GetMapping("/receipts")
+    @GetMapping("/public/receipts")
     public List<Receipt> receipts() {
-        return receiptRepository.findAll();
+        return receiptService.getAllReceipts();
+    }
+
+    @GetMapping("/public/receipt/{receiptId}")
+    public Receipt receipt(@PathVariable("receiptId") Long receiptId) {
+        return receiptService.getReceiptById(receiptId);
+    }
+
+    @PostMapping("/public/create/receipt")
+    public Receipt createReceipt(@RequestBody Receipt receipt){
+        return receiptService.saveReceipt(receipt);
+    }
+
+    @PutMapping("/public/update/receipt")
+    public Receipt updateReceipt(@RequestBody Receipt receipt){
+        if(receiptService.getReceiptById(receipt.getReceiptId()) != null){
+            return receiptService.saveReceipt(receipt);
+        }else{
+            return null;
+        }
+    }
+
+    @DeleteMapping("/public/delete/receipt/{receiptId}")
+    public void deleteReceipt(@PathVariable("receiptId") Long receiptId) {
+        receiptService.deleteReceipt(receiptId);
     }
 }

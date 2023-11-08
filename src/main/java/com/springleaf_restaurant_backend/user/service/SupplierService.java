@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Supplier;
 
-import com.springleaf_restaurant_backend.user.repositories.SupplierRepository;
+import java.util.List;
 
-@Service
-public class SupplierService {
-    @Autowired
-    SupplierRepository supplierRepository;
+public interface SupplierService {
+    List<Supplier> getAllSuppliers();
+    Supplier getSupplierById(Long id);
+    Supplier saveSupplier(Supplier supplier);
+    Supplier updateSupplier(Supplier supplier);
+    void deleteSupplier(Long id);
 }

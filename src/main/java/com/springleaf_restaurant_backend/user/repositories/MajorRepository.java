@@ -1,4 +1,4 @@
-package com.springleaf_restaurant_backend.user.restcontrollers;
+package com.springleaf_restaurant_backend.user.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

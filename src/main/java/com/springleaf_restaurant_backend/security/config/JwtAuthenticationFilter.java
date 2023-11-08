@@ -26,7 +26,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
-import com.springleaf_restaurant_backend.user.entities.Role;
 import com.springleaf_restaurant_backend.user.entities.User;
 
 @Component

@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Receipt;
 
-import com.springleaf_restaurant_backend.user.repositories.ReceiptRepository;
+import java.util.List;
 
-@Service
-public class ReceiptService {
-    @Autowired
-    ReceiptRepository receiptRepository;
+public interface ReceiptService {
+    List<Receipt> getAllReceipts();
+    Receipt getReceiptById(Long id);
+    Receipt saveReceipt(Receipt receipt);
+    Receipt updateReceipt(Receipt receipt);
+    void deleteReceipt(Long id);
 }

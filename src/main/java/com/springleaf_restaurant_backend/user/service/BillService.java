@@ -1,13 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-import com.springleaf_restaurant_backend.user.repositories.BillRepository;
+import com.springleaf_restaurant_backend.user.entities.Bill;
 
-@Service
-public class BillService {
-    
-    @Autowired
-    BillRepository billRepository;
+public interface BillService {
+    Bill getBillById(Long id);
+    List<Bill> getAllBills();
+    void saveBill(Bill bill);
+    void updateBill(Bill bill);
+    void deleteBill(Long id);
 }

@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 
-import com.springleaf_restaurant_backend.user.repositories.OrderDetailRepository;
+import java.util.List;
 
-@Service
-public class OrderDetailService {
-    @Autowired
-    OrderDetailRepository orderDetailRepository;
+public interface OrderDetailService {
+    List<OrderDetail> getAllOrderDetails();
+    OrderDetail getOrderDetailById(Long id);
+    OrderDetail saveOrderDetail(OrderDetail orderDetail);
+    OrderDetail updateOrderDetail(OrderDetail orderDetail);
+    void deleteOrderDetail(Long id);
 }

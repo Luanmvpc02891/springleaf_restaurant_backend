@@ -3,21 +3,18 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
-import com.springleaf_restaurant_backend.user.repositories.OrderDetailRepository;
+import com.springleaf_restaurant_backend.user.service.OrderDetailService;
 
 @RestController
-@RequestMapping("/api")
 public class CartDetailRestController {
     @Autowired
-    private OrderDetailRepository orderDetailRepository;
+    private OrderDetailService orderDetailService;
 
-    @GetMapping("/cartDetails")
+    @GetMapping("/api/cartDetails")
     public List<OrderDetail> getOrderDetails() {
-        return orderDetailRepository.findAll();
+        return orderDetailService.getAllOrderDetails();
     }
 }
