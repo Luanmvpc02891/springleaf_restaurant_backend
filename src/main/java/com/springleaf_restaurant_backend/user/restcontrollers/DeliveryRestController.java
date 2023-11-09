@@ -3,21 +3,42 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Delivery;
-import com.springleaf_restaurant_backend.user.repositories.DeliveryRepository;
+import com.springleaf_restaurant_backend.user.service.DeliveryService;
 
 @RestController
-@RequestMapping("/api/public")
 public class DeliveryRestController {
     @Autowired
-    private DeliveryRepository deliveryRepository;
+    private DeliveryService deliveryService;
 
-    @GetMapping("/deliveries")
+    @GetMapping("/public/deliveries")
     public List<Delivery> getDeliveries() {
-        return deliveryRepository.findAll();
+        return deliveryService.getAllDeliveries();
+    }
+
+    @GetMapping("/public/delivery/{deliveryId}")
+    public Delivery getOneDelivery(@PathVariable("deliveryId") Long deliveryId){
+        return deliveryService.getDeliveryById(deliveryId);
+    }
+
+    @PostMapping("/public/create/delivery")
+    public Delivery createDelivery(@RequestBody Delivery delivery){
+        return deliveryService.saveDelivery(delivery);
+    }
+
+    @PutMapping("/public/update/delivery")
+    public Delivery updateDelivery(@RequestBody Delivery delivery){
+        if(deliveryService.getDeliveryById(delivery.getDeliveryId()) != null){
+            return deliveryService.saveDelivery(delivery);
+        }else{
+            return null;
+        }
+    }
+
+    @DeleteMapping("/public/delete/delivery/{deliveryId}")
+    public void deleteDelivery(@PathVariable("deliveryId") Long deliveryId){
+        deliveryService.deleteDelivery(deliveryId);
     }
 }

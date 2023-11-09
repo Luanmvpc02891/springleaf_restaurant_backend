@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.InventoryBranch;
 
-import com.springleaf_restaurant_backend.user.repositories.InventoryBranchRepository;
+import java.util.List;
 
-@Service
-public class InventoryBranchService {
-    @Autowired
-    InventoryBranchRepository inventoryBrandRepository;
+public interface InventoryBranchService {
+    InventoryBranch getInventoryBranchById(Long id);
+    List<InventoryBranch> getAllInventoryBranches();
+    InventoryBranch saveInventoryBranch(InventoryBranch inventoryBranch);
+    InventoryBranch updateInventoryBranch(InventoryBranch inventoryBranch);
+    void deleteInventoryBranch(Long id);
 }

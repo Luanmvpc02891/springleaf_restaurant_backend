@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Restaurant;
 
-import com.springleaf_restaurant_backend.user.repositories.RestaurantRepository;
+import java.util.List;
 
-@Service
-public class RestaurantService {
-    @Autowired
-    RestaurantRepository restaurantRepository;
+public interface RestaurantService {
+    List<Restaurant> getAllRestaurants();
+    Restaurant getRestaurantById(Long id);
+    Restaurant saveRestaurant(Restaurant restaurant);
+    Restaurant updateRestaurant(Restaurant restaurant);
+    void deleteRestaurant(Long id);
 }

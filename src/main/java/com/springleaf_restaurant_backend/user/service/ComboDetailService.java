@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.ComboDetail;
 
-import com.springleaf_restaurant_backend.user.repositories.ComboDetailRepository;
+import java.util.List;
 
-@Service
-public class ComboDetailService {
-    @Autowired
-    ComboDetailRepository comboDetailRepository;
+public interface ComboDetailService {
+    ComboDetail getComboDetailById(Long id);
+    List<ComboDetail> getAllComboDetails();
+    ComboDetail saveComboDetail(ComboDetail comboDetail);
+    void updateComboDetail(ComboDetail comboDetail);
+    void deleteComboDetail(Long id);
 }

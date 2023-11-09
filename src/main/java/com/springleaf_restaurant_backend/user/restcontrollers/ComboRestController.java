@@ -1,54 +1,44 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Combo;
-import com.springleaf_restaurant_backend.user.repositories.ComboRepository;
+import com.springleaf_restaurant_backend.user.service.ComboService;
 
 @RestController
-@RequestMapping("/api/public")
 public class ComboRestController {
     @Autowired
-    private ComboRepository comboRepository;
+    private ComboService comboService;
 
-    @GetMapping("/combos")
+    @GetMapping("/public/combos")
     public List<Combo> getCombos() {
-        return comboRepository.findAll();
+        return comboService.getAllCombos();
     }
 
-    @PostMapping("/combo")
+    @GetMapping("/public/combo/{comboId}")
+    public Combo getCombos(@PathVariable("comboId") Long comboId) {
+        return comboService.getComboById(comboId);
+    }
+
+    @PostMapping("/public/create/combo")
     public Combo createCombo(@RequestBody Combo combo) {
-        return comboRepository.save(combo);
+        return comboService.saveCombo(combo);
     }
 
-    @PutMapping("/combo/{comboId}")
-    public Combo updateCombo(@PathVariable("comboId") Long comboId,
-            @RequestBody Combo updated) {
-        Optional<Combo> database = comboRepository.findById(comboId);
-        if (database.isPresent()) {
-            Combo existing = database.get();
-            existing.setComboName(updated.getComboName());
-            existing.setComboUser(updated.getComboUser());
-            existing.setTotalAmount(updated.getTotalAmount());
-            return comboRepository.save(existing);
+    @PutMapping("/public/update/combo")
+    public Combo updateCombo(@RequestBody Combo updated) {
+        if (comboService.getComboById(updated.getComboId()) != null) {
+            return comboService.saveCombo(updated);
         } else {
             return null;
         }
     }
 
-    @DeleteMapping("/combo/{comboId}")
+    @DeleteMapping("/public/delete/combo/{comboId}")
     public void deleteCombo(@PathVariable("comboId") Long comboId) {
-        comboRepository.deleteById(comboId);
+        comboService.deleteCombo(comboId);
     }
 }

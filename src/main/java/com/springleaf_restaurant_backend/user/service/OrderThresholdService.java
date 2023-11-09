@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.OrderThreshold;
 
-import com.springleaf_restaurant_backend.user.repositories.OrderThresholdRepository;
+import java.util.List;
 
-@Service
-public class OrderThresholdService {
-    @Autowired
-    OrderThresholdRepository orderThresholdRepository;
+public interface OrderThresholdService {
+    List<OrderThreshold> getAllOrderThresholds();
+    OrderThreshold getOrderThresholdById(Long id);
+    OrderThreshold saveOrderThreshold(OrderThreshold orderThreshold);
+    OrderThreshold updateOrderThreshold(OrderThreshold orderThreshold);
+    void deleteOrderThreshold(Long id);
 }

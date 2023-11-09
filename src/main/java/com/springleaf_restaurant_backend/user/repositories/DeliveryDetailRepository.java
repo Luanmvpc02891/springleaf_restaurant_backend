@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.springleaf_restaurant_backend.user.entities.DeliveryDetail;
 
-public interface DeliveryDetailRepository extends
-        JpaRepository<DeliveryDetail, Long> {
+public interface DeliveryDetailRepository extends JpaRepository<DeliveryDetail, Long> {
 
 }

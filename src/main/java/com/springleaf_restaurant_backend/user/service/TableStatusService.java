@@ -1,12 +1,13 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.TableStatus;
 
-import com.springleaf_restaurant_backend.user.repositories.TableStatusRepository;
+import java.util.List;
 
-@Service
-public class TableStatusService {
-    @Autowired
-    TableStatusRepository tableStatusRepository;
+public interface TableStatusService {
+    List<TableStatus> getAllTableStatuses();
+    TableStatus getTableStatusById(Integer id);
+    TableStatus saveTableStatus(TableStatus tableStatus);
+    TableStatus updateTableStatus(TableStatus tableStatus);
+    void deleteTableStatus(Integer id);
 }
