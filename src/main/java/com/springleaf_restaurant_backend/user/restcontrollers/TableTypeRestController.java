@@ -14,12 +14,12 @@ public class TableTypeRestController {
   @Autowired
   private TableTypeService tableTypeService;
 
-  @GetMapping("/tableTypes")
+  @GetMapping("/public/tableTypes")
   public List<TableType> getTableTypes() {
     return tableTypeService.getAllTableTypes();
   }
 
-  @GetMapping("/tableType/{tableTypeId}")
+  @GetMapping("/public/tableType/{tableTypeId}")
   public TableType getTableTypeById(@PathVariable("tableTypeId") Integer tableTypeId) {
     return tableTypeService.getTableTypeById(tableTypeId);
   }

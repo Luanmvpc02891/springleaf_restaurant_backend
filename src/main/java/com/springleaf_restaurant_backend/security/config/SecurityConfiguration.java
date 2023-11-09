@@ -14,10 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
-import com.springleaf_restaurant_backend.user.entities.Role;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 

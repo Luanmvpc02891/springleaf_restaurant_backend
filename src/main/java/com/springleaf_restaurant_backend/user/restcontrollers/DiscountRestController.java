@@ -28,7 +28,7 @@ public class DiscountRestController {
         return discountService.saveDiscount(discount);
     }
 
-    @PostMapping("/public/create/discount")
+    @PostMapping("/public/update/discount")
     public Discount updateDiscount(@RequestBody Discount discount){
         if(discountService.getDiscountById(discount.getEventId()) != null){
             return discountService.saveDiscount(discount);
