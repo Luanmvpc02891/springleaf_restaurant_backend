@@ -17,13 +17,16 @@ public class OrderThreshold {
     @Column(name = "reorder_point")
     private Integer reorderPoint;
 
-    @Column(name = "ingredient_id")
-    private Long ingredient;
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id")
+    private Ingredient ingredient;
 
-    @Column(name = "inventory_branch_id")
-    private Long inventoryBranch;
+    @ManyToOne
+    @JoinColumn(name = "inventory_branch_id")
+    private InventoryBranch inventoryBranch;
 
-    @Column(name = "inventory_id")
-    private Long inventory;
+    @ManyToOne
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
 
 }

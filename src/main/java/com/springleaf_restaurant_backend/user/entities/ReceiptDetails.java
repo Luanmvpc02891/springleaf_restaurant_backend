@@ -14,8 +14,9 @@ public class ReceiptDetails {
     @Column(name = "receipt_detail_id")
     private Long receiptDetailId;
 
-    @Column(name = "ingredient_id")
-    private Long ingredient;
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id")
+    private Ingredient ingredient;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -23,7 +24,8 @@ public class ReceiptDetails {
     @Column(name = "unit_price")
     private Double unitPrice;
 
-    @Column(name = "receipt_id")
-    private Long receipt;
+    @ManyToOne
+    @JoinColumn(name = "receipt_id")
+    private Receipt receipt;
 
 }

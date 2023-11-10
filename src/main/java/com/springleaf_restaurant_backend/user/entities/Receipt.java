@@ -17,11 +17,13 @@ public class Receipt {
     @Column(name = "receipt_id")
     private Long receiptId;
 
-    @Column(name = "user_id")
-    private String userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User userId;
 
-    @Column(name = "supplier_id")
-    private Long supplier;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplier;
 
     @Column(name = "date")
     private Date date;
@@ -29,7 +31,8 @@ public class Receipt {
     @Column(name = "total_amount")
     private Double totalAmount;
 
-    @Column(name = "inventory_id")
-    private Long inventory;
+    @ManyToOne
+    @JoinColumn(name = "inventory_id")
+    private Inventory inventory;
 
 }

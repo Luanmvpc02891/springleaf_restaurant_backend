@@ -16,22 +16,25 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
-    @Column(name = "user_name")
-    private String userName;
-
     @Column(name = "order_date")
     private Date orderDate;
 
     @Column(name = "total_amount")
     private Double totalAmount;
 
-    @Column(name = "table_id")
-    private Long table;
+    @ManyToOne
+    @JoinColumn(name = "combo_id")
+    private Combo combo;
 
-    @Column(name = "order_type")
-    private Long orderType;
+    @OneToOne
+    @JoinColumn(name = "reservation_id")
+    private Reservation reservationId;
 
-    @Column(name = "combo_id")
-    private Long combo;
+    @OneToOne
+    @JoinColumn(name = "delivery_order_id")
+    private DeliveryOrder deliveryOrderId;
+
+    @Column(name = "status")
+    private boolean status;
 
 }

@@ -14,10 +14,12 @@ public class Inventory {
     @Column(name = "inventory_id")
     private Long inventoryId;
 
-    @Column(name = "ingredient_id")
-    private Long ingredientId;
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id")
+    private Ingredient ingredientId;
 
-    @Column(name = "supplier_id")
-    private Long supplierId;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplierId;
 
 }

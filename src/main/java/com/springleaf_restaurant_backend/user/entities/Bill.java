@@ -15,11 +15,13 @@ public class Bill {
     @Column(name = "bill_id")
     private Long billId;
 
-    @Column(name = "user_name")
-    private Long userName;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User userId;
 
-    @Column(name = "order_id")
-    private Long orderId;
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order orderId;
 
     @Column(name = "bill_time")
     private Date billTime;
@@ -27,8 +29,9 @@ public class Bill {
     @Column(name = "total_amount")
     private Long totalAmount;
 
-    @Column(name = "payment_method")
-    private Long paymentMethod;
+    @ManyToOne
+    @JoinColumn(name = "payment_method")
+    private Payment paymentMethod;
 
     @Column(name = "address")
     private Integer address;
@@ -36,5 +39,4 @@ public class Bill {
     @Column(name = "bank_number")
     private String bankNumber;
 
-    // Constructors, getters, and setters
 }

@@ -48,8 +48,8 @@ public class User implements UserDetails {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "manager_id")
-    private Long managerId;
+    // @Column(name = "manager_id")
+    // private Long managerId;
 
     @Column(name = "restaurant_brach_id")
     private Long restaurantBrachId;

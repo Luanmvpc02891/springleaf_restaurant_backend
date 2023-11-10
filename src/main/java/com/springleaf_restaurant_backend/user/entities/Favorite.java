@@ -16,11 +16,13 @@ public class Favorite {
     @Column(name = "favorite_id")
     private Long favoriteId;
 
-    @Column(name = "user_name")
-    private Long user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Column(name = "menu_item_id")
-    private Long menuItem;
+    @ManyToOne
+    @JoinColumn(name = "menu_item_id")
+    private MenuItem menuItem;
 
     @Column(name = "favorite_date")
     private Date favoriteDate;

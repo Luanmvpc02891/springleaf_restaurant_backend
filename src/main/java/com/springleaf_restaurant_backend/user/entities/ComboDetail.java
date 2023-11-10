@@ -14,11 +14,13 @@ public class ComboDetail {
     @Column(name = "combo_detail_id")
     private Long comboDetailId;
 
-    @Column(name = "combo_id")
-    private Long combo;
+    @ManyToOne
+    @JoinColumn(name = "combo_id")
+    private Combo comboId;
 
-    @Column(name = "menu_item_id")
-    private Long menuItem;
+    @ManyToOne
+    @JoinColumn(name = "menu_item_id")
+    private MenuItem menuItem;
 
     @Column(name = "quantity")
     private Long quantity;

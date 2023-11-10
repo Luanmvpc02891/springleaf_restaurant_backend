@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,13 +23,16 @@ public class InventoryBranch {
     @Column(name = "inventory_branch_id")
     private Long inventoryBranchId;
 
-    @Column(name = "ingredient_id")
-    private Long ingredientId;
+    @ManyToOne
+    @JoinColumn(name = "ingredient_id")
+    private Ingredient ingredientId;
 
-    @Column(name = "supplier_id")
-    private Long supplierId;
+    @ManyToOne
+    @JoinColumn(name = "supplier_id")
+    private Supplier supplierId;
 
-    @Column(name = "restaurant_id")
-    private Long restaurantId;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurantId;
 
 }

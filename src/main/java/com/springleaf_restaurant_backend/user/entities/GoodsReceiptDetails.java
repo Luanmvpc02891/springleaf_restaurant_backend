@@ -7,22 +7,22 @@ import jakarta.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "Menu_Item_Ingredients")
-public class MenuItemIngredient {
+@Table(name = "GoodsReceipt_Details")
+public class GoodsReceiptDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "menu_item_ingredient_id")
-    private Long menuItemIngredientId;
+    @Column(name = "goodsreceipt_detail_id")
+    private Long goodsReceiptDetailId;
 
     @ManyToOne
-    @JoinColumn(name = "menu_item_id")
-    private MenuItem menuItem;
+    @JoinColumn(name = "goods_receipt_id")
+    private GoodsReceipt goodsReceiptId;
 
     @ManyToOne
     @JoinColumn(name = "ingredient_id")
-    private Ingredient ingredient;
+    private Ingredient ingredientId;
 
     @Column(name = "quantity")
-    private Double quantity;
+    private Integer quantity;
 
 }

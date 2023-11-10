@@ -19,10 +19,7 @@ public class Combo {
 
     @Column(name = "combo_user")
     private Long comboUser;
-
-    // @Column(name = "combo_item")
-    // private Long comboItem;
-
+    
     @Column(name = "total_amount")
     private Double totalAmount;
 

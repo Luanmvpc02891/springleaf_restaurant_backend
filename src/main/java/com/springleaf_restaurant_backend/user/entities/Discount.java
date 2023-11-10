@@ -15,8 +15,9 @@ public class Discount {
     @Column(name = "discount_id")
     private Integer eventId;
 
-    @Column(name = "menu_item_id")
-    private Long menuItemId;
+    @ManyToOne
+    @JoinColumn(name = "menu_item_id")
+    private MenuItem menuItemId;
 
     @Column(name = "discount_type")
     private String discountType;

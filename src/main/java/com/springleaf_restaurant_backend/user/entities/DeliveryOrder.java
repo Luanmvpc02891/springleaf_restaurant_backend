@@ -16,8 +16,9 @@ public class DeliveryOrder {
     @Column(name = "delivery_order_id")
     private Long deliveryOrderId;
 
-    @Column(name = "user_id")
-    private Long user;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(name = "order_date")
     private Date orderDate;
@@ -28,10 +29,8 @@ public class DeliveryOrder {
     @Column(name = "total_amount")
     private Double totalAmount;
 
-    @Column(name = "order_id")
-    private Long order;
-
-    @Column(name = "status_id")
-    private Long status;
+    @ManyToOne
+    @JoinColumn(name = "delivery_order_type_id")
+    private DeliveryOrderType deliveryOrderTypeId;
 
 }

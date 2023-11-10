@@ -13,9 +13,8 @@ public class RoleFunction {
     @Column(name = "role_function_id")
     private Integer roleFunctionId;
 
-    @Column(name = "role_id")
-    private Integer role;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
 
-    @Column(name = "major_id")
-    private Integer majorId;
 }

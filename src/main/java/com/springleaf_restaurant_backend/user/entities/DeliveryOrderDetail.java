@@ -16,11 +16,13 @@ public class DeliveryOrderDetail {
     @Column(name = "delivery_oder_detail_id")
     private Long deliveryOrderDetailId;
 
-    @Column(name = "deliveryoder_id")
-    private Long deliveryOrder;
+    @ManyToOne
+    @JoinColumn(name = "deliveryoder_id")
+    private DeliveryOrder deliveryOrder;
 
-    @Column(name = "menu_item_id")
-    private Long menuItem;
+    @ManyToOne
+    @JoinColumn(name = "menu_item_id")
+    private MenuItem menuItem;
 
     @Column(name = "quantity")
     private Integer quantity;

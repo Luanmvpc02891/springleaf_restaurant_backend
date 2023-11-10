@@ -72,30 +72,30 @@ public class ProductRestController {
 
     @PostMapping("/product/addToCart")
     public ResponseEntity<String> addToCart(@RequestBody Long productId){
-        DeliveryOrder deliveryOrder = deliveryOrderRepository.findByUser(Long.valueOf(1));
-        if(deliveryOrder == null) {
-            deliveryOrder = new DeliveryOrder();
-            deliveryOrder.setUser(Long.valueOf(1));
-            deliveryOrder.setDeliveryAddress(125);
-            deliveryOrderRepository.save(deliveryOrder);
-        }
-        DeliveryOrderDetail deliveryOrderDetail = deliveryOrderDetailRepository.findByDeliveryOrder(deliveryOrder.getDeliveryOrderId());
-        if(deliveryOrderDetail == null){
-            deliveryOrderDetail = new DeliveryOrderDetail();
-            deliveryOrderDetail.setDeliveryOrder(deliveryOrder.getDeliveryOrderId());
-            deliveryOrderDetailRepository.save(deliveryOrderDetail);
-        }
-        if(deliveryOrderDetail.getMenuItem() == productId){
-            System.out.println("Đã có trong giỏ hàng");
-            return ResponseEntity.badRequest().body("Đã có trong giỏ hàng");
-        }else{
-            deliveryOrderDetail.setDeliveryOrder(deliveryOrder.getDeliveryOrderId());
-            deliveryOrderDetail.setMenuItem(productId);
-            deliveryOrderDetail.setOrderTime(new Date());
-            deliveryOrderDetail.setQuantity(1);
-            deliveryOrderDetailRepository.save(deliveryOrderDetail);
-            System.out.println("Thêm thành công");
-            return ResponseEntity.ok("Thêm thành công");
-        }
+    //     DeliveryOrder deliveryOrder = deliveryOrderRepository.findByUser(Long.valueOf(1));
+    //     if(deliveryOrder == null) {
+    //         deliveryOrder = new DeliveryOrder();
+    //         deliveryOrder.setUser(Long.valueOf(1));
+    //         deliveryOrder.setDeliveryAddress(125);
+    //         deliveryOrderRepository.save(deliveryOrder);
+    //     }
+    //     DeliveryOrderDetail deliveryOrderDetail = deliveryOrderDetailRepository.findByDeliveryOrder(deliveryOrder.getDeliveryOrderId());
+    //     if(deliveryOrderDetail == null){
+    //         deliveryOrderDetail = new DeliveryOrderDetail();
+    //         deliveryOrderDetail.setDeliveryOrder(deliveryOrder.getDeliveryOrderId());
+    //         deliveryOrderDetailRepository.save(deliveryOrderDetail);
+    //     }
+    //     if(deliveryOrderDetail.getMenuItem() == productId){
+    //         System.out.println("Đã có trong giỏ hàng");
+    //         return ResponseEntity.badRequest().body("Đã có trong giỏ hàng");
+    //     }else{
+    //         deliveryOrderDetail.setDeliveryOrder(deliveryOrder.getDeliveryOrderId());
+    //         deliveryOrderDetail.setMenuItem(productId);
+    //         deliveryOrderDetail.setOrderTime(new Date());
+    //         deliveryOrderDetail.setQuantity(1);
+    //         deliveryOrderDetailRepository.save(deliveryOrderDetail);
+    //         System.out.println("Thêm thành công");
+             return ResponseEntity.ok("Thêm thành công");
+    //     }
     }
 }

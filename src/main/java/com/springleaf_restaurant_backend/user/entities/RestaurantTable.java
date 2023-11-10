@@ -1,14 +1,7 @@
 package com.springleaf_restaurant_backend.user.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
@@ -24,13 +17,16 @@ public class RestaurantTable {
     @Column(name = "table_name")
     private String tableName;
 
-    @Column(name = "table_type_id")
-    private Integer tableTypeId;
+    @ManyToOne
+    @JoinColumn(name = "table_type_id")
+    private TableType tableTypeId;
 
-    @Column(name = "table_status_id")
-    private Integer tableStatusId;
+    @ManyToOne
+    @JoinColumn(name = "table_status_id")
+    private TableStatus tableStatusId;
 
-    @Column(name = "restaurant_id")
-    private Long restaurantId;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurantId;
 
 }
