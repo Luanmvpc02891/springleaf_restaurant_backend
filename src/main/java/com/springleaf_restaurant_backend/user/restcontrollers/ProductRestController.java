@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.springleaf_restaurant_backend.user.entities.Category;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrderDetail;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
@@ -35,7 +36,7 @@ public class ProductRestController {
     }
 
     @GetMapping("/public/category/{id}/products")
-    public List<MenuItem> getProductByCategoryId(@PathVariable("id") Long categoryId) {
+    public List<MenuItem> getProductByCategoryId(@PathVariable("id") Category categoryId) {
         List<MenuItem> menuItems = menuItemService.getMenuItemsByCategoryId(categoryId);
         return menuItems;
     }

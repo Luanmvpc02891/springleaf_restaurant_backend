@@ -2,6 +2,8 @@ package com.springleaf_restaurant_backend.user.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.springleaf_restaurant_backend.user.entities.Category;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
 import com.springleaf_restaurant_backend.user.repositories.MenuItemRepository;
 import com.springleaf_restaurant_backend.user.service.MenuItemService;
@@ -23,7 +25,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public List<MenuItem> getMenuItemsByCategoryId(Long categoryId) {
+    public List<MenuItem> getMenuItemsByCategoryId(Category categoryId) {
         return menuItemRepository.findByCategoryId(categoryId);
     }
 
