@@ -1,3 +1,4 @@
+package com.springleaf_restaurant_backend.security.entities;
 // package com.springleaf_restaurant_backend.user.entities;
 
 // public enum RoleEnum {

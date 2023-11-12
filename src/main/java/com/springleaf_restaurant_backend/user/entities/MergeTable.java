@@ -16,9 +16,8 @@ public class MergeTable {
     @Column(name = "id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "table_id")
-    private RestaurantTable table;
+    @Column(name = "table_id")
+    private Long table;
 
     @Column(name = "merge_table_id")
     private String mergeTableId;

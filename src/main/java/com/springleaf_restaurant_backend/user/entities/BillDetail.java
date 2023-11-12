@@ -15,15 +15,13 @@ public class BillDetail {
     @Column(name = "bill_detail_id")
     private Long billDetailId;
 
-    @ManyToOne
-    @JoinColumn(name = "menu_item_id")
-    private MenuItem menuItem;
+    @Column(name = "menu_item_id")
+    private Long menuItem;
 
     @Column(name = "quantity")
     private Long quantity;
 
-    @ManyToOne
-    @JoinColumn(name = "bill_id")
-    private Bill bill;
+    @Column(name = "bill_id")
+    private Long bill;
 
 }

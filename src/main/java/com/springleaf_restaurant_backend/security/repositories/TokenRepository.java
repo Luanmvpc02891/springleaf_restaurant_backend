@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.springleaf_restaurant_backend.security.token.Token;
+import com.springleaf_restaurant_backend.security.entities.token.Token;
 
 public interface TokenRepository extends JpaRepository<Token, Integer> {
 

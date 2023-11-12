@@ -27,9 +27,8 @@ public class MenuItem {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private Category categoryId;
+    @Column(name = "category_id")
+    private Long categoryId;
 
     @Column(name = "status")
     private Boolean status;

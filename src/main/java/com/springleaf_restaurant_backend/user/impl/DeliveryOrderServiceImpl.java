@@ -2,8 +2,9 @@ package com.springleaf_restaurant_backend.user.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
-import com.springleaf_restaurant_backend.user.entities.User;
 import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderRepository;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
 

@@ -22,17 +22,14 @@ public class Order {
     @Column(name = "total_amount")
     private Double totalAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "combo_id")
-    private Combo combo;
+    @Column(name = "combo_id")
+    private Long combo;
 
-    @OneToOne
-    @JoinColumn(name = "reservation_id")
-    private Reservation reservationId;
+    @Column(name = "reservation_id")
+    private Long reservationId;
 
-    @OneToOne
-    @JoinColumn(name = "delivery_order_id")
-    private DeliveryOrder deliveryOrderId;
+    @Column(name = "delivery_order_id")
+    private Long deliveryOrderId;
 
     @Column(name = "status")
     private boolean status;

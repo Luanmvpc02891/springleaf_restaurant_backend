@@ -3,7 +3,6 @@ package com.springleaf_restaurant_backend.user.entities;
 import lombok.*;
 import jakarta.persistence.*;
 import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,13 +14,11 @@ public class Bill {
     @Column(name = "bill_id")
     private Long billId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User userId;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @OneToOne
-    @JoinColumn(name = "order_id")
-    private Order orderId;
+    @Column(name = "order_id")
+    private Long orderId;
 
     @Column(name = "bill_time")
     private Date billTime;
@@ -29,9 +26,8 @@ public class Bill {
     @Column(name = "total_amount")
     private Long totalAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "payment_method")
-    private Payment paymentMethod;
+    @Column(name = "payment_method")
+    private Long paymentMethod;
 
     @Column(name = "address")
     private Integer address;

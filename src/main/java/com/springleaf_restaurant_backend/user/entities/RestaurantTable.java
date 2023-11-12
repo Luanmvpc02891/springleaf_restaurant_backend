@@ -17,16 +17,13 @@ public class RestaurantTable {
     @Column(name = "table_name")
     private String tableName;
 
-    @ManyToOne
-    @JoinColumn(name = "table_type_id")
-    private TableType tableTypeId;
+    @Column(name = "table_type_id")
+    private Integer tableTypeId;
 
-    @ManyToOne
-    @JoinColumn(name = "table_status_id")
-    private TableStatus tableStatusId;
+    @Column(name = "table_status_id")
+    private Integer tableStatusId;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id")
-    private Restaurant restaurantId;
+    @Column(name = "restaurant_id")
+    private Long restaurantId;
 
 }

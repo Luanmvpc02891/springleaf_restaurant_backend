@@ -4,7 +4,6 @@ import lombok.*;
 import jakarta.persistence.*;
 
 import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,9 +15,8 @@ public class DeliveryOrder {
     @Column(name = "delivery_order_id")
     private Long deliveryOrderId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(name = "user_id")
+    private Long user;
 
     @Column(name = "order_date")
     private Date orderDate;
@@ -29,8 +27,7 @@ public class DeliveryOrder {
     @Column(name = "total_amount")
     private Double totalAmount;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_order_type_id")
-    private DeliveryOrderType deliveryOrderTypeId;
+    @Column(name = "delivery_order_type_id")
+    private Integer deliveryOrderTypeId;
 
 }

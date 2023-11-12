@@ -1,6 +1,11 @@
-package com.springleaf_restaurant_backend.user.entities;
+package com.springleaf_restaurant_backend.security.entities;
 
 import lombok.*;
+
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Data
@@ -13,9 +18,6 @@ public class Role {
     @Column(name = "role_id")
     private Integer roleId;
 
-    @Column(name = "role_sa")
-    private String roleSa;
-
     @Column(name = "role_name")
     private String roleName;
 
@@ -25,4 +27,7 @@ public class Role {
     @Column(name = "description")
     private String description;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "role")
+    List<UserRole> userRoles;
 }

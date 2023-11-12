@@ -23,10 +23,10 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
-import com.springleaf_restaurant_backend.user.entities.User;
 
 @Component
 @RequiredArgsConstructor
@@ -60,11 +60,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     userName = jwtService.extractUsername(jwt);
     // Nếu những url public sẽ được bỏ qua phần secu
     if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      Optional<User> user = userRepository.findByUsername(userName);
-      List<GrantedAuthority> authoritiesList = new ArrayList<>();
-      if(user != null){
-          authoritiesList.add(new SimpleGrantedAuthority(roleRepository.findRoleSaByRoleId(user.get().getRoleId()))); 
-      }
+      //Optional<User> user = userRepository.findByUsername(userName);
+      //List<GrantedAuthority> authoritiesList = new ArrayList<>();
+      //if(user != null){
+          //authoritiesList.add(new SimpleGrantedAuthority(roleRepository.findRoleSaByRoleId(user.get().getRoleId()))); 
+      //}
       UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
       
       var isTokenValid = tokenRepository.findByToken(jwt)
@@ -74,10 +74,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails,
             null,
-            //userDetails.getAuthorities()
-            authoritiesList
+            userDetails.getAuthorities()
+            //authoritiesList
         );
-        System.out.println("Test" + authoritiesList);
+        System.out.println("Test" + userDetails.getAuthorities());
         authToken.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
         );

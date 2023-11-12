@@ -25,12 +25,10 @@ public class Event {
     @Column(name = "number_of_guest")
     private Integer numberOfGuests;
 
-    @ManyToOne
-    @JoinColumn(name = "combo_id")
-    private Combo combo;
+    @Column(name = "combo_id")
+    private Long combo;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
+    @Column(name = "order_id")
+    private Long order;
 
 }

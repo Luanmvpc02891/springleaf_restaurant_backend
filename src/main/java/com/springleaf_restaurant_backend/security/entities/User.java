@@ -1,4 +1,4 @@
-package com.springleaf_restaurant_backend.user.entities;
+package com.springleaf_restaurant_backend.security.entities;
 
 import lombok.*;
 
@@ -11,7 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.springleaf_restaurant_backend.security.token.Token;
+import com.springleaf_restaurant_backend.security.entities.token.Token;
 
 import jakarta.persistence.*;
 
@@ -48,30 +48,42 @@ public class User implements UserDetails {
     @Column(name = "image")
     private String image;
 
-    // @Column(name = "manager_id")
-    // private Long managerId;
-
     @Column(name = "restaurant_brach_id")
     private Long restaurantBrachId;
 
-    @Column(name = "role_id")
-    private Integer roleId;
+    // @Column(name = "role_id")
+    // private Integer roleId;
 
     @Transient
-    private String roleName;
+    private List<String> roleName;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<UserRole> userRoles;
+
+
+    // @Override
+    // public Collection<? extends GrantedAuthority> getAuthorities() {
+    //     // Sử dụng thông tin roleName để lấy danh sách quyền
+    //     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        
+    //     // Thêm quyền ROLE_<role_name> vào danh sách authorities
+    //     authorities.add(new SimpleGrantedAuthority("ROLE_" + roleName)); 
+    
+    //     return authorities;
+    // }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Sử dụng thông tin roleName để lấy danh sách quyền
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        
-        // Thêm quyền ROLE_<role_name> vào danh sách authorities
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + roleName)); 
-    
+        for (UserRole userRole : userRoles) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole)); 
+        }
         return authorities;
     }
 

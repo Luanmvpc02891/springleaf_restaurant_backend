@@ -1,7 +1,7 @@
 package com.springleaf_restaurant_backend.user.service;
 
+import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
-import com.springleaf_restaurant_backend.user.entities.User;
 
 import java.util.List;
 

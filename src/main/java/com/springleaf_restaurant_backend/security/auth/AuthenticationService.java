@@ -2,12 +2,12 @@ package com.springleaf_restaurant_backend.security.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springleaf_restaurant_backend.security.config.JwtService;
+import com.springleaf_restaurant_backend.security.entities.User;
+import com.springleaf_restaurant_backend.security.entities.token.Token;
+import com.springleaf_restaurant_backend.security.entities.token.TokenType;
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
-import com.springleaf_restaurant_backend.security.token.Token;
-import com.springleaf_restaurant_backend.security.token.TokenType;
-import com.springleaf_restaurant_backend.user.entities.User;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,12 +18,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -54,7 +57,7 @@ public class AuthenticationService {
         var user = User.builder()
             .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
-            .roleId(2)
+            //.roleId(2)
             .fullName(request.getFullName())
             .email(request.getEmail())
             .build();
@@ -81,9 +84,15 @@ public class AuthenticationService {
     var jwtToken = jwtService.generateToken(user);
     var refreshToken = jwtService.generateRefreshToken(user);
     if(user != null){
-      Integer roleId = user.getRoleId();
-      String roleName = roleRepository.findRoleSaByRoleId(roleId);
-      user.setRoleName(roleName);
+      //List<GrantedAuthority> authoritiesList = new ArrayList<>();
+      System.out.println(user.getUserId());
+      List<String> role_name = new ArrayList<>();
+      role_name = userRepository.findRoleNameByUserId(user.getUserId());
+      if (!role_name.isEmpty()) {
+        System.out.println(role_name.get(0) + "nè");
+    } else {
+        System.out.println("Không có role nào cho người dùng này.");
+    }
     }
     revokeAllUserTokens(user);
     saveUserToken(user, jwtToken);
@@ -105,11 +114,11 @@ public class AuthenticationService {
             } else {
                 var user = userRepository.findByUsername(this.jwtService.extractUsername(accessToken))
                     .orElseThrow();
-                if (user != null) {
-                    Integer roleId = user.getRoleId();
-                    String roleName = roleRepository.findRoleSaByRoleId(roleId);
-                    user.setRoleName(roleName);
-                }
+                // if (user != null) {
+                //     Integer roleId = user.getRoleId();
+                //     String roleName = roleRepository.findRoleSaByRoleId(roleId);
+                //     user.setRoleName(roleName);
+                // }
                 return AuthenticationResponse.builder()
                     .accessToken(accessToken)
                     .refreshToken(accessToken)

@@ -14,13 +14,11 @@ public class GoodsReceiptDetails {
     @Column(name = "goodsreceipt_detail_id")
     private Long goodsReceiptDetailId;
 
-    @ManyToOne
-    @JoinColumn(name = "goods_receipt_id")
-    private GoodsReceipt goodsReceiptId;
+    @Column(name = "goods_receipt_id")
+    private Long goodsReceiptId;
 
-    @ManyToOne
-    @JoinColumn(name = "ingredient_id")
-    private Ingredient ingredientId;
+    @Column(name = "ingredient_id")
+    private Long ingredientId;
 
     @Column(name = "quantity")
     private Integer quantity;
