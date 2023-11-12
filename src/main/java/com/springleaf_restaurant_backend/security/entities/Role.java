@@ -27,7 +27,7 @@ public class Role {
     @Column(name = "description")
     private String description;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "role")
-    List<UserRole> userRoles;
+    //@JsonIgnore
+    //@OneToMany(mappedBy = "role")
+    //List<UserRole> userRoles;
 }

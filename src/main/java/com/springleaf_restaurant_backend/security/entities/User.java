@@ -51,9 +51,6 @@ public class User implements UserDetails {
     @Column(name = "restaurant_brach_id")
     private Long restaurantBrachId;
 
-    // @Column(name = "role_id")
-    // private Integer roleId;
-
     @Transient
     private List<String> roleName;
 
@@ -61,28 +58,14 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "user")
-    private List<UserRole> userRoles;
-
-
-    // @Override
-    // public Collection<? extends GrantedAuthority> getAuthorities() {
-    //     // Sử dụng thông tin roleName để lấy danh sách quyền
-    //     List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        
-    //     // Thêm quyền ROLE_<role_name> vào danh sách authorities
-    //     authorities.add(new SimpleGrantedAuthority("ROLE_" + roleName)); 
-    
-    //     return authorities;
-    // }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // Sử dụng thông tin roleName để lấy danh sách quyền
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        for (UserRole userRole : userRoles) {
-            authorities.add(new SimpleGrantedAuthority("ROLE_" + userRole)); 
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if(roleName != null){
+            for (String roleName : roleName) {
+                authorities.add(new SimpleGrantedAuthority(roleName)); 
+            }
         }
         return authorities;
     }

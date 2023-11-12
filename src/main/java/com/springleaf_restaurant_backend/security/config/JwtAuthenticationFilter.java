@@ -36,7 +36,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
   private final UserDetailsService userDetailsService;
   private final TokenRepository tokenRepository;
   private final UserRepository userRepository;
-  private final RoleRepository roleRepository;
 
   @Override
   protected void doFilterInternal(
@@ -58,13 +57,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
     jwt = authHeader.substring(7);
     userName = jwtService.extractUsername(jwt);
+    System.out.println(authHeader);
     // Nếu những url public sẽ được bỏ qua phần secu
     if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-      //Optional<User> user = userRepository.findByUsername(userName);
-      //List<GrantedAuthority> authoritiesList = new ArrayList<>();
-      //if(user != null){
-          //authoritiesList.add(new SimpleGrantedAuthority(roleRepository.findRoleSaByRoleId(user.get().getRoleId()))); 
-      //}
+      Optional<User> user = userRepository.findByUsername(userName);
+      List<GrantedAuthority> authoritiesList = new ArrayList<>();
+      if(user != null){
+        List<String> roleNames = userRepository.findRoleNamesByUserId(user.get().getUserId());
+        user.get().setRoleName(roleNames);
+        System.out.println("Đây: " + user.get().getRoleName().get(0));
+        if(roleNames != null){
+            for (String roleName : roleNames) {
+              authoritiesList.add(new SimpleGrantedAuthority(roleName)); 
+            }
+        }
+      }
       UserDetails userDetails = this.userDetailsService.loadUserByUsername(userName);
       
       var isTokenValid = tokenRepository.findByToken(jwt)
@@ -74,10 +81,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails,
             null,
-            userDetails.getAuthorities()
-            //authoritiesList
+            //userDetails.getAuthorities()
+            authoritiesList
         );
-        System.out.println("Test" + userDetails.getAuthorities());
+        System.out.println("Test" + authToken.getAuthorities());
         authToken.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
         );

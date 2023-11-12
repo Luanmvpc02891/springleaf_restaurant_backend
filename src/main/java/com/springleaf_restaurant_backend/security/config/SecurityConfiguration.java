@@ -46,7 +46,7 @@ public class SecurityConfiguration {
           )
             .permitAll()
 
-        .requestMatchers("/admin/**").hasAnyAuthority( "MANAGE")
+        .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
         
         .anyRequest()
           .authenticated()

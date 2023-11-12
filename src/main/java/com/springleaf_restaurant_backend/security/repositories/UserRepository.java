@@ -15,10 +15,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     User findByEmail(String email);
 
     @Query("SELECT r.roleName FROM User u " +
-       "JOIN UserRole ur ON u.userId = ur.user.userId " +
-       "JOIN Role r ON ur.role.roleId = r.roleId " +
-       "WHERE u.userId = :userId")
-    List<String> findRoleNameByUserId(@Param("userId") Long userId);
+           "INNER JOIN UserRole ur ON ur.user = u.userId " +
+           "INNER JOIN Role r ON ur.role = r.roleId " +
+           "WHERE u.userId = :userId")
+    List<String> findRoleNamesByUserId(@Param("userId") Long userId);
 
 
 }
