@@ -17,11 +17,11 @@ public class Reservation {
     @Column(name = "reservation_id")
     private Long reservationId;
 
-    @Column(name = "table_id")
-    private Long table;
+    @Column(name = "restaurant_table_id")
+    private Long restaurantTableId;
 
     @Column(name = "user_id")
-    private Long user;
+    private Long userId;
 
     @Column(name = "reservation_date")
     private Date reservationDate;

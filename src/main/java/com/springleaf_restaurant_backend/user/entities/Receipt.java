@@ -21,7 +21,7 @@ public class Receipt {
     private Long userId;
 
     @Column(name = "supplier_id")
-    private Long supplier;
+    private Long supplierId;
 
     @Column(name = "date")
     private Date date;
@@ -30,5 +30,5 @@ public class Receipt {
     private Double totalAmount;
 
     @Column(name = "inventory_id")
-    private Long inventory;
+    private Long inventoryId;
 }

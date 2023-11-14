@@ -14,16 +14,16 @@ public class GoodsReceipt {
     @Column(name = "goods_receipt_id")
     private Long goodsReceiptId;
 
-    @Column(name = "inventories_brand_id")
-    private Long inventoryBrand;
+    @Column(name = "inventories_branch_id")
+    private Long inventoryBranch;
 
     @Column(name = "date")
     private Date date;
 
-    @Column(name = "warehouse_manager_id")
+    @Column(name = "inventory_manager_id")
     private Long warehouseManager;
 
-    @Column(name = "user_id")
-    private Long user;
+    @Column(name = "inventory_branch_manager_id")
+    private Long inventoryBranchManagerId;
 
 }

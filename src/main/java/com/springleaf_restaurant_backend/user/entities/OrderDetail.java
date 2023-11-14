@@ -14,10 +14,10 @@ public class OrderDetail {
     private Long orderDetailId;
 
     @Column(name = "order_id")
-    private Long order;
+    private Long orderId;
 
     @Column(name = "menu_item_id")
-    private Long menuItem;
+    private Long menuItemId;
 
     @Column(name = "quantity")
     private Long quantity;

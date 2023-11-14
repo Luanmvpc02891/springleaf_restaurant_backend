@@ -16,12 +16,6 @@ public class Order {
     @Column(name = "order_id")
     private Long orderId;
 
-    @Column(name = "order_date")
-    private Date orderDate;
-
-    @Column(name = "total_amount")
-    private Double totalAmount;
-
     @Column(name = "combo_id")
     private Long combo;
 
@@ -30,6 +24,15 @@ public class Order {
 
     @Column(name = "delivery_order_id")
     private Long deliveryOrderId;
+
+    @Column(name = "order_date")
+    private Date orderDate;
+
+    @Column(name = "total_amount")
+    private Double totalAmount;
+
+    @Column(name = "staff_id")
+    private Long staffId;
 
     @Column(name = "status")
     private boolean status;

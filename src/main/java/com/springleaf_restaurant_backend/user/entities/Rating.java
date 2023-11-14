@@ -19,7 +19,7 @@ public class Rating {
     private Long menuItem;
 
     @Column(name = "user_id")
-    private Long user;
+    private Long userId;
 
     @Column(name = "rating")
     private Integer rating;

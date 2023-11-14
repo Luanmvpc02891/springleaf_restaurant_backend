@@ -25,7 +25,7 @@ public class DeliveryOrderStatusRestController {
 
     @PostMapping("/public/create/deliveryOrderStatus")
     public DeliveryOrderStatus createDeliveryOrderStatus(@RequestBody DeliveryOrderStatus deliveryOrderStatus){
-        if(deliveryOrderStatusService.getDeliveryOrderStatusByName(deliveryOrderStatus.getName()) == null){
+        if(deliveryOrderStatusService.getDeliveryOrderStatusByName(deliveryOrderStatus.getDeliveryOrderStatusName()) == null){
              return deliveryOrderStatusService.saveDeliveryOrderStatus(deliveryOrderStatus);
         }else{
             return null;
@@ -35,7 +35,7 @@ public class DeliveryOrderStatusRestController {
 
     @PutMapping("/public/update/deliveryOrderStatus")
     public DeliveryOrderStatus updateDeliveryOrderStatus(@RequestBody DeliveryOrderStatus deliveryOrderStatus){
-        if(deliveryOrderStatusService.getDeliveryOrderStatusById(deliveryOrderStatus.getStatusId()) != null){
+        if(deliveryOrderStatusService.getDeliveryOrderStatusById(deliveryOrderStatus.getDeliveryOrderStatusId()) != null){
             return deliveryOrderStatusService.saveDeliveryOrderStatus(deliveryOrderStatus);
         }else{
             return null;

@@ -21,8 +21,8 @@ public class MenuItem {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "price")
-    private Double price;
+    @Column(name = "unit_price")
+    private Double unitPrice;
 
     @Column(name = "image_url")
     private String imageUrl;

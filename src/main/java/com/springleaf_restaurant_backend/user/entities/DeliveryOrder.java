@@ -2,8 +2,6 @@ package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
-
-import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,20 +13,16 @@ public class DeliveryOrder {
     @Column(name = "delivery_order_id")
     private Long deliveryOrderId;
 
-    @Column(name = "user_id")
-    private Long user;
-
-    @Column(name = "order_date")
-    private Date orderDate;
+    @Column(name = "customer_id")
+    private Long customerId;
 
     @Column(name = "delivery_address")
     private Integer deliveryAddress;
 
-    @Column(name = "total_amount")
-    private Double totalAmount;
-
     @Column(name = "delivery_order_type_id")
     private Integer deliveryOrderTypeId;
 
+    @Column(name = "delivery_order_status_id")
+    private Integer deliveryOrderStatusId;
 }
  

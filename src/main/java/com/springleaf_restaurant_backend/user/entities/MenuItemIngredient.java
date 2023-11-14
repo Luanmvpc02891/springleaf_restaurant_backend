@@ -15,10 +15,10 @@ public class MenuItemIngredient {
     private Long menuItemIngredientId;
 
     @Column(name = "menu_item_id")
-    private Long menuItem;
+    private Long menuItemId;
 
     @Column(name = "ingredient_id")
-    private Long ingredient;
+    private Long ingredientId;
 
     @Column(name = "quantity")
     private Double quantity;

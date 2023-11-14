@@ -18,11 +18,11 @@ public class OrderThreshold {
     private Integer reorderPoint;
 
     @Column(name = "ingredient_id")
-    private Long ingredient;
+    private Long ingredientId;
 
     @Column(name = "inventory_branch_id")
-    private Long inventoryBranch;
+    private Long inventoryBranchId;
 
     @Column(name = "inventory_id")
-    private Long inventory;
+    private Long inventoryId;
 }

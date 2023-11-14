@@ -13,6 +13,6 @@ public class DeliveryOrderType {
     @Column(name = "delivery_order_type_id")
     private Integer deliveryOrderTypeId;
 
-    @Column(name = "type_name")
-    private String typeName;
+    @Column(name = "delivery_order_type_name")
+    private String deliveryOrderTypeName;
 }

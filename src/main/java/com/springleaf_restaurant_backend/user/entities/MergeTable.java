@@ -17,7 +17,7 @@ public class MergeTable {
     private Long id;
 
     @Column(name = "table_id")
-    private Long table;
+    private Long tableId;
 
     @Column(name = "merge_table_id")
     private String mergeTableId;

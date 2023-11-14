@@ -14,8 +14,8 @@ public class UserRole {
     private Long userRoleId;
     
     @Column(name = "user_id")
-    private Long user;
+    private Long userId;
     
     @Column(name = "role_id")
-    private Integer role;
+    private Integer roleId;
 }
