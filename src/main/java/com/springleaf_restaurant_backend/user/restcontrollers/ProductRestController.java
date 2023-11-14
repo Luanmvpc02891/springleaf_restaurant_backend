@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Category;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
-import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderDetailRepository;
 import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderRepository;
 import com.springleaf_restaurant_backend.user.service.CategoryService;
 import com.springleaf_restaurant_backend.user.service.MenuItemService;
@@ -22,8 +21,6 @@ public class ProductRestController {
     CategoryService categoryService;
     @Autowired
     DeliveryOrderRepository deliveryOrderRepository;
-    @Autowired
-    DeliveryOrderDetailRepository deliveryOrderDetailRepository;
 
     @GetMapping("/public/products")
     public List<MenuItem> getCategories() {
