@@ -33,5 +33,4 @@ public class Order {
 
     @Column(name = "status")
     private boolean status;
-
 }

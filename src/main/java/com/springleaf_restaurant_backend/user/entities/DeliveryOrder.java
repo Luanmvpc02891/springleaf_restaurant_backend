@@ -31,3 +31,4 @@ public class DeliveryOrder {
     private Integer deliveryOrderTypeId;
 
 }
+ 

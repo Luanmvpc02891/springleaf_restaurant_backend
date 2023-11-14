@@ -38,7 +38,7 @@ public class InventoryBranchServiceImpl implements InventoryBranchService {
     }
 
     @Override
-    public void deleteInventoryBranch(Long id) {
+    public void deleteInventoryBranch(Long id) { 
         inventoryBranchRepository.deleteById(id);
     }
 }

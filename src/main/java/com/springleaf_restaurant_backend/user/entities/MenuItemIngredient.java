@@ -22,5 +22,4 @@ public class MenuItemIngredient {
 
     @Column(name = "quantity")
     private Double quantity;
-
 }

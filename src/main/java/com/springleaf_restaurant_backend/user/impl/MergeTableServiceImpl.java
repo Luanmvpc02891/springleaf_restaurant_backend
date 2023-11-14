@@ -38,7 +38,7 @@ public class MergeTableServiceImpl implements MergeTableService {
     }
 
     @Override
-    public void deleteMergeTable(Long id) {
+    public void deleteMergeTable(Long id) { 
         mergeTableRepository.deleteById(id);
     }
 }

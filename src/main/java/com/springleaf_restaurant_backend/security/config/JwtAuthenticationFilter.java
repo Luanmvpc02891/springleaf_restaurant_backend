@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.springleaf_restaurant_backend.security.entities.User;
-import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 
@@ -81,7 +80,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             userDetails,
             null,
-            //userDetails.getAuthorities()
             authoritiesList
         );
         System.out.println("Test" + authToken.getAuthorities());

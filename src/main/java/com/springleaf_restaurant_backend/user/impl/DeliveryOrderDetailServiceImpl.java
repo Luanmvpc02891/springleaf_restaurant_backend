@@ -34,7 +34,6 @@ public class DeliveryOrderDetailServiceImpl implements DeliveryOrderDetailServic
 
     @Override
     public void updateDeliveryOrderDetail(DeliveryOrderDetail deliveryOrderDetail) {
-        // Bạn có thể thêm logic kinh doanh cụ thể tại đây trước khi lưu delivery order detail.
         deliveryOrderDetailRepository.save(deliveryOrderDetail);
     }
 

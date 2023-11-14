@@ -39,7 +39,6 @@ public class DeliveryOrderStatusServiceImpl implements DeliveryOrderStatusServic
 
     @Override
     public DeliveryOrderStatus updateDeliveryOrderStatus(DeliveryOrderStatus deliveryOrderStatus) {
-        // Bạn có thể thêm logic kinh doanh cụ thể tại đây trước khi lưu trạng thái đơn hàng giao hàng.
         return deliveryOrderStatusRepository.save(deliveryOrderStatus);
     }
 

@@ -39,6 +39,6 @@ public class OrderThresholdServiceImpl implements OrderThresholdService {
 
     @Override
     public void deleteOrderThreshold(Long id) {
-        orderThresholdRepository.deleteById(id);
+        orderThresholdRepository.deleteById(id); 
     }
 }

@@ -24,7 +24,7 @@ public class TableStatusServiceImpl implements TableStatusService {
 
     @Override
     public TableStatus getTableStatusById(Integer id) {
-        return tableStatusRepository.findById(id).orElse(null);
+        return tableStatusRepository.findById(id).orElse(null); 
     }
 
     @Override

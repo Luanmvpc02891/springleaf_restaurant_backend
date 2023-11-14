@@ -25,5 +25,4 @@ public class Supplier {
 
     @Column(name = "email")
     private String email;
-
 }

@@ -4,7 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.util.Date;
 @Data
-@AllArgsConstructor
+@AllArgsConstructor 
 @NoArgsConstructor
 @Entity
 @Table(name = "Bills")

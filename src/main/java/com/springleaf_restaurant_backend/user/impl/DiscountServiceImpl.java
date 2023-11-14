@@ -34,7 +34,6 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount updateDiscount(Discount discount) {
-        // Bạn có thể thêm logic kinh doanh cụ thể tại đây trước khi lưu discount.
         return discountRepository.save(discount);
     }
 

@@ -22,5 +22,4 @@ public class Ingredient {
 
     @Column(name = "order_threshold")
     private Integer orderThreshold;
-
 }

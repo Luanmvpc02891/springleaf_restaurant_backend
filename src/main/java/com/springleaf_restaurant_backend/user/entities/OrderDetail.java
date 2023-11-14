@@ -21,5 +21,4 @@ public class OrderDetail {
 
     @Column(name = "quantity")
     private Long quantity;
-
 }

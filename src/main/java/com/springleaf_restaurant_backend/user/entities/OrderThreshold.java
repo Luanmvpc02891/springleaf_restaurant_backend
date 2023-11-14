@@ -25,5 +25,4 @@ public class OrderThreshold {
 
     @Column(name = "inventory_id")
     private Long inventory;
-
 }

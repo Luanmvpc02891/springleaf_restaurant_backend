@@ -4,9 +4,6 @@ import lombok.*;
 import jakarta.persistence.*;
 
 import java.util.Date;
-
-import com.springleaf_restaurant_backend.security.entities.User;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

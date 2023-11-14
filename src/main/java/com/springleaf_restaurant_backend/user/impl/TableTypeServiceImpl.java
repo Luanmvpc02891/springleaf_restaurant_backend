@@ -38,7 +38,7 @@ public class TableTypeServiceImpl implements TableTypeService {
     }
 
     @Override
-    public void deleteTableType(Integer id) {
+    public void deleteTableType(Integer id) { 
         tableTypeRepository.deleteById(id);
     }
 }

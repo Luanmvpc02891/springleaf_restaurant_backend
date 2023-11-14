@@ -35,7 +35,6 @@ public class ComboDetailServiceImpl implements ComboDetailService {
 
     @Override
     public void updateComboDetail(ComboDetail comboDetail) {
-        // You can add any specific business logic here before saving the combo detail.
         comboDetailRepository.save(comboDetail);
     }
 

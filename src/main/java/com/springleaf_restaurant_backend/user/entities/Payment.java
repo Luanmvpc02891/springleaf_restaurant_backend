@@ -16,5 +16,4 @@ public class Payment {
 
     @Column(name = "name")
     private String name;
-
 }

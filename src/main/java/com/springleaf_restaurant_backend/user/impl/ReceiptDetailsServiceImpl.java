@@ -38,7 +38,7 @@ public class ReceiptDetailsServiceImpl implements ReceiptDetailsService {
     }
 
     @Override
-    public void deleteReceiptDetails(Long id) {
+    public void deleteReceiptDetails(Long id) { 
         receiptDetailsRepository.deleteById(id);
     }
 }

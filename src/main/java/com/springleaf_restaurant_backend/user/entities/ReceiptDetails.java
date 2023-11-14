@@ -25,5 +25,4 @@ public class ReceiptDetails {
 
     @Column(name = "receipt_id")
     private Long receipt;
-
 }

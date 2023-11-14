@@ -19,5 +19,4 @@ public class Inventory {
 
     @Column(name = "supplier_id")
     private Long supplierId;
-
 }

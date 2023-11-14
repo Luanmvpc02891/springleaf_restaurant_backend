@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.springleaf_restaurant_backend.security.entities.User;
-
+ 
 public interface UserService {
     Optional<User> findByUsername(String username);
     User findByEmail(String email);

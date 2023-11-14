@@ -35,7 +35,6 @@ public class ComboServiceImpl implements ComboService {
 
     @Override
     public void updateCombo(Combo combo) {
-        // Bạn có thể thêm logic kinh doanh cụ thể tại đây trước khi lưu combo.
         comboRepository.save(combo);
     }
 

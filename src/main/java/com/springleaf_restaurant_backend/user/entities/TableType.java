@@ -15,5 +15,4 @@ public class TableType {
 
   @Column(name = "type_name")
   private String name;
-
 }

@@ -35,7 +35,6 @@ public class BillDetailServiceImpl implements BillDetailService {
 
     @Override
     public void updateBillDetail(BillDetail billDetail) {
-        // You can add any specific business logic here before saving the bill detail.
         billDetailRepository.save(billDetail);
     }
 

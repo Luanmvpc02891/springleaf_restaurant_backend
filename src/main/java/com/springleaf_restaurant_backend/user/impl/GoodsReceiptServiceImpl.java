@@ -31,7 +31,7 @@ public class GoodsReceiptServiceImpl implements GoodsReceiptService {
     @Override
     public GoodsReceipt saveGoodsReceipt(GoodsReceipt goodsReceipt) {
         return goodsReceiptRepository.save(goodsReceipt);
-    }
+    } 
 
     @Override
     public GoodsReceipt updateGoodsReceipt(GoodsReceipt goodsReceipt) {

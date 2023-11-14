@@ -23,5 +23,4 @@ public class Rating {
 
     @Column(name = "rating")
     private Integer rating;
-
 }

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
-import com.springleaf_restaurant_backend.security.service.UserService;
+import com.springleaf_restaurant_backend.security.service.UserService; 
 
 @Service
 public class UserServiceImpl implements UserService {

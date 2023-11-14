@@ -14,7 +14,7 @@ import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-  private final TokenRepository tokenRepository;
+  private final TokenRepository tokenRepository; 
 
   @Override
   public void logout(

@@ -34,7 +34,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event updateEvent(Event event) {
-        // Bạn có thể thêm logic kinh doanh cụ thể tại đây trước khi lưu event.
         return eventRepository.save(event);
     }
 

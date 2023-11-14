@@ -21,5 +21,4 @@ public class InventoryBranch {
 
     @Column(name = "restaurant_id")
     private Long restaurantId;
-
 }

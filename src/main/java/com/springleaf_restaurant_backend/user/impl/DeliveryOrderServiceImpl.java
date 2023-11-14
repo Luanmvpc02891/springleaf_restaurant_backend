@@ -47,5 +47,5 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     @Override
     public void findByUser(User id) {
         deliveryOrderRepository.findByUser(id);
-    }
+    } 
 }

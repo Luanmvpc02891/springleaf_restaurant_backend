@@ -18,7 +18,7 @@ public class MenuItem {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description", columnDefinition = "text")
+    @Column(name = "description")
     private String description;
 
     @Column(name = "price")
@@ -32,5 +32,4 @@ public class MenuItem {
 
     @Column(name = "status")
     private Boolean status;
-
 }

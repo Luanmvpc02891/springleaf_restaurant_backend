@@ -15,5 +15,4 @@ public class TableStatus {
 
     @Column(name = "name")
     private String name;
-
 }

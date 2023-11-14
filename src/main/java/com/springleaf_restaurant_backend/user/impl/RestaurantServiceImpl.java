@@ -24,7 +24,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Restaurant getRestaurantById(Long id) {
-        return restaurantRepository.findById(id).orElse(null);
+        return restaurantRepository.findById(id).orElse(null); 
     }
 
     @Override

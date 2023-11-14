@@ -1,6 +1,5 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Category;
-import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
-import com.springleaf_restaurant_backend.user.entities.DeliveryOrderDetail;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
 import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderDetailRepository;
 import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderRepository;

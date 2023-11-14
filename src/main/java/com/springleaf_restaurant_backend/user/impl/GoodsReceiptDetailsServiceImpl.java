@@ -39,7 +39,7 @@ public class GoodsReceiptDetailsServiceImpl implements GoodsReceiptDetailsServic
     }
 
     @Override
-    public void deleteGoodsReceiptDetails(Long id) {
+    public void deleteGoodsReceiptDetails(Long id) { 
         goodsReceiptDetailsRepository.deleteById(id);
     }
 }

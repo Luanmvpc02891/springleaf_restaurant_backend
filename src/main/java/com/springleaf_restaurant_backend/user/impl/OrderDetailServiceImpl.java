@@ -38,7 +38,7 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     }
 
     @Override
-    public void deleteOrderDetail(Long id) {
+    public void deleteOrderDetail(Long id) { 
         orderDetailRepository.deleteById(id);
     }
 }

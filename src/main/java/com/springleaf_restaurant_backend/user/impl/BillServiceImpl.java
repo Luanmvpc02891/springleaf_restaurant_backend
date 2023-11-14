@@ -35,7 +35,6 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public void updateBill(Bill bill) {
-        // You can add any specific business logic here before saving the bill.
         billRepository.save(bill);
     }
 

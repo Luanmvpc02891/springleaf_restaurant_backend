@@ -3,10 +3,7 @@ package com.springleaf_restaurant_backend.security.auth;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.springleaf_restaurant_backend.security.entities.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder

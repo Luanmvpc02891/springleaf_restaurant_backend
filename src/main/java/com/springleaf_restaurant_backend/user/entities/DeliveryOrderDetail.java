@@ -27,5 +27,4 @@ public class DeliveryOrderDetail {
 
     @Column(name = "order_time")
     private Date orderTime;
-
 }

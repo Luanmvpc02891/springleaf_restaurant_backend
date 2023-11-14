@@ -2,10 +2,6 @@ package com.springleaf_restaurant_backend.security.entities;
 
 import lombok.*;
 
-import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.*;
 
 @Data

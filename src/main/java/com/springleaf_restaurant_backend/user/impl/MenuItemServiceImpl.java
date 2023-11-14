@@ -50,7 +50,7 @@ public class MenuItemServiceImpl implements MenuItemService {
     }
 
     @Override
-    public void deleteMenuItem(Long id) {
+    public void deleteMenuItem(Long id) { 
         menuItemRepository.deleteById(id);
     }
 }

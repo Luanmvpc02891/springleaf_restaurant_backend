@@ -28,5 +28,4 @@ public class Reservation {
 
     @Column(name = "number_of_guest")
     private Long numberOfGuests;
-
 }

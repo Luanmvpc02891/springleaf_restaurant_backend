@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.springleaf_restaurant_backend.security.entities.Role;
-
+ 
 public interface RoleService {
     Role createRole(Role role);
     List<Role> getAllRoles();

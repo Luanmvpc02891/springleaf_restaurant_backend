@@ -39,6 +39,6 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public void deleteRating(Long id) {
-        ratingRepository.deleteById(id);
+        ratingRepository.deleteById(id); 
     }
 }

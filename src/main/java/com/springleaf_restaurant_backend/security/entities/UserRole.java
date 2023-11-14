@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name = "user_role")
-public class UserRole {
+public class UserRole { 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userRoleId;

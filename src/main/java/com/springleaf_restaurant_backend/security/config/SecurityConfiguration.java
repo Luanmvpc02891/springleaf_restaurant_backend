@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
+import com.springleaf_restaurant_backend.security.repositories.RoleRepository; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 

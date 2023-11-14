@@ -24,3 +24,4 @@ public class GoodsReceiptDetails {
     private Integer quantity;
 
 }
+ 

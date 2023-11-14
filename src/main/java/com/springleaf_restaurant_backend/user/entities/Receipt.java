@@ -31,5 +31,4 @@ public class Receipt {
 
     @Column(name = "inventory_id")
     private Long inventory;
-
 }

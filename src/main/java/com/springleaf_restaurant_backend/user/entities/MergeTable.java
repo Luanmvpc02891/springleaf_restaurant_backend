@@ -24,5 +24,4 @@ public class MergeTable {
 
     @Column(name = "merge_time")
     private Date mergeTime;
-
 }
