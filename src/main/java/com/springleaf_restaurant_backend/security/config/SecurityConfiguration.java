@@ -8,19 +8,13 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
-
-import jakarta.servlet.http.HttpServletResponse;
-
-import java.io.IOException;
+import com.springleaf_restaurant_backend.user.restcontrollers.AdminCheckRestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -35,6 +29,8 @@ public class SecurityConfiguration {
   private final LogoutHandler logoutHandler;
   @Autowired
   RoleRepository roleRepository;
+  @Autowired
+  AdminCheckRestController adminCheckRestController;
 
   
   @Bean
@@ -69,10 +65,9 @@ public class SecurityConfiguration {
         .oauth2Login(oauth2Login ->
             oauth2Login
                 .successHandler((request, response, authentication) -> {
-                    callYourApiAfterLogin(authentication, response);
+                    adminCheckRestController.handleGoogleCallback(authentication);
                 })
-            )
-        
+        )
         .logout()
         .logoutUrl("/api/v1/auth/logout")
         .addLogoutHandler(logoutHandler)
@@ -81,20 +76,4 @@ public class SecurityConfiguration {
     ;
     return http.build();
   }
-
-
-  public void callYourApiAfterLogin(Authentication authentication, HttpServletResponse response) throws IOException {
-    if (authentication instanceof OAuth2AuthenticationToken) {
-    OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-
-    // Lấy thông tin người dùng từ Principal
-    OAuth2User oAuth2User = (OAuth2User) oauthToken.getPrincipal();
-    String userId = oAuth2User.getName();
-    String email = (String) oAuth2User.getAttribute("email");
-    String givenName = (String) oAuth2User.getAttribute("given_name");
-    String pictureUrl = (String) oAuth2User.getAttribute("picture");
-    System.out.println("email: " + email + " name: " + givenName + " picture: " + pictureUrl);
-}
-}
-
 }
