@@ -16,7 +16,6 @@ import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
 import com.springleaf_restaurant_backend.user.entities.Order;
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
-import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderRepository;
 import com.springleaf_restaurant_backend.user.service.CategoryService;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
 import com.springleaf_restaurant_backend.user.service.MenuItemService;
@@ -89,7 +88,7 @@ public class ProductRestController {
                 order.setReservationId(null);
                 order.setStaffId(null);
                 order.setCombo(null);
-                order.setOrderDate(new Date());
+                //order.setOrderDate(new Date());
                 order.setStatus(true);
                 order.setTotalAmount(null);
             }

@@ -3,8 +3,6 @@ package com.springleaf_restaurant_backend.user.entities;
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,7 +24,7 @@ public class Order {
     private Long deliveryOrderId;
 
     @Column(name = "order_date")
-    private Date orderDate;
+    private String orderDate;
 
     @Column(name = "total_amount")
     private Double totalAmount;

@@ -2,7 +2,6 @@ package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
-import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,8 +23,8 @@ public class Discount {
     private Integer discountValue;
 
     @Column(name = "start_date")
-    private Date startDate;
+    private String startDate;
 
     @Column(name = "end_date")
-    private Date endDate;
+    private String endDate;
 }

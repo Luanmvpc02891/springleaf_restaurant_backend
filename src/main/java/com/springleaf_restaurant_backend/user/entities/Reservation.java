@@ -1,9 +1,6 @@
 package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
-
-import java.util.Date;
-
 import jakarta.persistence.*;
 
 @Data
@@ -24,7 +21,10 @@ public class Reservation {
     private Long userId;
 
     @Column(name = "reservation_date")
-    private Date reservationDate;
+    private String reservationDate;
+
+    @Column(name = "out_time")
+    private String outTime;
 
     @Column(name = "number_of_guest")
     private Long numberOfGuests;

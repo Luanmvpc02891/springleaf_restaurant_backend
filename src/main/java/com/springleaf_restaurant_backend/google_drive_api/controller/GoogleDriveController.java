@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController(value = "googleDriveController")
 public class GoogleDriveController {
@@ -34,9 +35,8 @@ public class GoogleDriveController {
 
     @Autowired
     GoogleDriveConfig googleDriveConfig;
-
     // Get all file on drive
-    @GetMapping("/api/")
+    @GetMapping("/public/api/")
     public ModelAndView pageIndex() throws IOException, GeneralSecurityException {
         ModelAndView mav = new ModelAndView("index");
 
@@ -48,31 +48,57 @@ public class GoogleDriveController {
     }
 
     // Upload file to public
-    @PostMapping(value = "/api/upload/file")
-    public ResponseEntity<String> uploadFile(
-            @RequestParam("fileUpload") MultipartFile fileUpload, // file upload
-            @RequestParam("filePath") String pathFile, // thư mục
-            @RequestParam("shared") String shared) { // chế độ công khai
-        try {
-            System.out.println(fileUpload.getContentType());
-            if(!fileUpload.getContentType().equals("image/jpge")){
-                return new ResponseEntity<>("File has an incorrect format", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            if (pathFile.equals("")){
-                pathFile = "Root"; // Save to default folder if the user does not select a
-            }
-            List<GoogleDriveFileDTO> listFile = googleDriveFileService.getAllFile();
-            for (GoogleDriveFileDTO googleDriveFileDTO : listFile) {
-                if(googleDriveFileDTO.getName().equals(fileUpload.getOriginalFilename())){
-                    return new ResponseEntity<>("Image  already exists", HttpStatus.INTERNAL_SERVER_ERROR);
-                }
-            }
-            googleDriveFileService.uploadFile(fileUpload, pathFile, Boolean.parseBoolean(shared));
-            return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
-        } catch (Exception e) {
+    // @PostMapping(value = "/api/upload/file")
+    // public ResponseEntity<String> uploadFile(
+    //         @RequestParam("fileUpload") MultipartFile fileUpload, // file upload
+    //         @RequestParam("filePath") String pathFile, // thư mục
+    //         @RequestParam("shared") String shared) { // chế độ công khai
+    //     try {
+    //         System.out.println(fileUpload.getContentType());
+    //         if(!fileUpload.getContentType().equals("image/jpge")){
+    //             return new ResponseEntity<>("File has an incorrect format", HttpStatus.INTERNAL_SERVER_ERROR);
+    //         }
+    //         if (pathFile.equals("")){
+    //             pathFile = "Root"; // Save to default folder if the user does not select a
+    //         }
+    //         List<GoogleDriveFileDTO> listFile = googleDriveFileService.getAllFile();
+    //         for (GoogleDriveFileDTO googleDriveFileDTO : listFile) {
+    //             if(googleDriveFileDTO.getName().equals(fileUpload.getOriginalFilename())){
+    //                 return new ResponseEntity<>("Image  already exists", HttpStatus.INTERNAL_SERVER_ERROR);
+    //             }
+    //         }
+    //         googleDriveFileService.uploadFile(fileUpload, pathFile, Boolean.parseBoolean(shared));
+    //         return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
+    //     } catch (Exception e) {
+    //         return new ResponseEntity<>("Upload failed", HttpStatus.INTERNAL_SERVER_ERROR);
+    //     }
+    // }
+    @PostMapping(value = "/api/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile fileUpload,
+            @RequestParam("path") String pathFile) {
+        System.out.println("pathFile : " + pathFile );
+        System.out.println(fileUpload.getContentType());
+        // try {
+        //     System.out.println(fileUpload.getContentType());
+        //     if (!fileUpload.getContentType().equals("image/jpeg")) {
+        //         return new ResponseEntity<>("File has an incorrect format", HttpStatus.INTERNAL_SERVER_ERROR);
+        //     }
+        //     if (pathFile.equals("")) {
+        //         pathFile = "Root"; // Save to default folder if the user does not select a
+        //     }
+        //     List<GoogleDriveFileDTO> listFile = googleDriveFileService.getAllFile();
+        //     for (GoogleDriveFileDTO googleDriveFileDTO : listFile) {
+        //         if (googleDriveFileDTO.getName().equals(fileUpload.getOriginalFilename())) {
+        //             return new ResponseEntity<>("Image already exists", HttpStatus.INTERNAL_SERVER_ERROR);
+        //         }
+        //     }
+        //     googleDriveFileService.uploadFile(fileUpload, pathFile, Boolean.parseBoolean(shared));
+        //     return new ResponseEntity<>("File uploaded successfully", HttpStatus.OK);
+        // } catch (Exception e) {
             return new ResponseEntity<>("Upload failed", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        //}
     }
+
 
     // Delete file by id
     @GetMapping("/api/delete/file/{id}")
@@ -110,4 +136,21 @@ public class GoogleDriveController {
         googleDriveFolderService.deleteFolder(id);
         return new ModelAndView("redirect:" + "/list/folders");
     }
+
+    @GetMapping("/public/list/folders") 
+    public ResponseEntity<List<String>> listFolder2() throws IOException, GeneralSecurityException {
+    try {
+        List<GoogleDriveFoldersDTO> listFolder = googleDriveFolderService.getAllFolder();
+
+        // Chuyển đổi danh sách DTO thành danh sách tên folder
+        List<String> folderNames = listFolder.stream()
+                                            .map(GoogleDriveFoldersDTO::getName)
+                                            .collect(Collectors.toList());
+
+        return new ResponseEntity<>(folderNames, HttpStatus.OK);
+    } catch (Exception e) {
+        // Xử lý ngoại lệ nếu có
+        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
 }

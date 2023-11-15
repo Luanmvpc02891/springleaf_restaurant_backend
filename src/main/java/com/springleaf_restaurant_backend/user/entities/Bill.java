@@ -2,7 +2,6 @@ package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
-import java.util.Date;
 @Data
 @AllArgsConstructor 
 @NoArgsConstructor
@@ -21,7 +20,7 @@ public class Bill {
     private Long orderId;
 
     @Column(name = "bill_time")
-    private Date billTime;
+    private String billTime;
 
     @Column(name = "total_amount")
     private Long totalAmount;

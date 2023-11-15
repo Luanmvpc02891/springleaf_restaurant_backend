@@ -2,8 +2,6 @@ package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
-
-import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +20,6 @@ public class Favorite {
     private Long menuItem;
 
     @Column(name = "favorite_date")
-    private Date favoriteDate;
+    private String favoriteDate;
 
 }

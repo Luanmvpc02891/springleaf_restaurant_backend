@@ -2,7 +2,6 @@ package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
 import jakarta.persistence.*;
-import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,7 +17,7 @@ public class GoodsReceipt {
     private Long inventoryBranch;
 
     @Column(name = "date")
-    private Date date;
+    private String date;
 
     @Column(name = "inventory_manager_id")
     private Long warehouseManager;

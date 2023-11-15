@@ -1,22 +1,21 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springleaf_restaurant_backend.user.repositories.MenuItemRepository;
-
 @RestController
-@RequestMapping("/admin")
 public class AdminCheckRestController {
-    @Autowired
-    MenuItemRepository menuItemRepository;
 
-    @GetMapping("/checks")
-    public ResponseEntity<String> getCategories() {
-        String reponse = "Phân Quyền Thành Công";
-        return ResponseEntity.ok(reponse);
+    @GetMapping("/v1/auth/login-google")
+    public void loginWithGoogle(){ }
+
+    @GetMapping("/login/oauth2/code/google")
+    public ResponseEntity<String> handleGoogleCallback() {
+        // Xử lý mã code từ Google OAuth2
+        // Thực hiện các hành động cần thiết, ví dụ: lấy thông tin người dùng
+        System.out.println("Success riderect");
+        // Trả về một ResponseEntity với body là thông điệp và status code là 200 OK
+        return ResponseEntity.ok("Callback from Google received. Code: ");
     }
 }
