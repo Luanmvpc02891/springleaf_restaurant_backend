@@ -30,11 +30,7 @@ public class DeliveryOrderRestController {
 
     @PutMapping("/public/update/deliveryOrder")
     public DeliveryOrder updateDeliveryOrder(@RequestBody DeliveryOrder deliveryOrder){
-        if(deliveryOrderService.getDeliveryOrderById(deliveryOrder.getDeliveryOrderId()) != null){
-            return deliveryOrderService.saveDeliveryOrder(deliveryOrder);
-        }else{
-            return null;
-        }
+        return deliveryOrderService.saveDeliveryOrder(deliveryOrder);
     }
     
     @DeleteMapping("/public/delete/deliveryOrder/{deliveryOrderId}")

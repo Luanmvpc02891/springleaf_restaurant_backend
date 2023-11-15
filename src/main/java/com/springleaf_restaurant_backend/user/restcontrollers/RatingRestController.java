@@ -30,11 +30,7 @@ public class RatingRestController {
 
     @PutMapping("/public/update/rating")
     public Rating updateRating(@RequestBody Rating rating){
-        if(ratingService.getRatingById(rating.getRatingId()) != null){
-            return ratingService.saveRating(rating);
-        }else{
-            return null;
-        }
+        return ratingService.saveRating(rating);
     }
 
     @DeleteMapping("/public/delete/rating/{ratingId}")

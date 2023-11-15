@@ -30,11 +30,7 @@ public class ReservationRestController {
 
     @PutMapping("/public/update/reservation")
     public Reservation updateReservation(@RequestBody Reservation reservation){
-        if(reservationService.getReservationById(reservation.getReservationId()) != null){
-            return reservationService.saveReservation(reservation);
-        }else{
-            return null;
-        }
+        return reservationService.saveReservation(reservation);
     }
     @DeleteMapping("/public/delete/reservation/{reservationId}")
     public void deleteReservation(@PathVariable("reservationId") Long reservationId) {

@@ -30,11 +30,7 @@ public class ReceiptRestController {
 
     @PutMapping("/public/update/receipt")
     public Receipt updateReceipt(@RequestBody Receipt receipt){
-        if(receiptService.getReceiptById(receipt.getReceiptId()) != null){
-            return receiptService.saveReceipt(receipt);
-        }else{
-            return null;
-        }
+        return receiptService.saveReceipt(receipt);
     }
 
     @DeleteMapping("/public/delete/receipt/{receiptId}")

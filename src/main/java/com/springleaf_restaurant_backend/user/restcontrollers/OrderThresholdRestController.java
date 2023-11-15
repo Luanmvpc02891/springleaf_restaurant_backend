@@ -30,11 +30,7 @@ public class OrderThresholdRestController {
 
     @PutMapping("/public/update/orderThreshold")
     public OrderThreshold updateOrderThreshold(@RequestBody OrderThreshold orderThreshold){
-        if(orderThresholdService.getOrderThresholdById(orderThreshold.getOrderThresholdId()) != null){
-            return orderThresholdService.saveOrderThreshold(orderThreshold);
-        }else{
-            return null;
-        }
+        return orderThresholdService.saveOrderThreshold(orderThreshold);
     }
 
     @DeleteMapping("/public/delete/{orderThresholdId}")

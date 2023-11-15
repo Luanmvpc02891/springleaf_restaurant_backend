@@ -31,12 +31,7 @@ public class GoodsReceiptDetailsRestController {
 
     @PutMapping("/public/update/GoodsReceiptDetails")
     public GoodsReceiptDetails updateGoodsReceiptDetails(@RequestBody GoodsReceiptDetails GoodsReceiptDetails){
-        GoodsReceiptDetails GoodsReceiptDetailsDatabase = GoodsReceiptDetailsService.getGoodsReceiptDetailsById(GoodsReceiptDetails.getGoodsReceiptDetailId());
-        if(GoodsReceiptDetailsDatabase != null){
-            return GoodsReceiptDetailsService.saveGoodsReceiptDetails(GoodsReceiptDetails);
-        }else{
-            return null;
-        }
+        return GoodsReceiptDetailsService.saveGoodsReceiptDetails(GoodsReceiptDetails);
     }
 
     @DeleteMapping("/public/delete/GoodsReceiptDetails/{deliveryOrderid}")

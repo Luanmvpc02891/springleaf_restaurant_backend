@@ -30,11 +30,7 @@ public class PaymentRestController {
 
     @PutMapping("/public/update/payment")
     public Payment updatePayment(@RequestBody Payment payment){
-        if(paymentService.getPaymentById(payment.getPaymentMethodId()) != null){
-            return paymentService.savePayment(payment);
-        }else{
-            return null;
-        }
+        return paymentService.savePayment(payment);
     }
 
     @DeleteMapping("/public/delete/payment/{paymentId}")

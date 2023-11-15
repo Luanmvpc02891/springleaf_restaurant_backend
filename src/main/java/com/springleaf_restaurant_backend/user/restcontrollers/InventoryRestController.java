@@ -30,11 +30,7 @@ public class InventoryRestController {
 
     @PutMapping("/public/update/inventory")
     public Inventory updateInventory(@RequestBody Inventory updatedInventory) {
-        if (inventoryService.getInventoryById(updatedInventory.getInventoryId()) != null) {
-            return inventoryService.saveInventory(updatedInventory);
-        } else {
-            return null;
-        }
+        return inventoryService.saveInventory(updatedInventory);
     }
 
     @DeleteMapping("/public/delete/inventory/{invetoryId}")

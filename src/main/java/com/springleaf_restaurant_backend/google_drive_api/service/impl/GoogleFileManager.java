@@ -8,10 +8,7 @@ import com.google.api.services.drive.model.Permission;
 import com.springleaf_restaurant_backend.google_drive_api.config.GoogleDriveConfig;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayInputStream;

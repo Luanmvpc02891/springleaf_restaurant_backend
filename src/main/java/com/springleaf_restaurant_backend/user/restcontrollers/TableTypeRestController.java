@@ -31,11 +31,7 @@ public class TableTypeRestController {
 
   @PutMapping("/public/update/tableType")
   public TableType updateTableType(@RequestBody TableType tableType){
-    if(tableTypeService.getTableTypeById(tableType.getTableTypeId()) != null){
-      return tableTypeService.saveTableType(tableType);
-    }else{
-      return null;
-    }
+    return tableTypeService.saveTableType(tableType);
   }
 
   @DeleteMapping("/public/delete/tableType/{tableTypeId}")

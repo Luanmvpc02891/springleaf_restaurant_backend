@@ -30,11 +30,7 @@ public class CategoryRestController {
 
     @PutMapping("/public/update/category")
     public Category updateCategory(@RequestBody Category updatedCategory) {
-        if (categoryService.getCategoryById(updatedCategory.getCategoryId()) != null) {
-            return categoryService.saveCategory(updatedCategory);
-        } else {
-            return null;
-        }
+        return categoryService.saveCategory(updatedCategory);
     }
 
     @DeleteMapping("/public/delete/category/{categoryId}")

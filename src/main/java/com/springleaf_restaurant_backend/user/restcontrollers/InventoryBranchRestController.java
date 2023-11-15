@@ -30,11 +30,7 @@ public class InventoryBranchRestController {
 
     @PutMapping("/public/update/inventoryBranch")
     public InventoryBranch putMethodName(@RequestBody InventoryBranch inventoryBranch) {
-        if(inventoryBranchService.getInventoryBranchById(inventoryBranch.getInventoryBranchId()) != null){
-            return inventoryBranchService.saveInventoryBranch(inventoryBranch);
-        }else{
-            return null;
-        }
+        return inventoryBranchService.saveInventoryBranch(inventoryBranch);
     }
     
     @DeleteMapping("/public/delete/inventoryBranch/{inventoryBranchId}")

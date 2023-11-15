@@ -30,11 +30,7 @@ public class FavoriteRestController {
 
     @PutMapping("/public/update/favorite")
     public Favorite updateFavorite(@RequestBody Favorite favorite){
-        if(favoriteService.getFavoriteById(favorite.getFavoriteId()) != null){
-            return favoriteService.saveFavorite(favorite);
-        }else{
-            return null;
-        }
+        return favoriteService.saveFavorite(favorite);
     }
 
     @DeleteMapping("/public/delete/favorite/{favoriteId}")

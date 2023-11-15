@@ -29,13 +29,13 @@ public class BillDetailServiceImpl implements BillDetailService {
     }
 
     @Override
-    public void saveBillDetail(BillDetail billDetail) {
-        billDetailRepository.save(billDetail);
+    public BillDetail saveBillDetail(BillDetail billDetail) {
+        return billDetailRepository.save(billDetail);
     }
 
     @Override
-    public void updateBillDetail(BillDetail billDetail) {
-        billDetailRepository.save(billDetail);
+    public BillDetail updateBillDetail(BillDetail billDetail) {
+        return billDetailRepository.save(billDetail);
     }
 
     @Override

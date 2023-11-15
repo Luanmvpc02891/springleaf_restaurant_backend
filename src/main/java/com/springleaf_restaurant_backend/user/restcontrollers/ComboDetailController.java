@@ -31,11 +31,7 @@ public class ComboDetailController {
 
     @PutMapping("/public/update/comboDetail")
     public ComboDetail updateCategory(@RequestBody ComboDetail comboDetail) {
-        if (comboDetailService.getComboDetailById(comboDetail.getComboDetailId()) != null) {
-            return comboDetailService.saveComboDetail(comboDetail);
-        } else {
-            return null;
-        }
+        return comboDetailService.saveComboDetail(comboDetail);
     }
     
     @DeleteMapping("/public/delete/comboDetail/{comboDetailId}")

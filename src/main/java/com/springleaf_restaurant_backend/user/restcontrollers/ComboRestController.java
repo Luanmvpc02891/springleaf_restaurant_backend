@@ -30,11 +30,7 @@ public class ComboRestController {
 
     @PutMapping("/public/update/combo")
     public Combo updateCombo(@RequestBody Combo updated) {
-        if (comboService.getComboById(updated.getComboId()) != null) {
-            return comboService.saveCombo(updated);
-        } else {
-            return null;
-        }
+        return comboService.saveCombo(updated);
     }
 
     @DeleteMapping("/public/delete/combo/{comboId}")

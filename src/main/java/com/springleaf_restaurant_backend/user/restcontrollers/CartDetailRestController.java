@@ -13,8 +13,28 @@ public class CartDetailRestController {
     @Autowired
     private OrderDetailService orderDetailService;
 
-    @GetMapping("/api/cartDetails")
+    @GetMapping("/public/cartDetails")
     public List<OrderDetail> getOrderDetails() {
         return orderDetailService.getAllOrderDetails();
+    }
+
+    @GetMapping("/public/cartDetail/{cartDetailId}")
+    public OrderDetail getOneOrderDetail(@PathVariable("cartDetailId") Long cartDetailId){
+        return orderDetailService.getOrderDetailById(cartDetailId);
+    }
+
+    @PostMapping("/public/create/cartDetail")
+    public OrderDetail createCartDetail(@RequestBody OrderDetail orderDetail){
+        return orderDetailService.saveOrderDetail(orderDetail);
+    }
+
+    @PutMapping("/public/update/cartDetail")
+    public OrderDetail updateCartDetail(@RequestBody OrderDetail orderDetail){
+        return orderDetailService.saveOrderDetail(orderDetail);
+    }
+
+    @DeleteMapping("/public/delete/cartDetail/{cartDetailId}")
+    public void deleteOrderDetail(@PathVariable("cartDetailId") Long cartDetailId){
+        orderDetailService.deleteOrderDetail(cartDetailId);
     }
 }

@@ -30,11 +30,7 @@ public class MergeTableRestController {
 
     @PutMapping("/public/update/mergeTable")
     public MergeTable updateMergeTable(@RequestBody MergeTable mergeTable){
-        if(mergeTableService.getMergeTableById(mergeTable.getId()) != null){
-            return mergeTableService.saveMergeTable(mergeTable);
-        }else{
-            return null;
-        }
+        return mergeTableService.saveMergeTable(mergeTable);
     }
 
     @DeleteMapping("/public/delete/mergeTable/{mergeTableId}")

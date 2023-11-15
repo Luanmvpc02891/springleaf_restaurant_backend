@@ -30,11 +30,7 @@ public class EventRestController {
 
     @PutMapping("/public/update/event")
     public Event updateEvent(@RequestBody Event event){
-        if(eventService.getEventById(event.getEventId()) != null){
-            return eventService.saveEvent(event);
-        }else{
-            return null;
-        }
+        return eventService.saveEvent(event);
     }
 
     @DeleteMapping("/public/delete/event/{eventId}")

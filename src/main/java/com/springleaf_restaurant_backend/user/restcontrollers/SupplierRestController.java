@@ -30,11 +30,7 @@ public class SupplierRestController {
 
     @PutMapping("/public/update/supplier/{supplierId}")
     public Supplier updateSupplier(@RequestBody Supplier updatedSupplier) {
-        if (supplierService.getSupplierById(updatedSupplier.getSupplierId()) != null) {
-            return supplierService.saveSupplier(updatedSupplier);
-        } else {
-            return null;
-        }
+        return supplierService.saveSupplier(updatedSupplier);
     }
 
     @DeleteMapping("/public/delete/supplier/{supplierId}")

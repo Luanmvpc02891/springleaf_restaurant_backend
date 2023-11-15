@@ -30,11 +30,7 @@ public class TableStatusRestController {
 
     @PutMapping("/public/update/tableStatus")
     public TableStatus updateTableStatus(@RequestBody TableStatus tableStatus){
-        if(tableStatusService.getTableStatusById(tableStatus.getTableStatusId()) != null){
-            return tableStatusService.saveTableStatus(tableStatus);
-        }else{
-            return null;
-        }
+        return tableStatusService.saveTableStatus(tableStatus);
     }
 
     @DeleteMapping("/public/delete/tableStatus/{tableStatusId}")

@@ -29,11 +29,7 @@ public class MenuItemIngredientRestController {
 
     @PutMapping("/public/update/menuItemIngredient")
     public MenuItemIngredient putMethodName(@RequestBody MenuItemIngredient menuItemIngredient) {
-        if(menuItemIngredientService.getMenuItemIngredientById(menuItemIngredient.getMenuItemIngredientId()) != null){
-            return menuItemIngredientService.saveMenuItemIngredient(menuItemIngredient);
-        }else{
-            return null;
-        }
+        return menuItemIngredientService.saveMenuItemIngredient(menuItemIngredient);
     }
 
     @DeleteMapping("/public/delete/menuItemIngredient/{menuItemIngredientId}")

@@ -29,13 +29,13 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public void saveBill(Bill bill) {
-        billRepository.save(bill);
+    public Bill saveBill(Bill bill) {
+        return billRepository.save(bill);
     }
 
     @Override
-    public void updateBill(Bill bill) {
-        billRepository.save(bill);
+    public Bill updateBill(Bill bill) {
+        return billRepository.save(bill);
     }
 
     @Override

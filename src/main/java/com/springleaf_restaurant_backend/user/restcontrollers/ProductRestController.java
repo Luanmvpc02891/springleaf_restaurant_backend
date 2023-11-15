@@ -61,11 +61,7 @@ public class ProductRestController {
 
     @PutMapping("/public/update/product/{menuItemId}")
     public MenuItem updateMenuItem(@RequestBody MenuItem updatedMenuItem) {
-        if (menuItemService.getMenuItemById(updatedMenuItem.getMenuItemId()) != null) {
-            return menuItemService.saveMenuItem(updatedMenuItem);
-        } else {
-            return null;
-        }
+        return menuItemService.saveMenuItem(updatedMenuItem);
     }
 
     @DeleteMapping("/public/delete/product/{menuItemId}")

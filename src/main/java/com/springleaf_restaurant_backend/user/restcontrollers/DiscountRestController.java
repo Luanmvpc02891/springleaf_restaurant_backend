@@ -30,11 +30,7 @@ public class DiscountRestController {
 
     @PostMapping("/public/update/discount")
     public Discount updateDiscount(@RequestBody Discount discount){
-        if(discountService.getDiscountById(discount.getEventId()) != null){
-            return discountService.saveDiscount(discount);
-        }else{
-            return null;
-        }
+        return discountService.saveDiscount(discount);
     }
 
     @DeleteMapping("/public/delete/discount/{eventId}")

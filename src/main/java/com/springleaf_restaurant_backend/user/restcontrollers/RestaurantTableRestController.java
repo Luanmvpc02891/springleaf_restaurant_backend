@@ -31,11 +31,7 @@ public class RestaurantTableRestController {
 
     @PutMapping("/public/update/restaurantTable")
     public RestaurantTable updateTable(@RequestBody RestaurantTable updatedTable) {
-        if (restauranTableService.getRestaurantTableById(updatedTable.getTableId()) != null) {
-            return restauranTableService.saveRestaurantTable(updatedTable);
-        } else {
-            return null;
-        }
+        return restauranTableService.saveRestaurantTable(updatedTable);
     }
 
     @DeleteMapping("/public/delete/restaurantTable/{tableId}")

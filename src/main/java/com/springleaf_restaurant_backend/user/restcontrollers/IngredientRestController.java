@@ -30,11 +30,7 @@ public class IngredientRestController {
 
     @PutMapping("/public/update/ingredient")
     public Ingredient updateIngredient(@RequestBody Ingredient updatedIngredient) {
-        if (ingredientService.getIngredientById(updatedIngredient.getIngredientId()) != null) {
-            return ingredientService.saveIngredient(updatedIngredient);
-        } else {
-            return null;
-        }
+        return ingredientService.saveIngredient(updatedIngredient);
     }
 
     @DeleteMapping("/public/delete/ingredient/{ingredientId}")

@@ -7,7 +7,7 @@ import java.util.List;
 public interface BillDetailService {
     BillDetail getBillDetailById(Long id);
     List<BillDetail> getAllBillDetails();
-    void saveBillDetail(BillDetail billDetail);
-    void updateBillDetail(BillDetail billDetail);
+    BillDetail saveBillDetail(BillDetail billDetail);
+    BillDetail updateBillDetail(BillDetail billDetail);
     void deleteBillDetail(Long id);
 }

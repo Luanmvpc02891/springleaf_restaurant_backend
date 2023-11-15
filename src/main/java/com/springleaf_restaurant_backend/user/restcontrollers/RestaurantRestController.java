@@ -30,11 +30,7 @@ public class RestaurantRestController {
 
     @PostMapping("/public/update/restaurant")
     public Restaurant updateRestaurant(@RequestBody Restaurant restaurant){
-        if(restaurantService.getRestaurantById(restaurant.getRestaurantId()) != null){
-            return restaurantService.saveRestaurant(restaurant);
-        }else{
-            return null;
-        }
+        return restaurantService.saveRestaurant(restaurant);
     }
 
     @DeleteMapping("/public/delete/restaurant/{restaurantId}")
