@@ -12,5 +12,4 @@ public interface MenuItemService {
     MenuItem saveMenuItem(MenuItem menuItem);
     MenuItem updateMenuItem(MenuItem menuItem);
     void deleteMenuItem(Long id);
-    MenuItem saveMenuItem2(MenuItem menuItem);
 }

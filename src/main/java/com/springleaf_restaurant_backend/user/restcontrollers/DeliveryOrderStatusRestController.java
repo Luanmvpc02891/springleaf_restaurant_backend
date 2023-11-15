@@ -25,11 +25,11 @@ public class DeliveryOrderStatusRestController {
 
     @PostMapping("/public/create/deliveryOrderStatus")
     public DeliveryOrderStatus createDeliveryOrderStatus(@RequestBody DeliveryOrderStatus deliveryOrderStatus){
-        if(deliveryOrderStatusService.getDeliveryOrderStatusByName(deliveryOrderStatus.getDeliveryOrderStatusName()) == null){
-             return deliveryOrderStatusService.saveDeliveryOrderStatus(deliveryOrderStatus);
-        }else{
+        // if(deliveryOrderStatusService.findByDeliveryOrderStatusName(deliveryOrderStatus.getDeliveryOrderStatusName()) == null){
+        //      return deliveryOrderStatusService.saveDeliveryOrderStatus(deliveryOrderStatus);
+        // }else{
             return null;
-        }
+        //}
        
     }
 

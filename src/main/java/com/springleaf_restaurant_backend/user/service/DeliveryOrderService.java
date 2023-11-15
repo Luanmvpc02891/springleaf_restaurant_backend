@@ -1,9 +1,8 @@
 package com.springleaf_restaurant_backend.user.service;
-
-import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DeliveryOrderService {
     DeliveryOrder getDeliveryOrderById(Long id);
@@ -11,5 +10,6 @@ public interface DeliveryOrderService {
     DeliveryOrder saveDeliveryOrder(DeliveryOrder deliveryOrder);
     DeliveryOrder updateDeliveryOrder(DeliveryOrder deliveryOrder);
     void deleteDeliveryOrder(Long id);
-    void findByUser(User user);
+    void findByCustomerId(Long userId);
+    //DeliveryOrder findByDeliveryOrderStatusId(Integer deliveryOrderStatusId);
 }

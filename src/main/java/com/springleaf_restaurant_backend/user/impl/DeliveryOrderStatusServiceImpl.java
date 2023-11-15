@@ -7,6 +7,7 @@ import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderStatusRe
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderStatusService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeliveryOrderStatusServiceImpl implements DeliveryOrderStatusService {
@@ -22,10 +23,10 @@ public class DeliveryOrderStatusServiceImpl implements DeliveryOrderStatusServic
         return deliveryOrderStatusRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public DeliveryOrderStatus getDeliveryOrderStatusByName(String name) {
-        return deliveryOrderStatusRepository.findByName(name).orElse(null);
-    }
+    // @Override
+    // public DeliveryOrderStatus findByDeliveryOrderStatusName(String name) {
+    //     return deliveryOrderStatusRepository.findByDeliveryOrderStatusName(name).orElse(null);
+    // }
 
     @Override
     public List<DeliveryOrderStatus> getAllDeliveryOrderStatuses() {

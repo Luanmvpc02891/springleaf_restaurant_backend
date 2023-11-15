@@ -9,6 +9,7 @@ import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderReposito
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeliveryOrderServiceImpl implements DeliveryOrderService {
@@ -45,7 +46,8 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     }
 
     @Override
-    public void findByUser(User id) {
-        deliveryOrderRepository.findByUser(id);
+    public void findByCustomerId(Long id) {
+        deliveryOrderRepository.findByCustomerId(id);
     } 
+    
 }

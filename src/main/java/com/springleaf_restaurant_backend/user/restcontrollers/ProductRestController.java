@@ -1,16 +1,26 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.springleaf_restaurant_backend.security.config.JwtService;
+import com.springleaf_restaurant_backend.security.entities.User;
+import com.springleaf_restaurant_backend.security.service.UserService;
 import com.springleaf_restaurant_backend.user.entities.Category;
+import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
+import com.springleaf_restaurant_backend.user.entities.Order;
+import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 import com.springleaf_restaurant_backend.user.repositories.DeliveryOrderRepository;
 import com.springleaf_restaurant_backend.user.service.CategoryService;
+import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
 import com.springleaf_restaurant_backend.user.service.MenuItemService;
+import com.springleaf_restaurant_backend.user.service.OrderService;
 
 @RestController
 public class ProductRestController {
@@ -20,7 +30,13 @@ public class ProductRestController {
     @Autowired
     CategoryService categoryService;
     @Autowired
-    DeliveryOrderRepository deliveryOrderRepository;
+    DeliveryOrderService deliveryOrderService;
+    @Autowired
+    JwtService jwtService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    OrderService orderService;
 
     @GetMapping("/public/products")
     public List<MenuItem> getCategories() {
@@ -40,7 +56,7 @@ public class ProductRestController {
 
     @PostMapping("/public/create/product")
     public MenuItem createMenuItem(@RequestBody MenuItem menuItem) {
-        return menuItemService.saveMenuItem2(menuItem);
+        return menuItemService.saveMenuItem(menuItem);
     }
 
     @PutMapping("/public/update/product/{menuItemId}")
@@ -57,32 +73,31 @@ public class ProductRestController {
         menuItemService.deleteMenuItem(menuItemId);
     }
 
-    @PostMapping("/product/addToCart")
-    public ResponseEntity<String> addToCart(@RequestBody Long productId){
-    //DeliveryOrder deliveryOrder = deliveryOrderRepository.findByUser(Long.valueOf(1));
-    //     if(deliveryOrder == null) {
-    //         deliveryOrder = new DeliveryOrder();
-    //         deliveryOrder.setUser(Long.valueOf(1));
-    //         deliveryOrder.setDeliveryAddress(125);
-    //         deliveryOrderRepository.save(deliveryOrder);
-    //     }
-    //     DeliveryOrderDetail deliveryOrderDetail = deliveryOrderDetailRepository.findByDeliveryOrder(deliveryOrder.getDeliveryOrderId());
-    //     if(deliveryOrderDetail == null){
-    //         deliveryOrderDetail = new DeliveryOrderDetail();
-    //         deliveryOrderDetail.setDeliveryOrder(deliveryOrder.getDeliveryOrderId());
-    //         deliveryOrderDetailRepository.save(deliveryOrderDetail);
-    //     }
-    //     if(deliveryOrderDetail.getMenuItem() == productId){
-    //         System.out.println("Đã có trong giỏ hàng");
-    //         return ResponseEntity.badRequest().body("Đã có trong giỏ hàng");
-    //     }else{
-    //         deliveryOrderDetail.setDeliveryOrder(deliveryOrder.getDeliveryOrderId());
-    //         deliveryOrderDetail.setMenuItem(productId);
-    //         deliveryOrderDetail.setOrderTime(new Date());
-    //         deliveryOrderDetail.setQuantity(1);
-    //         deliveryOrderDetailRepository.save(deliveryOrderDetail);
-    //         System.out.println("Thêm thành công");
-             return ResponseEntity.ok("Thêm thành công");
-    //     }
+    @PostMapping("/public/product/addToCart")
+    public ResponseEntity<String> addToCart(
+        @RequestHeader("header") String header, @RequestBody List<Long> body)
+        {
+        String jwt = header.substring(7);
+        if(jwtService.isTokenExpired(jwt)){
+            Optional<User> user = userService.findByUsername(jwtService.extractUsername(jwt));
+            if(user != null){
+                Order order = new Order();
+                OrderDetail orderDetail = new OrderDetail();
+                DeliveryOrder deliveryOrder = new DeliveryOrder();
+                deliveryOrder.setCustomerId(body.get(0));
+                //deliveryOrder.setDeliveryAddress(Integer.valueOf(body.get(1)));
+                deliveryOrder.setDeliveryOrderStatusId(null);
+                deliveryOrder.setDeliveryOrderTypeId(null);
+                deliveryOrderService.saveDeliveryOrder(deliveryOrder);
+                order.setDeliveryOrderId(deliveryOrder.getDeliveryOrderId());
+                order.setReservationId(null);
+                order.setStaffId(null);
+                order.setCombo(null);
+                order.setOrderDate(new Date());
+                order.setStatus(true);
+                order.setTotalAmount(null);
+            }
+        }
+        return ResponseEntity.ok("Thêm thành công");
     }
 }

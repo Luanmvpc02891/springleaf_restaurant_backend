@@ -38,11 +38,6 @@ public class MenuItemServiceImpl implements MenuItemService {
     public MenuItem saveMenuItem(MenuItem menuItem) {
         return menuItemRepository.save(menuItem);
     }
-    
-    @Override
-    public MenuItem saveMenuItem2(MenuItem menuItem) {
-        return menuItemRepository.save(menuItem);
-    }
 
     @Override
     public MenuItem updateMenuItem(MenuItem menuItem) {
