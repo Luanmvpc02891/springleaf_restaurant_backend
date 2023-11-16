@@ -11,30 +11,30 @@ import com.springleaf_restaurant_backend.user.service.GoodsReceiptService;
 @RestController
 public class GoodsReceiptRestController {
     @Autowired
-    private GoodsReceiptService GoodsReceiptService;
+    private GoodsReceiptService goodsReceiptService;
 
-    @GetMapping("/public/deliveries")
+    @GetMapping("/public/goodsReceipts")
     public List<GoodsReceipt> getGoodsReceipt() {
-        return GoodsReceiptService.getAllDeliveries();
+        return goodsReceiptService.getAllDeliveries();
     }
 
-    @GetMapping("/public/GoodsReceipt/{GoodsReceiptId}")
+    @GetMapping("/public/goodsReceipt/{GoodsReceiptId}")
     public GoodsReceipt getOneGoodsReceipt(@PathVariable("GoodsReceiptId") Long GoodsReceiptId){
-        return GoodsReceiptService.getGoodsReceiptById(GoodsReceiptId);
+        return goodsReceiptService.getGoodsReceiptById(GoodsReceiptId);
     }
 
-    @PostMapping("/public/create/GoodsReceipt")
+    @PostMapping("/public/create/goodsReceipt")
     public GoodsReceipt createGoodsReceipt(@RequestBody GoodsReceipt GoodsReceipt){
-        return GoodsReceiptService.saveGoodsReceipt(GoodsReceipt);
+        return goodsReceiptService.saveGoodsReceipt(GoodsReceipt);
     }
 
-    @PutMapping("/public/update/GoodsReceipt")
+    @PutMapping("/public/update/goodsReceipt")
     public GoodsReceipt updateGoodsReceipt(@RequestBody GoodsReceipt GoodsReceipt){
-        return GoodsReceiptService.saveGoodsReceipt(GoodsReceipt);
+        return goodsReceiptService.saveGoodsReceipt(GoodsReceipt);
     }
 
-    @DeleteMapping("/public/delete/GoodsReceipt/{GoodsReceiptId}")
+    @DeleteMapping("/public/delete/goodsReceipt/{GoodsReceiptId}")
     public void deleteGoodsReceipt(@PathVariable("GoodsReceiptId") Long GoodsReceiptId){
-        GoodsReceiptService.deleteGoodsReceipt(GoodsReceiptId);
+        goodsReceiptService.deleteGoodsReceipt(GoodsReceiptId);
     }
 }
