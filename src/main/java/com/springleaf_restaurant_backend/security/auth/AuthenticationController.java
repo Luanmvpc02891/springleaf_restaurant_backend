@@ -5,9 +5,14 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.springleaf_restaurant_backend.security.config.JwtService;
+import com.springleaf_restaurant_backend.security.config.LogoutService;
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 
@@ -19,6 +24,7 @@ public class AuthenticationController {
   private final AuthenticationService service;
   private final JwtService jwtService;
   private final UserRepository userRepository;
+  private final LogoutService logoutService;
 
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
@@ -82,5 +88,10 @@ public class AuthenticationController {
             }
         
     }
+    
+    // @PostMapping("/logout")
+    // public void logout(){
+    //   logoutService.logout(null, null, null);
+    // }
 
 }

@@ -9,6 +9,7 @@ import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 import com.springleaf_restaurant_backend.security.service.UserRoleService;
+import com.springleaf_restaurant_backend.security.service.UserService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final UserRoleService userRoleService;
+  private final UserService userService;
 
   @Autowired
   RoleRepository roleRepository;
@@ -93,6 +95,31 @@ public class AuthenticationService {
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
         //.refreshToken(refreshToken)
+        .user(user)
+      .build();
+  }
+  // ---- Login google -- //
+  public AuthenticationResponse authenticateGoogleLogin(User user) {
+    authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(
+            user.getUsername(),
+            user.getPassword()
+        )
+    );
+    var jwtToken = jwtService.generateToken(user);
+    //var refreshToken = jwtService.generateRefreshToken(user);
+    if(user != null){
+      List<String> role_name = userRepository.findRoleNamesByUserId(user.getUserId());
+      if (role_name != null) {
+        user.setRoleName(role_name);
+      } else {
+          System.out.println("Không có role nào cho người dùng này.");
+      }
+    }
+    revokeAllUserTokens(user);
+    saveUserToken(user, jwtToken);
+    return AuthenticationResponse.builder()
+        .accessToken(jwtToken)
         .user(user)
       .build();
   }
