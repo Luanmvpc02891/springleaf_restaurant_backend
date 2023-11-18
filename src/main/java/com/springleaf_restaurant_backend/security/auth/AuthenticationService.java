@@ -1,28 +1,24 @@
 package com.springleaf_restaurant_backend.security.auth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springleaf_restaurant_backend.security.config.JwtService;
 import com.springleaf_restaurant_backend.security.entities.User;
+import com.springleaf_restaurant_backend.security.entities.UserRole;
 import com.springleaf_restaurant_backend.security.entities.token.Token;
 import com.springleaf_restaurant_backend.security.entities.token.TokenType;
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
+import com.springleaf_restaurant_backend.security.service.UserRoleService;
 
 import io.jsonwebtoken.ExpiredJwtException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +30,7 @@ public class AuthenticationService {
   private final PasswordEncoder passwordEncoder;
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
+  private final UserRoleService userRoleService;
 
   @Autowired
   RoleRepository roleRepository;
@@ -59,11 +56,15 @@ public class AuthenticationService {
             .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        var refreshToken = jwtService.generateRefreshToken(user);
+        //var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
+        UserRole ur = new UserRole();
+        ur.setRoleId(3);
+        ur.setUserId(user.getUserId());
+        userRoleService.createUserRole(ur);
         return AuthenticationResponse.builder()
             .accessToken(jwtToken)
-            .refreshToken(refreshToken)
+            //.refreshToken(refreshToken)
             .build();
     }
   }
@@ -78,7 +79,7 @@ public class AuthenticationService {
     var user = userRepository.findByUsername(request.getUserName())
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
-    var refreshToken = jwtService.generateRefreshToken(user);
+    //var refreshToken = jwtService.generateRefreshToken(user);
     if(user != null){
       List<String> role_name = userRepository.findRoleNamesByUserId(user.getUserId());
       if (role_name != null) {
@@ -91,7 +92,7 @@ public class AuthenticationService {
     saveUserToken(user, jwtToken);
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
-        .refreshToken(refreshToken)
+        //.refreshToken(refreshToken)
         .user(user)
       .build();
   }
@@ -117,7 +118,7 @@ public class AuthenticationService {
                 }
                 return AuthenticationResponse.builder()
                     .accessToken(accessToken)
-                    .refreshToken(accessToken)
+                    //.refreshToken(accessToken)
                     .user(user)
                     .build();
             }
@@ -160,31 +161,31 @@ public class AuthenticationService {
 }
 
 
-  public void refreshToken(
-          HttpServletRequest request,
-          HttpServletResponse response
-  ) throws IOException {
-    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String refreshToken;
-    final String userName;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      return;
-    }
-    refreshToken = authHeader.substring(7);
-    userName = jwtService.extractUsername(refreshToken);
-    if (userName != null) {
-      var user = this.userRepository.findByUsername(userName)
-              .orElseThrow();
-      if (jwtService.isTokenValid(refreshToken, user)) {
-        var accessToken = jwtService.generateToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
-        var authResponse = AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
-        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-      }
-    }
-  }
+  // public void refreshToken(
+  //         HttpServletRequest request,
+  //         HttpServletResponse response
+  // ) throws IOException {
+  //   final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+  //   final String refreshToken;
+  //   final String userName;
+  //   if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+  //     return;
+  //   }
+  //   refreshToken = authHeader.substring(7);
+  //   userName = jwtService.extractUsername(refreshToken);
+  //   if (userName != null) {
+  //     var user = this.userRepository.findByUsername(userName)
+  //             .orElseThrow();
+  //     if (jwtService.isTokenValid(refreshToken, user)) {
+  //       var accessToken = jwtService.generateToken(user);
+  //       revokeAllUserTokens(user);
+  //       saveUserToken(user, accessToken);
+  //       var authResponse = AuthenticationResponse.builder()
+  //               .accessToken(accessToken)
+  //               .refreshToken(refreshToken)
+  //               .build();
+  //       new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+  //     }
+  //   }
+  // }
 }
