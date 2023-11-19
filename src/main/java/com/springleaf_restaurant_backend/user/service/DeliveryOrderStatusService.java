@@ -6,9 +6,12 @@ import java.util.List;
 
 public interface DeliveryOrderStatusService {
     DeliveryOrderStatus getDeliveryOrderStatusById(Long id);
-    //Optional<DeliveryOrderStatus> findByDeliveryOrderStatusName(String deliveryOrderStatusName);
+
+    // Optional<DeliveryOrderStatus> findByDeliveryOrderStatusName(String
+    // deliveryOrderStatusName);
     List<DeliveryOrderStatus> getAllDeliveryOrderStatuses();
+
     DeliveryOrderStatus saveDeliveryOrderStatus(DeliveryOrderStatus deliveryOrderStatus);
-    DeliveryOrderStatus updateDeliveryOrderStatus(DeliveryOrderStatus deliveryOrderStatus);
+
     void deleteDeliveryOrderStatus(Long id);
 }

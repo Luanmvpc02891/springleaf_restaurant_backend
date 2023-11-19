@@ -12,7 +12,6 @@ import java.util.List;
 public class MenuItemIngredientServiceImpl implements MenuItemIngredientService {
     private final MenuItemIngredientRepository menuItemIngredientRepository;
 
-    @Autowired
     public MenuItemIngredientServiceImpl(MenuItemIngredientRepository menuItemIngredientRepository) {
         this.menuItemIngredientRepository = menuItemIngredientRepository;
     }
@@ -29,11 +28,6 @@ public class MenuItemIngredientServiceImpl implements MenuItemIngredientService 
 
     @Override
     public MenuItemIngredient saveMenuItemIngredient(MenuItemIngredient menuItemIngredient) {
-        return menuItemIngredientRepository.save(menuItemIngredient);
-    }
-
-    @Override
-    public MenuItemIngredient updateMenuItemIngredient(MenuItemIngredient menuItemIngredient) {
         return menuItemIngredientRepository.save(menuItemIngredient);
     }
 

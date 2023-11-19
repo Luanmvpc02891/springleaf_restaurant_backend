@@ -12,7 +12,6 @@ import java.util.List;
 public class DiscountServiceImpl implements DiscountService {
     private final DiscountRepository discountRepository;
 
-    @Autowired
     public DiscountServiceImpl(DiscountRepository discountRepository) {
         this.discountRepository = discountRepository;
     }
@@ -29,11 +28,6 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Discount saveDiscount(Discount discount) {
-        return discountRepository.save(discount);
-    }
-
-    @Override
-    public Discount updateDiscount(Discount discount) {
         return discountRepository.save(discount);
     }
 

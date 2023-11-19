@@ -12,7 +12,6 @@ import java.util.List;
 public class RatingServiceImpl implements RatingService {
     private final RatingRepository ratingRepository;
 
-    @Autowired
     public RatingServiceImpl(RatingRepository ratingRepository) {
         this.ratingRepository = ratingRepository;
     }
@@ -29,11 +28,6 @@ public class RatingServiceImpl implements RatingService {
 
     @Override
     public Rating saveRating(Rating rating) {
-        return ratingRepository.save(rating);
-    }
-
-    @Override
-    public Rating updateRating(Rating rating) {
         return ratingRepository.save(rating);
     }
 

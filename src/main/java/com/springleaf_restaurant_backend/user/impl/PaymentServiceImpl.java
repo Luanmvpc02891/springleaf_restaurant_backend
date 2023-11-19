@@ -12,7 +12,6 @@ import java.util.List;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
-    @Autowired
     public PaymentServiceImpl(PaymentRepository paymentRepository) {
         this.paymentRepository = paymentRepository;
     }
@@ -29,11 +28,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public Payment savePayment(Payment payment) {
-        return paymentRepository.save(payment);
-    }
-
-    @Override
-    public Payment updatePayment(Payment payment) {
         return paymentRepository.save(payment);
     }
 

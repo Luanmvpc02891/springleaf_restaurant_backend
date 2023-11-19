@@ -6,8 +6,12 @@ import java.util.List;
 
 public interface RestaurantTableService {
     List<RestaurantTable> getAllRestaurantTables();
+
     RestaurantTable getRestaurantTableById(Long id);
+
     RestaurantTable saveRestaurantTable(RestaurantTable restaurantTable);
+
     RestaurantTable updateRestaurantTable(RestaurantTable restaurantTable);
+
     void deleteRestaurantTable(Long id);
 }

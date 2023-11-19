@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface ComboDetailService {
     ComboDetail getComboDetailById(Long id);
+
     List<ComboDetail> getAllComboDetails();
+
     ComboDetail saveComboDetail(ComboDetail comboDetail);
-    void updateComboDetail(ComboDetail comboDetail);
+
     void deleteComboDetail(Long id);
 }

@@ -12,7 +12,6 @@ import java.util.List;
 public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
 
-    @Autowired
     public InventoryServiceImpl(InventoryRepository inventoryRepository) {
         this.inventoryRepository = inventoryRepository;
     }
@@ -29,11 +28,6 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public Inventory saveInventory(Inventory inventory) {
-        return inventoryRepository.save(inventory);
-    }
-
-    @Override
-    public Inventory updateInventory(Inventory inventory) {
         return inventoryRepository.save(inventory);
     }
 

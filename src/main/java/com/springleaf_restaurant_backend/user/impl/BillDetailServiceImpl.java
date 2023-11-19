@@ -34,11 +34,6 @@ public class BillDetailServiceImpl implements BillDetailService {
     }
 
     @Override
-    public BillDetail updateBillDetail(BillDetail billDetail) {
-        return billDetailRepository.save(billDetail);
-    }
-
-    @Override
     public void deleteBillDetail(Long id) {
         billDetailRepository.deleteById(id);
     }

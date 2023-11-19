@@ -12,7 +12,6 @@ import java.util.List;
 public class SupplierServiceImpl implements SupplierService {
     private final SupplierRepository supplierRepository;
 
-    @Autowired
     public SupplierServiceImpl(SupplierRepository supplierRepository) {
         this.supplierRepository = supplierRepository;
     }
@@ -29,11 +28,6 @@ public class SupplierServiceImpl implements SupplierService {
 
     @Override
     public Supplier saveSupplier(Supplier supplier) {
-        return supplierRepository.save(supplier);
-    }
-
-    @Override
-    public Supplier updateSupplier(Supplier supplier) {
         return supplierRepository.save(supplier);
     }
 

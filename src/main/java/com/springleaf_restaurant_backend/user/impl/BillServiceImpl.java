@@ -34,11 +34,6 @@ public class BillServiceImpl implements BillService {
     }
 
     @Override
-    public Bill updateBill(Bill bill) {
-        return billRepository.save(bill);
-    }
-
-    @Override
     public void deleteBill(Long id) {
         billRepository.deleteById(id);
     }

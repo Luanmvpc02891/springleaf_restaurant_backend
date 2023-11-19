@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface OrderThresholdService {
     List<OrderThreshold> getAllOrderThresholds();
+
     OrderThreshold getOrderThresholdById(Long id);
+
     OrderThreshold saveOrderThreshold(OrderThreshold orderThreshold);
-    OrderThreshold updateOrderThreshold(OrderThreshold orderThreshold);
+
     void deleteOrderThreshold(Long id);
 }

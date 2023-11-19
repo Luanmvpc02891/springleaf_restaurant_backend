@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface ReceiptService {
     List<Receipt> getAllReceipts();
+
     Receipt getReceiptById(Long id);
+
     Receipt saveReceipt(Receipt receipt);
-    Receipt updateReceipt(Receipt receipt);
+
     void deleteReceipt(Long id);
 }

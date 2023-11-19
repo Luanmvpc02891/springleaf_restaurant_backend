@@ -12,7 +12,6 @@ import java.util.List;
 public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
 
-    @Autowired
     public EventServiceImpl(EventRepository eventRepository) {
         this.eventRepository = eventRepository;
     }
@@ -29,11 +28,6 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event saveEvent(Event event) {
-        return eventRepository.save(event);
-    }
-
-    @Override
-    public Event updateEvent(Event event) {
         return eventRepository.save(event);
     }
 

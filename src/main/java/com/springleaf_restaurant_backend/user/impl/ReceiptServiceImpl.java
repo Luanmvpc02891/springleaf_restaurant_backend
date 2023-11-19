@@ -12,7 +12,6 @@ import java.util.List;
 public class ReceiptServiceImpl implements ReceiptService {
     private final ReceiptRepository receiptRepository;
 
-    @Autowired
     public ReceiptServiceImpl(ReceiptRepository receiptRepository) {
         this.receiptRepository = receiptRepository;
     }
@@ -29,11 +28,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     public Receipt saveReceipt(Receipt receipt) {
-        return receiptRepository.save(receipt);
-    }
-
-    @Override
-    public Receipt updateReceipt(Receipt receipt) {
         return receiptRepository.save(receipt);
     }
 

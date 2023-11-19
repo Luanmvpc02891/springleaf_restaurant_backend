@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface InventoryBranchService {
     InventoryBranch getInventoryBranchById(Long id);
+
     List<InventoryBranch> getAllInventoryBranches();
+
     InventoryBranch saveInventoryBranch(InventoryBranch inventoryBranch);
-    InventoryBranch updateInventoryBranch(InventoryBranch inventoryBranch);
+
     void deleteInventoryBranch(Long id);
 }

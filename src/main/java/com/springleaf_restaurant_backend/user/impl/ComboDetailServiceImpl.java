@@ -34,11 +34,6 @@ public class ComboDetailServiceImpl implements ComboDetailService {
     }
 
     @Override
-    public void updateComboDetail(ComboDetail comboDetail) {
-        comboDetailRepository.save(comboDetail);
-    }
-
-    @Override
     public void deleteComboDetail(Long id) {
         comboDetailRepository.deleteById(id);
     }

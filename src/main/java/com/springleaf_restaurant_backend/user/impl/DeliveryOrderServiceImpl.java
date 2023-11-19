@@ -15,7 +15,6 @@ import java.util.Optional;
 public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     private final DeliveryOrderRepository deliveryOrderRepository;
 
-    @Autowired
     public DeliveryOrderServiceImpl(DeliveryOrderRepository deliveryOrderRepository) {
         this.deliveryOrderRepository = deliveryOrderRepository;
     }
@@ -32,11 +31,6 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
 
     @Override
     public DeliveryOrder saveDeliveryOrder(DeliveryOrder deliveryOrder) {
-        return deliveryOrderRepository.save(deliveryOrder);
-    }
-
-    @Override
-    public DeliveryOrder updateDeliveryOrder(DeliveryOrder deliveryOrder) {
         return deliveryOrderRepository.save(deliveryOrder);
     }
 
