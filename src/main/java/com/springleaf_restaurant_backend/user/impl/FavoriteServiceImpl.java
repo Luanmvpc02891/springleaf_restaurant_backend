@@ -12,7 +12,6 @@ import java.util.List;
 public class FavoriteServiceImpl implements FavoriteService {
     private final FavoriteRepository favoriteRepository;
 
-    @Autowired
     public FavoriteServiceImpl(FavoriteRepository favoriteRepository) {
         this.favoriteRepository = favoriteRepository;
     }
@@ -29,11 +28,6 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public Favorite saveFavorite(Favorite favorite) {
-        return favoriteRepository.save(favorite);
-    }
-
-    @Override
-    public Favorite updateFavorite(Favorite favorite) {
         return favoriteRepository.save(favorite);
     }
 

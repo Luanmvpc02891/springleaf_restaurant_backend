@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface DiscountService {
     Discount getDiscountById(Integer id);
+
     List<Discount> getAllDiscounts();
+
     Discount saveDiscount(Discount discount);
-    Discount updateDiscount(Discount discount);
+
     void deleteDiscount(Integer id);
 }

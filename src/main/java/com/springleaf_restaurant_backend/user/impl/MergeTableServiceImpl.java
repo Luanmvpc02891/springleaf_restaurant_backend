@@ -12,7 +12,6 @@ import java.util.List;
 public class MergeTableServiceImpl implements MergeTableService {
     private final MergeTableRepository mergeTableRepository;
 
-    @Autowired
     public MergeTableServiceImpl(MergeTableRepository mergeTableRepository) {
         this.mergeTableRepository = mergeTableRepository;
     }
@@ -29,11 +28,6 @@ public class MergeTableServiceImpl implements MergeTableService {
 
     @Override
     public MergeTable saveMergeTable(MergeTable mergeTable) {
-        return mergeTableRepository.save(mergeTable);
-    }
-
-    @Override
-    public MergeTable updateMergeTable(MergeTable mergeTable) {
         return mergeTableRepository.save(mergeTable);
     }
 

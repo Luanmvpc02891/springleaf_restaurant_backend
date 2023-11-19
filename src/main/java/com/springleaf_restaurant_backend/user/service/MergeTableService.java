@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface MergeTableService {
     List<MergeTable> getAllMergeTables();
+
     MergeTable getMergeTableById(Long id);
+
     MergeTable saveMergeTable(MergeTable mergeTable);
-    MergeTable updateMergeTable(MergeTable mergeTable);
+
     void deleteMergeTable(Long id);
 }

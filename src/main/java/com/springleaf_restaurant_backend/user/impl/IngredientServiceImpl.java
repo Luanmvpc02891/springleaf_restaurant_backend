@@ -12,7 +12,6 @@ import java.util.List;
 public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
 
-    @Autowired
     public IngredientServiceImpl(IngredientRepository ingredientRepository) {
         this.ingredientRepository = ingredientRepository;
     }
@@ -29,11 +28,6 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Ingredient saveIngredient(Ingredient ingredient) {
-        return ingredientRepository.save(ingredient);
-    }
-
-    @Override
-    public Ingredient updateIngredient(Ingredient ingredient) {
         return ingredientRepository.save(ingredient);
     }
 

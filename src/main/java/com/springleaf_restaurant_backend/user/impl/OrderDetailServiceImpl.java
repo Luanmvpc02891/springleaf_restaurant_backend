@@ -12,7 +12,6 @@ import java.util.List;
 public class OrderDetailServiceImpl implements OrderDetailService {
     private final OrderDetailRepository orderDetailRepository;
 
-    @Autowired
     public OrderDetailServiceImpl(OrderDetailRepository orderDetailRepository) {
         this.orderDetailRepository = orderDetailRepository;
     }
@@ -29,11 +28,6 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 
     @Override
     public OrderDetail saveOrderDetail(OrderDetail orderDetail) {
-        return orderDetailRepository.save(orderDetail);
-    }
-
-    @Override
-    public OrderDetail updateOrderDetail(OrderDetail orderDetail) {
         return orderDetailRepository.save(orderDetail);
     }
 

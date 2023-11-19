@@ -13,7 +13,6 @@ import java.util.List;
 public class GoodsReceiptServiceImpl implements GoodsReceiptService {
     private final GoodsReceiptRepository goodsReceiptRepository;
 
-    @Autowired
     public GoodsReceiptServiceImpl(GoodsReceiptRepository goodsReceiptRepository) {
         this.goodsReceiptRepository = goodsReceiptRepository;
     }
@@ -32,11 +31,6 @@ public class GoodsReceiptServiceImpl implements GoodsReceiptService {
     public GoodsReceipt saveGoodsReceipt(GoodsReceipt goodsReceipt) {
         return goodsReceiptRepository.save(goodsReceipt);
     } 
-
-    @Override
-    public GoodsReceipt updateGoodsReceipt(GoodsReceipt goodsReceipt) {
-        return goodsReceiptRepository.save(goodsReceipt);
-    }
 
     @Override
     public void deleteGoodsReceipt(Long id) {

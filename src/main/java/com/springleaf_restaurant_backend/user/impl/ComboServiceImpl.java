@@ -34,11 +34,6 @@ public class ComboServiceImpl implements ComboService {
     }
 
     @Override
-    public void updateCombo(Combo combo) {
-        comboRepository.save(combo);
-    }
-
-    @Override
     public void deleteCombo(Long id) {
         comboRepository.deleteById(id);
     }

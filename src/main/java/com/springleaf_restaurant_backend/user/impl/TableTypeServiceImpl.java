@@ -12,7 +12,6 @@ import java.util.List;
 public class TableTypeServiceImpl implements TableTypeService {
     private final TableTypeRepository tableTypeRepository;
 
-    @Autowired
     public TableTypeServiceImpl(TableTypeRepository tableTypeRepository) {
         this.tableTypeRepository = tableTypeRepository;
     }
@@ -29,11 +28,6 @@ public class TableTypeServiceImpl implements TableTypeService {
 
     @Override
     public TableType saveTableType(TableType tableType) {
-        return tableTypeRepository.save(tableType);
-    }
-
-    @Override
-    public TableType updateTableType(TableType tableType) {
         return tableTypeRepository.save(tableType);
     }
 

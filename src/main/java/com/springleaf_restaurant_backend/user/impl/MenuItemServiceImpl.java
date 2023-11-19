@@ -14,7 +14,6 @@ import java.util.List;
 public class MenuItemServiceImpl implements MenuItemService {
     private final MenuItemRepository menuItemRepository;
 
-    @Autowired
     public MenuItemServiceImpl(MenuItemRepository menuItemRepository) {
         this.menuItemRepository = menuItemRepository;
     }
@@ -36,11 +35,6 @@ public class MenuItemServiceImpl implements MenuItemService {
 
     @Override
     public MenuItem saveMenuItem(MenuItem menuItem) {
-        return menuItemRepository.save(menuItem);
-    }
-
-    @Override
-    public MenuItem updateMenuItem(MenuItem menuItem) {
         return menuItemRepository.save(menuItem);
     }
 

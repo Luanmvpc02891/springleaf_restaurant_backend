@@ -12,7 +12,6 @@ import java.util.List;
 public class OrderThresholdServiceImpl implements OrderThresholdService {
     private final OrderThresholdRepository orderThresholdRepository;
 
-    @Autowired
     public OrderThresholdServiceImpl(OrderThresholdRepository orderThresholdRepository) {
         this.orderThresholdRepository = orderThresholdRepository;
     }
@@ -29,11 +28,6 @@ public class OrderThresholdServiceImpl implements OrderThresholdService {
 
     @Override
     public OrderThreshold saveOrderThreshold(OrderThreshold orderThreshold) {
-        return orderThresholdRepository.save(orderThreshold);
-    }
-
-    @Override
-    public OrderThreshold updateOrderThreshold(OrderThreshold orderThreshold) {
         return orderThresholdRepository.save(orderThreshold);
     }
 

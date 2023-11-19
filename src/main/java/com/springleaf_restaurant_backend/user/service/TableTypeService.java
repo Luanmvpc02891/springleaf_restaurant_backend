@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface TableTypeService {
     List<TableType> getAllTableTypes();
+
     TableType getTableTypeById(Integer id);
+
     TableType saveTableType(TableType tableType);
-    TableType updateTableType(TableType tableType);
+
     void deleteTableType(Integer id);
 }

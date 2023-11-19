@@ -12,7 +12,6 @@ import java.util.List;
 public class TableStatusServiceImpl implements TableStatusService {
     private final TableStatusRepository tableStatusRepository;
 
-    @Autowired
     public TableStatusServiceImpl(TableStatusRepository tableStatusRepository) {
         this.tableStatusRepository = tableStatusRepository;
     }
@@ -29,11 +28,6 @@ public class TableStatusServiceImpl implements TableStatusService {
 
     @Override
     public TableStatus saveTableStatus(TableStatus tableStatus) {
-        return tableStatusRepository.save(tableStatus);
-    }
-
-    @Override
-    public TableStatus updateTableStatus(TableStatus tableStatus) {
         return tableStatusRepository.save(tableStatus);
     }
 

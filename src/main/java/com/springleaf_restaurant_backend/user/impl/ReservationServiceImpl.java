@@ -12,7 +12,6 @@ import java.util.List;
 public class ReservationServiceImpl implements ReservationService {
     private final ReservationRepository reservationRepository;
 
-    @Autowired
     public ReservationServiceImpl(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
     }
@@ -30,11 +29,6 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation saveReservation(Reservation reservation) { 
         return reservationRepository.save(reservation);
-    }
-
-    @Override
-    public Reservation updateReservation(Reservation reservation) {
-        return  reservationRepository.save(reservation);
     }
 
     @Override

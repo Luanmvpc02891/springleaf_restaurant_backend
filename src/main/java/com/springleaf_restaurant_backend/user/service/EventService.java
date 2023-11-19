@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface EventService {
     Event getEventById(Long id);
+
     List<Event> getAllEvents();
+
     Event saveEvent(Event event);
-    Event updateEvent(Event event);
+
     void deleteEvent(Long id);
 }

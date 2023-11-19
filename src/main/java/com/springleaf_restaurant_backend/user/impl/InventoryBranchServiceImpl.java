@@ -12,7 +12,6 @@ import java.util.List;
 public class InventoryBranchServiceImpl implements InventoryBranchService {
     private final InventoryBranchRepository inventoryBranchRepository;
 
-    @Autowired
     public InventoryBranchServiceImpl(InventoryBranchRepository inventoryBranchRepository) {
         this.inventoryBranchRepository = inventoryBranchRepository;
     }
@@ -29,11 +28,6 @@ public class InventoryBranchServiceImpl implements InventoryBranchService {
 
     @Override
     public InventoryBranch saveInventoryBranch(InventoryBranch inventoryBranch) {
-        return inventoryBranchRepository.save(inventoryBranch);
-    }
-
-    @Override
-    public InventoryBranch updateInventoryBranch(InventoryBranch inventoryBranch) {
         return inventoryBranchRepository.save(inventoryBranch);
     }
 

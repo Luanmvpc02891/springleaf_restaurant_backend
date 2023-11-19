@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface MenuItemIngredientService {
     List<MenuItemIngredient> getAllMenuItemIngredients();
+
     MenuItemIngredient getMenuItemIngredientById(Long id);
+
     MenuItemIngredient saveMenuItemIngredient(MenuItemIngredient menuItemIngredient);
-    MenuItemIngredient updateMenuItemIngredient(MenuItemIngredient menuItemIngredient);
+
     void deleteMenuItemIngredient(Long id);
 }

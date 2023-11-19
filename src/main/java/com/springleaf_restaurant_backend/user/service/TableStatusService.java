@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface TableStatusService {
     List<TableStatus> getAllTableStatuses();
+
     TableStatus getTableStatusById(Integer id);
+
     TableStatus saveTableStatus(TableStatus tableStatus);
-    TableStatus updateTableStatus(TableStatus tableStatus);
+
     void deleteTableStatus(Integer id);
 }
