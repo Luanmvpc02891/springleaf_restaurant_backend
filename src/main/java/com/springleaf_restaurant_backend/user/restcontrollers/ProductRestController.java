@@ -58,7 +58,7 @@ public class ProductRestController {
         return menuItemService.saveMenuItem(menuItem);
     }
 
-    @PutMapping("/public/update/product/{menuItemId}")
+    @PutMapping("/public/update/product")
     public MenuItem updateMenuItem(@RequestBody MenuItem updatedMenuItem) {
         return menuItemService.saveMenuItem(updatedMenuItem);
     }
