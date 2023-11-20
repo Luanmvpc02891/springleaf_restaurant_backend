@@ -30,6 +30,6 @@ public class Reservation {
     private Long numberOfGuests;
 
     @Column(name = "reservation_status")
-    private Integer reservationStatus;
+    private Integer reservationStatusId;
 
 }
