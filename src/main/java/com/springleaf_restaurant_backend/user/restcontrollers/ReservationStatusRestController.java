@@ -7,13 +7,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springleaf_restaurant_backend.user.entities.ReservationStatus;
-import com.springleaf_restaurant_backend.user.entities.Restaurant;
 import com.springleaf_restaurant_backend.user.service.ReservationStatusService;
-import com.springleaf_restaurant_backend.user.service.RestaurantService;
 
 @RestController
 public class ReservationStatusRestController {
@@ -22,7 +21,7 @@ public class ReservationStatusRestController {
     private ReservationStatusService reservationStatusService;
 
     @GetMapping("/public/reservationStatuses")
-    public List<ReservationStatus> getRestaurant() {
+    public List<ReservationStatus> getReservationStatus() {
         return reservationStatusService.getAllReservationStatuses();
     }
 
@@ -32,17 +31,17 @@ public class ReservationStatusRestController {
     }
 
     @PostMapping("/public/create/reservationStatus")
-    public ReservationStatus createRestaurant(@RequestBody ReservationStatus reservationStatus){
+    public ReservationStatus createReservationStatus(@RequestBody ReservationStatus reservationStatus){
         return reservationStatusService.saveReservationStatus(reservationStatus);
     }
 
-    @PostMapping("/public/update/reservationStatus")
-    public ReservationStatus updateRestaurant(@RequestBody ReservationStatus reservationStatus) {
+    @PutMapping("/public/update/reservationStatus")
+    public ReservationStatus updateReservationStatus(@RequestBody ReservationStatus reservationStatus) {
         return reservationStatusService.saveReservationStatus(reservationStatus);
     }
 
     @DeleteMapping("/public/delete/reservationStatus/{reservationStatusId}")
-    public void deleteRestaurantById(@PathVariable("reservationStatusId") Integer reservationStatusId) {
+    public void deleteReservationStatusById(@PathVariable("reservationStatusId") Integer reservationStatusId) {
         reservationStatusService.deleteReservationStatus(reservationStatusId);
     }
 

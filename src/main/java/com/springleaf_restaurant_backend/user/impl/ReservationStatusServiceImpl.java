@@ -34,7 +34,7 @@ public class ReservationStatusServiceImpl implements ReservationStatusService {
 
     @Override
     public void deleteReservationStatus(Integer id) {
-     
+        reservationStatusRepository.deleteById(id);
     }
     
 }
