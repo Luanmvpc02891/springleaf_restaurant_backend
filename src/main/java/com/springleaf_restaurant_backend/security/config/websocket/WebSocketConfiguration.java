@@ -10,28 +10,16 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
-    // @Override
-    // public void registerStompEndpoints(StompEndpointRegistry registry) {
-    // registry.addEndpoint("/socket").setAllowedOrigins("http://localhost:4200",
-    // "https://springleafrestaurant.onrender.com");
-    // registry.addEndpoint("/socket").setAllowedOrigins("http://localhost:4200",
-    // "https://springleafrestaurant.onrender.com").withSockJS();
-    // }
-
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/socket")
-                .setAllowedOrigins("*"); // Cho phép tất cả các domain kết nối WebSocket
-
-        registry.addEndpoint("/socket")
-                .setAllowedOrigins("*")
-                .withSockJS();
+        registry.addEndpoint("/public/socket").setAllowedOrigins("http://localhost:4200", "https://springleafrestaurant.onrender.com");
+        registry.addEndpoint("/public/socket").setAllowedOrigins("http://localhost:4200", "https://springleafrestaurant.onrender.com").withSockJS();
     }
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
-        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker("/public/topic");
+        registry.setApplicationDestinationPrefixes("/public/app");
     }
 
 }
