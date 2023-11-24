@@ -76,13 +76,11 @@ public class WebSockerRestController {
     }
 
     @MessageMapping("/private/{userId}")
-    // @Scheduled(fixedRate = 1000)
+    //@Scheduled(fixedRate = 1000)
     @SendTo("/private/greetings/{userId}")
-    public String handleStompMessage(@DestinationVariable String userId) {
-        // Xử lý tin nhắn STOMP ở đây
-        // System.out.println("Received login topic: " + userId);
-        // System.out.println("Received name topic: " + message.getName());
-        System.out.println("Sóc liên tục");
+    public String handleStompMessage(@DestinationVariable String userId, String name) {
+        System.out.println("Socket");
+        System.out.println("User Id: " + userId);
 
         // Lấy thời gian hiện tại theo UTC
         Instant currentUtcTime = Instant.now();
