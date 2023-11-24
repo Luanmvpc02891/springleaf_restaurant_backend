@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class HelloMessage {
+public class WebSocketMessage {
 
   private String name;
-  private Integer userId;
+  private Object[] objects;
 
 }

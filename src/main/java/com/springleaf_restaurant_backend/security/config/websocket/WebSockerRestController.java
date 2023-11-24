@@ -50,7 +50,7 @@ public class WebSockerRestController {
 
     @MessageMapping("/topic/{userId}")
     @SendTo("/topic/greetings/{userId}")
-    public String handleStompMessage(@DestinationVariable Integer userId, HelloMessage message) {
+    public String handleStompMessage(@DestinationVariable Integer userId, WebSocketMessage message) {
         // Xử lý tin nhắn STOMP ở đây
         System.out.println("Received login topic: " + userId);
         System.out.println("Received name topic: " + message.getName());
@@ -61,13 +61,13 @@ public class WebSockerRestController {
 
     @MessageMapping("/queu")
     @SendTo("/queu/greetings")
-    public String handleStompMessagePublic(HelloMessage message) {
+    public WebSocketMessage handleStompMessagePublic(WebSocketMessage message) {
         // Xử lý tin nhắn STOMP ở đây
-        System.out.println("Received login: " + message.getUserId());
-        System.out.println("Received name: " + message.getName());
+        System.out.println("Received login: " + message.getName());
+        System.out.println("Received name: " + message.getObjects());
 
         // Trả về tin nhắn trả lời
-        return "I am " + message.getName();
+        return message;
     }
 
 }
