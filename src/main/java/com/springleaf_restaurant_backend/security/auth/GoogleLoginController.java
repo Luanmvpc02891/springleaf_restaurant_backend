@@ -1,14 +1,20 @@
 package com.springleaf_restaurant_backend.security.auth;
 
+import java.util.Collections;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import com.springleaf_restaurant_backend.security.config.JwtService;
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.entities.UserRole;
@@ -17,6 +23,7 @@ import com.springleaf_restaurant_backend.security.entities.token.TokenType;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.service.UserRoleService;
 import com.springleaf_restaurant_backend.security.service.UserService;
+
 
 @RestController
 public class GoogleLoginController {
@@ -28,14 +35,21 @@ public class GoogleLoginController {
     JwtService jwtService;
     @Autowired
     UserRoleService userRoleService;
-    // @Autowired
-    // TokenService tokenService;
     @Autowired
     TokenRepository tokenRepository;
+    ClientRegistrationRepository clientRegistrationRepository;
 
-    // ------ Login Google ---- //
-    @GetMapping("/auth/login-google")
-    public void loginWithGoogle(){ }
+    @GetMapping("/login")
+    public void loginWithGoogle() {
+        // Tạo URL callback cho endpoint "/login/oauth2/code/google"
+        System.out.println("Vô đây rồi");
+        NetHttpTransport transport = new NetHttpTransport();
+            JacksonFactory factory = JacksonFactory.getDefaultInstance();
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, factory)
+                    .setAudience(Collections.singletonList("709298806232-0gqc6kn27s7653irqbdv8l0iv4ro9rr5.apps.googleusercontent.com"))
+                    .build();
+        
+    }
 
     @GetMapping("/login/oauth2/code/google")
     public RedirectView  handleGoogleCallback(Authentication authentication) throws Exception {
@@ -60,7 +74,7 @@ public class GoogleLoginController {
              userData.setEmail(email);
              userService.createUser(userData);
              var jwtToken = jwtService.generateToken(userData);
-            //var refreshToken = jwtService.generateRefreshToken(user);
+            
             var token = Token.builder()
                 .user(userData)
                 .token(jwtToken)
@@ -76,7 +90,7 @@ public class GoogleLoginController {
              System.out.println("Đăng ký tài khoản mới");
         }
          }
-        //return ResponseEntity.ok("Callback from Google received. Code: ");
+        
         return new RedirectView ( "http://localhost:4200/user/index", true);
     }
 }

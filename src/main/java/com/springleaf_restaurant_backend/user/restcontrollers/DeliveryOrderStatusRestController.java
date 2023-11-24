@@ -25,12 +25,12 @@ public class DeliveryOrderStatusRestController {
 
     @PostMapping("/public/create/deliveryOrderStatus")
     public DeliveryOrderStatus createDeliveryOrderStatus(@RequestBody DeliveryOrderStatus deliveryOrderStatus){
-        return deliveryOrderStatusService.saveDeliveryOrderStatus(deliveryOrderStatus);
+        return deliveryOrderStatusService.createDeliveryOrderStatus(deliveryOrderStatus);
     }
 
     @PutMapping("/public/update/deliveryOrderStatus")
     public DeliveryOrderStatus updateDeliveryOrderStatus(@RequestBody DeliveryOrderStatus deliveryOrderStatus){
-        return deliveryOrderStatusService.saveDeliveryOrderStatus(deliveryOrderStatus);
+        return deliveryOrderStatusService.createDeliveryOrderStatus(deliveryOrderStatus);
     }
 
     @DeleteMapping("/public/delete/deliveryOrderStatus/{deliveryOrderStatusId}")
