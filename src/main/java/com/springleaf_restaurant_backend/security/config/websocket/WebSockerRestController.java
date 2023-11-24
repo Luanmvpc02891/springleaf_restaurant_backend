@@ -83,15 +83,17 @@ public class WebSockerRestController {
 
         // Lấy thời gian hiện tại theo múi giờ Việt Nam
         Instant currentVietnamTime = Instant.now().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toInstant();
+
+        // Định dạng thời gian theo "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
         String formattedTime = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd HH:mm:ss")
+                .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
                 .withZone(ZoneId.of("Asia/Ho_Chi_Minh"))
                 .format(currentVietnamTime);
 
         System.out.println(formattedTime);
 
         // Trả về tin nhắn trả lời kèm thời gian hiện tại theo múi giờ Việt Nam
-        return ". Current Vietnam time is: " + formattedTime;
+        return formattedTime;
     }
 
 }
