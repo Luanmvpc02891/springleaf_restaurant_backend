@@ -22,8 +22,10 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
                 "https://springleafrestaurant.onrender.com");
         registry.addEndpoint("/public/socket")
                 .setAllowedOrigins("http://localhost:4200", "https://springleafrestaurant.onrender.com").withSockJS();
+        registry.addEndpoint("/public/socket2").setAllowedOrigins("http://localhost:4200",
+                "https://springleafrestaurant.onrender.com");
+        registry.addEndpoint("/public/socket2")
+                .setAllowedOrigins("http://localhost:4200", "https://springleafrestaurant.onrender.com").withSockJS();
     }
-
-    
 
 }

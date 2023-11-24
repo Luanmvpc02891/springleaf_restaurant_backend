@@ -15,6 +15,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.user.SimpUser;
 import org.springframework.messaging.simp.user.SimpUserRegistry;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.HtmlUtils;
@@ -53,13 +54,14 @@ public class WebSockerRestController {
 
     // @MessageMapping("/topic/{userId}")
     // @SendTo("/topic/greetings/{userId}")
-    // public String handleStompMessage(@DestinationVariable Integer userId, WebSocketMessage message) {
-    //     // Xử lý tin nhắn STOMP ở đây
-    //     System.out.println("Received login topic: " + userId);
-    //     System.out.println("Received name topic: " + message.getName());
+    // public String handleStompMessage(@DestinationVariable Integer userId,
+    // WebSocketMessage message) {
+    // // Xử lý tin nhắn STOMP ở đây
+    // System.out.println("Received login topic: " + userId);
+    // System.out.println("Received name topic: " + message.getName());
 
-    //     // Trả về tin nhắn trả lời
-    //     return "I am " + message.getName();
+    // // Trả về tin nhắn trả lời
+    // return "I am " + message.getName();
     // }
 
     @MessageMapping("/public")
@@ -74,11 +76,13 @@ public class WebSockerRestController {
     }
 
     @MessageMapping("/private/{userId}")
+    // @Scheduled(fixedRate = 1000)
     @SendTo("/private/greetings/{userId}")
-    public String handleStompMessage(@DestinationVariable Integer userId, WebSocketMessage message) {
+    public String handleStompMessage(@DestinationVariable String userId) {
         // Xử lý tin nhắn STOMP ở đây
-        System.out.println("Received login topic: " + userId);
-        System.out.println("Received name topic: " + message.getName());
+        // System.out.println("Received login topic: " + userId);
+        // System.out.println("Received name topic: " + message.getName());
+        System.out.println("Sóc liên tục");
 
         // Lấy thời gian hiện tại theo UTC
         Instant currentUtcTime = Instant.now();
@@ -87,8 +91,9 @@ public class WebSockerRestController {
                 .withZone(ZoneId.of("UTC"))
                 .format(currentUtcTime);
 
+        System.out.println(formattedTime);
         // Trả về tin nhắn trả lời kèm thời gian hiện tại
-        return "I am " + message.getName() + ". Current UTC time is: " + formattedTime;
+        return ". Current UTC time is: " + formattedTime;
     }
 
 }
