@@ -150,7 +150,6 @@ public class MailerServiceImpl implements MailerService {
 				"</body>\r\n" + //
 				"</html>\r\n";
 				message.setContent(htmlContent, "text/html; charset=utf-8");
-
 		Transport.send(message);
 	}
 
