@@ -76,22 +76,22 @@ public class WebSockerRestController {
     }
 
     @MessageMapping("/private/{userId}")
-    //@Scheduled(fixedRate = 1000)
     @SendTo("/private/greetings/{userId}")
     public String handleStompMessage(@DestinationVariable String userId, String name) {
         System.out.println("Socket");
         System.out.println("User Id: " + userId);
 
-        // Lấy thời gian hiện tại theo UTC
-        Instant currentUtcTime = Instant.now();
+        // Lấy thời gian hiện tại theo múi giờ Việt Nam
+        Instant currentVietnamTime = Instant.now().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toInstant();
         String formattedTime = DateTimeFormatter
                 .ofPattern("yyyy-MM-dd HH:mm:ss")
-                .withZone(ZoneId.of("UTC"))
-                .format(currentUtcTime);
+                .withZone(ZoneId.of("Asia/Ho_Chi_Minh"))
+                .format(currentVietnamTime);
 
         System.out.println(formattedTime);
-        // Trả về tin nhắn trả lời kèm thời gian hiện tại
-        return ". Current UTC time is: " + formattedTime;
+
+        // Trả về tin nhắn trả lời kèm thời gian hiện tại theo múi giờ Việt Nam
+        return ". Current Vietnam time is: " + formattedTime;
     }
 
 }
