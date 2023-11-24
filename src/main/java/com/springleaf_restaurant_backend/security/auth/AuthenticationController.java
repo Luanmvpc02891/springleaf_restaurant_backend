@@ -5,16 +5,11 @@ import lombok.RequiredArgsConstructor;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import com.springleaf_restaurant_backend.security.config.JwtService;
-import com.springleaf_restaurant_backend.security.config.LogoutService;
 import com.springleaf_restaurant_backend.security.entities.User;
-import com.springleaf_restaurant_backend.security.repositories.UserRepository;
+import com.springleaf_restaurant_backend.security.service.UserService;
 
 @RestController
 @RequestMapping("/auth")
@@ -23,14 +18,19 @@ public class AuthenticationController {
   
   private final AuthenticationService service;
   private final JwtService jwtService;
-  private final UserRepository userRepository;
-  private final LogoutService logoutService;
+  private final UserService userService;
 
   @PostMapping("/register")
   public ResponseEntity<AuthenticationResponse> register(
       @RequestBody RegisterRequest request
   ) throws Exception {
     return ResponseEntity.ok(service.register(request));
+  }
+
+  @PostMapping("/access-code")
+  public ResponseEntity<String> accessRegister(@RequestParam String email){
+    System.out.println(email);
+    return ResponseEntity.ok(service.accessCode(email));
   }
   
   @PostMapping("/authenticate")
@@ -59,7 +59,7 @@ public class AuthenticationController {
         String token = authorizationHeader.replace("Bearer ", "");
         System.out.println(token);
         String username = jwtService.extractUsername(token);
-        Optional<User> profile = userRepository.findByUsername(username);
+        Optional<User> profile = userService.findByUsername(username);
         if (profile.isPresent()) {
             return ResponseEntity.ok(profile);
         } else {
@@ -74,7 +74,7 @@ public class AuthenticationController {
             String token = authorizationHeader.replace("Bearer ", "");
             String username = jwtService.extractUsername(token);
             // Tìm người dùng trong cơ sở dữ liệu
-            Optional<User> userRequest = userRepository.findByUsername(username);
+            Optional<User> userRequest = userService.findByUsername(username);
 
             if (userRequest.isPresent()) {
                 User user = userRequest.get();
@@ -82,13 +82,12 @@ public class AuthenticationController {
                 user.setEmail(updatedUserData.getEmail());
                 user.setAddress(updatedUserData.getAddress());
                 user.setPhone(updatedUserData.getPhone());
-                return userRepository.save(user);
+                return userService.createUser(user);
             } else {
                 return null;
             }
-        
     }
-    
+
     // @PostMapping("/logout")
     // public void logout(){
     //   logoutService.logout(null, null, null);

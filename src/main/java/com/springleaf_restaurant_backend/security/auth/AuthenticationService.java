@@ -9,7 +9,8 @@ import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
 import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 import com.springleaf_restaurant_backend.security.service.UserRoleService;
-import com.springleaf_restaurant_backend.security.service.UserService;
+import com.springleaf_restaurant_backend.user.entities.MailInfo;
+import com.springleaf_restaurant_backend.user.service.mail.MailerService;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,11 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +36,7 @@ public class AuthenticationService {
   private final JwtService jwtService;
   private final AuthenticationManager authenticationManager;
   private final UserRoleService userRoleService;
-  private final UserService userService;
+  private final MailerService mailerService;
 
   @Autowired
   RoleRepository roleRepository;
@@ -58,7 +62,6 @@ public class AuthenticationService {
             .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        //var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
         UserRole ur = new UserRole();
         ur.setRoleId(3);
@@ -68,6 +71,30 @@ public class AuthenticationService {
             .accessToken(jwtToken)
             //.refreshToken(refreshToken)
             .build();
+    }
+  }
+
+  public String accessCode(String email){
+    User existingUserByEmail = userRepository.findByEmail(email);
+    if (existingUserByEmail != null) {
+      return "User with this email already exists";
+    }else{
+      List<Integer> keys = generateRandomAccessCode();
+      String jwtToken = jwtService.generateAccessRegisterToken(email);
+      saveAccessRigisterToken(jwtToken);
+      for (Integer key : keys) {
+        jwtToken += String.valueOf(key);
+      }
+      try {
+        MailInfo mail = new MailInfo();
+        mail.setTo(email);
+        mail.setKeys(keys);
+        mail.setSubject(new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+        mailerService.send(mail);
+      } catch (Exception e) {
+        
+      }
+      return jwtToken;
     }
   }
 
@@ -185,7 +212,28 @@ public class AuthenticationService {
     });
     
     tokenRepository.saveAll(validUserTokens);
-}
+  }
+
+  private void saveAccessRigisterToken(String jwtToken) {
+    var token = Token.builder()
+        .user(null)
+        .token(jwtToken)
+        .tokenType(TokenType.BEARER)
+        .expired(false)
+        .revoked(false)
+        .build();
+    tokenRepository.save(token);
+  }
+
+  public List<Integer> generateRandomAccessCode() {
+    List<Integer> randomNumbers = new ArrayList<>();
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            int randomNumber = random.nextInt(10); 
+            randomNumbers.add(randomNumber);
+        }
+        return randomNumbers;
+  }
 
 
   // public void refreshToken(

@@ -24,6 +24,8 @@ public class JwtService {
   private long jwtExpiration;
   @Value("${application.security.jwt.refresh-token.expiration}")
   private long refreshExpiration;
+  @Value("${application.security.jwt.accessRegisterExpiration}")
+  private long accessRegisterExpiration;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -33,7 +35,7 @@ public class JwtService {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims); 
   }
-
+  // Tạo access token
   public String generateToken(UserDetails userDetails) {
     return generateToken(new HashMap<>(), userDetails);
   }
@@ -92,4 +94,33 @@ public class JwtService {
     byte[] keyBytes = Decoders.BASE64.decode(secretKey);
     return Keys.hmacShaKeyFor(keyBytes);
   }
+
+  // ------ Token cho Access Key ------- //
+  public String generateAccessRegisterToken(String email) {
+    return generateAccessRegisterToken(new HashMap<>(), email);
+  }
+
+  public String generateAccessRegisterToken(
+      Map<String, Object> extraClaims,
+      String email
+  ) {
+    return buildAccessRegisterToken(new HashMap<>(), email, accessRegisterExpiration);
+  }
+
+  private String buildAccessRegisterToken(
+          Map<String, Object> extraClaims,
+          String email,
+          long accessRegisterExpiration
+  ) {
+    return Jwts
+            .builder()
+            .setClaims(extraClaims)
+            .setSubject(email)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + accessRegisterExpiration))
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact();
+  }
+
+  
 }
