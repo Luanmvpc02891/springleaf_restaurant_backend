@@ -1,6 +1,9 @@
 package com.springleaf_restaurant_backend.security.config.websocket;
 
 import java.security.Principal;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -48,19 +51,19 @@ public class WebSockerRestController {
         this.simpUserRegistry = simpUserRegistry;
     }
 
-    @MessageMapping("/topic/{userId}")
-    @SendTo("/topic/greetings/{userId}")
-    public String handleStompMessage(@DestinationVariable Integer userId, WebSocketMessage message) {
-        // Xử lý tin nhắn STOMP ở đây
-        System.out.println("Received login topic: " + userId);
-        System.out.println("Received name topic: " + message.getName());
+    // @MessageMapping("/topic/{userId}")
+    // @SendTo("/topic/greetings/{userId}")
+    // public String handleStompMessage(@DestinationVariable Integer userId, WebSocketMessage message) {
+    //     // Xử lý tin nhắn STOMP ở đây
+    //     System.out.println("Received login topic: " + userId);
+    //     System.out.println("Received name topic: " + message.getName());
 
-        // Trả về tin nhắn trả lời
-        return "I am " + message.getName();
-    }
+    //     // Trả về tin nhắn trả lời
+    //     return "I am " + message.getName();
+    // }
 
-    @MessageMapping("/queu")
-    @SendTo("/queu/greetings")
+    @MessageMapping("/public")
+    @SendTo("/public/greetings")
     public WebSocketMessage handleStompMessagePublic(WebSocketMessage message) {
         // Xử lý tin nhắn STOMP ở đây
         System.out.println("Received login: " + message.getName());
@@ -68,6 +71,24 @@ public class WebSockerRestController {
 
         // Trả về tin nhắn trả lời
         return message;
+    }
+
+    @MessageMapping("/private/{userId}")
+    @SendTo("/private/greetings/{userId}")
+    public String handleStompMessage(@DestinationVariable Integer userId, WebSocketMessage message) {
+        // Xử lý tin nhắn STOMP ở đây
+        System.out.println("Received login topic: " + userId);
+        System.out.println("Received name topic: " + message.getName());
+
+        // Lấy thời gian hiện tại theo UTC
+        Instant currentUtcTime = Instant.now();
+        String formattedTime = DateTimeFormatter
+                .ofPattern("yyyy-MM-dd HH:mm:ss")
+                .withZone(ZoneId.of("UTC"))
+                .format(currentUtcTime);
+
+        // Trả về tin nhắn trả lời kèm thời gian hiện tại
+        return "I am " + message.getName() + ". Current UTC time is: " + formattedTime;
     }
 
 }
