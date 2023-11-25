@@ -1,12 +1,12 @@
 package com.springleaf_restaurant_backend.user.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.springleaf_restaurant_backend.user.entities.Reservation;
 import com.springleaf_restaurant_backend.user.repositories.ReservationRepository;
 import com.springleaf_restaurant_backend.user.service.ReservationService;
-
-import java.util.List;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -27,7 +27,7 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public Reservation saveReservation(Reservation reservation) { 
+    public Reservation saveReservation(Reservation reservation) {
         return reservationRepository.save(reservation);
     }
 
@@ -38,8 +38,7 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<Reservation> getReservationsByUserId(Long userId) {
-       return  reservationRepository.findByUserId(userId);
+        return reservationRepository.findByUserId(userId);
     }
 
-    
 }
