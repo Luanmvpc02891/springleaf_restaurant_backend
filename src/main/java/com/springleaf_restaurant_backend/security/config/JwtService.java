@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.security.config;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -74,7 +75,8 @@ public class JwtService {
   }
 
   public boolean isTokenExpired(String token) {
-    return extractExpiration(token).before(new Date());
+    return (extractExpiration(token).before(new Date()));
+    
   }
 
   private Date extractExpiration(String token) {
@@ -121,6 +123,16 @@ public class JwtService {
             .signWith(getSignInKey(), SignatureAlgorithm.HS256)
             .compact();
   }
+
+  public boolean isTokenRegisterValid(String token, String email) {
+    try {
+        String emailToken = extractUsername(token);
+        return emailToken.equals(email) && !isTokenExpired(token);
+    } catch (ExpiredJwtException ex) {
+        // Xử lý khi token hết hạn
+        return false;
+    }
+}
 
   
 }
