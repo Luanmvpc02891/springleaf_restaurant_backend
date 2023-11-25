@@ -75,14 +75,16 @@ public class AuthenticationService {
           return AuthenticationResponse.builder()
             .error("Role not found")
             .build();
+        }else{
+          UserRole ur = new UserRole();
+          ur.setRoleId(role.getRoleId());
+          ur.setUserId(user.getUserId());
+          userRoleService.createUserRole(ur);
+          return AuthenticationResponse.builder()
+              .accessToken(jwtToken)
+              .build();
         }
-        UserRole ur = new UserRole();
-        ur.setRoleId(role.getRoleId());
-        ur.setUserId(user.getUserId());
-        userRoleService.createUserRole(ur);
-        return AuthenticationResponse.builder()
-            .accessToken(jwtToken)
-            .build();
+        
     }
   }
 
