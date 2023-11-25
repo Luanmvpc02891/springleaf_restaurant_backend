@@ -45,6 +45,5 @@ public class ReservationServiceImpl implements ReservationService {
     public List<Reservation> getReservationsByUserId(Long userId) {
        return  reservationRepository.findByUserId(userId);
     }
-
     
 }
