@@ -55,6 +55,22 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.authenticateAutoByToken(authorizationHeader));
     }
 
+    @PostMapping("/config-password")
+    public ResponseEntity<String> configPassword(
+        @RequestHeader("Authorization") String authorizationHeader,
+        @RequestBody String password
+    ){
+        return ResponseEntity.ok(service.configPassword(authorizationHeader, password));
+    }
+
+    @PostMapping("/change-password")
+    public ResponseEntity<String> changePassword(
+        @RequestHeader("Authorization") String authorizationHeader,
+        @RequestBody String password
+    ){
+        return ResponseEntity.ok(service.changePassword(authorizationHeader, password));
+    }
+
     @GetMapping("/your-profile")
     public ResponseEntity<?> getProfile(@RequestHeader("Authorization") String authorizationHeader) {
         String token = authorizationHeader.replace("Bearer ", "");
