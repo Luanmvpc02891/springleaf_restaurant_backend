@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,12 @@ public class ReservationRestController {
     @DeleteMapping("/public/delete/reservation/{reservationId}")
     public void deleteReservation(@PathVariable("reservationId") Long reservationId) {
         reservationService.deleteReservation(reservationId);
+    }
+
+     @GetMapping("public/reservations/user/{userId}")
+    public ResponseEntity<List<Reservation>> getReservationsByUser(@PathVariable Long userId) {
+        List<Reservation> userReservations = reservationService.getReservationsByUserId(userId);
+        return ResponseEntity.ok(userReservations);
     }
 
     @Scheduled(fixedRate = 1000) // Chạy mỗi giây
