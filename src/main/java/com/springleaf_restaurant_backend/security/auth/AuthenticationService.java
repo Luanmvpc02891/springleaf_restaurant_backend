@@ -45,7 +45,8 @@ public class AuthenticationService {
   public AuthenticationResponse register(RegisterRequest request) throws Exception {
     User existingUserByEmail = userRepository.findByEmail(request.getEmail());
     Optional<User> existingUserByUsername = userRepository.findByUsername(request.getUsername());
-    if(!jwtService.isTokenRegisterValid(request.getJwtToken(), request.getUsername())){
+    Role role = roleRepository.findByRoleName("USER");
+    if(jwtService.isTokenRegisterValid(request.getJwtToken(), request.getUsername())){
       return AuthenticationResponse.builder()
           .error("JWT is valid")
           .build();
@@ -58,8 +59,12 @@ public class AuthenticationService {
       return AuthenticationResponse.builder()
             .error("User with this username already exists")
             .build();
-    } else {
-        var user = User.builder()
+    } else if(role == null){
+      return AuthenticationResponse.builder()
+            .error("Role not found")
+            .build();
+    }else{
+          var user = User.builder()
             .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
             .fullName(request.getFullName())
@@ -67,22 +72,16 @@ public class AuthenticationService {
             .phone(request.getPhone())
             //.status(true)
             .build();
-        var savedUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        saveUserToken(savedUser, jwtToken);
-        Role role = roleRepository.findByRoleName("USER");
-        if(role == null){
+          var savedUser = userRepository.save(user);
+          var jwtToken = jwtService.generateToken(user);
+          saveUserToken(savedUser, jwtToken);
+          UserRole ur = new UserRole();
+          ur.setRoleId(role.getRoleId());
+          ur.setUserId(user.getUserId());
+          userRoleService.createUserRole(ur);
           return AuthenticationResponse.builder()
-            .error("Role not found")
-            .build();
-        }
-        UserRole ur = new UserRole();
-        ur.setRoleId(role.getRoleId());
-        ur.setUserId(user.getUserId());
-        userRoleService.createUserRole(ur);
-        return AuthenticationResponse.builder()
-            .accessToken(jwtToken)
-            .build();
+              .accessToken(jwtToken)
+              .build();
     }
   }
 
