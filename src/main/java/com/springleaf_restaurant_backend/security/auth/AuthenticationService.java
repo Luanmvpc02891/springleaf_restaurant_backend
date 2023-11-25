@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.security.auth;
 
 import com.springleaf_restaurant_backend.security.config.JwtService;
+import com.springleaf_restaurant_backend.security.entities.Role;
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.entities.UserRole;
 import com.springleaf_restaurant_backend.security.entities.token.Token;
@@ -44,33 +45,43 @@ public class AuthenticationService {
   public AuthenticationResponse register(RegisterRequest request) throws Exception {
     User existingUserByEmail = userRepository.findByEmail(request.getEmail());
     Optional<User> existingUserByUsername = userRepository.findByUsername(request.getUsername());
-
+    Role role = roleRepository.findByRoleName("USER");
+    if(jwtService.isTokenRegisterValid(request.getJwtToken(), request.getUsername())){
+      return AuthenticationResponse.builder()
+          .error("JWT is valid")
+          .build();
+    }
     if (existingUserByEmail != null) {
       return AuthenticationResponse.builder()
           .error("User with this email already exists")
           .build();
-  } else if (existingUserByUsername.isPresent()) {
+    } else if (existingUserByUsername.isPresent()) {
       return AuthenticationResponse.builder()
             .error("User with this username already exists")
             .build();
-  } else {
-        var user = User.builder()
+    } else if(role == null){
+      return AuthenticationResponse.builder()
+            .error("Role not found")
+            .build();
+    }else{
+          var user = User.builder()
             .username(request.getUsername())
             .password(passwordEncoder.encode(request.getPassword()))
             .fullName(request.getFullName())
             .email(request.getEmail())
+            .phone(request.getPhone())
+            //.status(true)
             .build();
-        var savedUser = userRepository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        saveUserToken(savedUser, jwtToken);
-        UserRole ur = new UserRole();
-        ur.setRoleId(3);
-        ur.setUserId(user.getUserId());
-        userRoleService.createUserRole(ur);
-        return AuthenticationResponse.builder()
-            .accessToken(jwtToken)
-            //.refreshToken(refreshToken)
-            .build();
+          var savedUser = userRepository.save(user);
+          var jwtToken = jwtService.generateToken(user);
+          saveUserToken(savedUser, jwtToken);
+          UserRole ur = new UserRole();
+          ur.setRoleId(role.getRoleId());
+          ur.setUserId(user.getUserId());
+          userRoleService.createUserRole(ur);
+          return AuthenticationResponse.builder()
+              .accessToken(jwtToken)
+              .build();
     }
   }
 
@@ -90,25 +101,28 @@ public class AuthenticationService {
         mail.setTo(email);
         mail.setKeys(keys);
         mail.setSubject(new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
-        mailerService.send(mail);
+       mailerService.send(mail);
       } catch (Exception e) {
-        
+        return null;
       }
       return jwtToken;
     }
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    String userName = request.getUserName();
+    String pass = request.getPassword();
+    System.out.println(userName + pass);
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
             request.getUserName(),
             request.getPassword()
         )
     );
+    
     var user = userRepository.findByUsername(request.getUserName())
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
-    //var refreshToken = jwtService.generateRefreshToken(user);
     if(user != null){
       List<String> role_name = userRepository.findRoleNamesByUserId(user.getUserId());
       if (role_name != null) {
@@ -121,7 +135,6 @@ public class AuthenticationService {
     saveUserToken(user, jwtToken);
     return AuthenticationResponse.builder()
         .accessToken(jwtToken)
-        //.refreshToken(refreshToken)
         .user(user)
       .build();
   }

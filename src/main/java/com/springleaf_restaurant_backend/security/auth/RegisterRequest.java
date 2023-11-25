@@ -12,5 +12,5 @@ public class RegisterRequest {
   private String password;
   private String phone;
   private String email;
-  
+  private String jwtToken;
 }

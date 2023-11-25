@@ -1,9 +1,14 @@
 package com.springleaf_restaurant_backend.security.config.websocket;
 
 import java.security.Principal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.Message;
@@ -78,22 +83,43 @@ public class WebSockerRestController {
     @MessageMapping("/private/{userId}")
     @SendTo("/private/greetings/{userId}")
     public String handleStompMessage(@DestinationVariable String userId, String name) {
-        System.out.println("Socket");
-        System.out.println("User Id: " + userId);
-
         // Lấy thời gian hiện tại theo múi giờ Việt Nam
-        Instant currentVietnamTime = Instant.now().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toInstant();
+        Date currentVietnamTime = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss 'GMT'Z (z)");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+        String formattedServerTime = dateFormat.format(currentVietnamTime);
 
-        // Định dạng thời gian theo "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
-        String formattedTime = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                .withZone(ZoneId.of("Asia/Ho_Chi_Minh"))
-                .format(currentVietnamTime);
+        // System.out.println("Server Time: " + formattedServerTime);
 
-        System.out.println(formattedTime);
+        // Trả về tin nhắn trả lời kèm thời gian hiện tại theo định dạng
+        return formattedServerTime;
+    }
 
-        // Trả về tin nhắn trả lời kèm thời gian hiện tại theo múi giờ Việt Nam
-        return formattedTime;
+    @MessageMapping("/private/turnToWaitTime/{userId}")
+    @SendTo("/private/turnToWaitTime/{userId}")
+    public String turnToWaitTime(@DestinationVariable String userId, String clientTime) {
+        System.out.println("User Id: " + userId);
+        System.out.println("Client Time: " + clientTime);
+
+        try {
+            // Parse thời gian từ client
+            SimpleDateFormat clientDateFormat = new SimpleDateFormat("E MMM dd yyyy HH:mm:ss 'GMT'Z (z)");
+            Date clientDate = clientDateFormat.parse(clientTime);
+
+            // Lấy thời gian hiện tại theo múi giờ Việt Nam
+            Date currentVietnamTime = new Date();
+
+            // Tính sự chênh lệch giữa thời gian client và thời gian hiện tại
+            Duration duration = Duration.between(clientDate.toInstant(), currentVietnamTime.toInstant());
+
+            // Trả về chuỗi đại diện cho thời gian chênh lệch
+            return duration.toString();
+
+        } catch (ParseException e) {
+            // Xử lý nếu có lỗi xảy ra khi parse thời gian từ client
+            e.printStackTrace();
+            return "Error parsing client time";
+        }
     }
 
 }

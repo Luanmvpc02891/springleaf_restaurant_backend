@@ -28,8 +28,8 @@ public class AuthenticationController {
   }
 
   @PostMapping("/access-code")
-  public ResponseEntity<String> accessRegister(@RequestParam String email){
-    System.out.println(email);
+  public ResponseEntity<String> accessCode(@RequestParam String email){
+    System.out.println("API calling...");
     return ResponseEntity.ok(service.accessCode(email));
   }
   
@@ -37,6 +37,7 @@ public class AuthenticationController {
   public ResponseEntity<AuthenticationResponse> authenticate(
       @RequestBody AuthenticationRequest request
   ) {
+    
     return ResponseEntity.ok(service.authenticate(request)); 
   }
   
