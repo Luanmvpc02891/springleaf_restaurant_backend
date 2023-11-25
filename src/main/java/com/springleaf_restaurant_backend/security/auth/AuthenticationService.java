@@ -109,6 +109,38 @@ public class AuthenticationService {
     }
   }
 
+  public String configPassword(String jwt, String password){
+    String jwtToken = jwt.substring(7);
+    Optional<User> user = userRepository.findByUsername(jwtService.extractUsername(jwtToken));
+    if(user.isEmpty()){
+      return "User not found";
+    }else{
+      String pass = passwordEncoder.encode(password);
+      System.out.println(user.get().getPassword());
+      System.out.println(pass);
+      System.out.println(passwordEncoder.matches(password,user.get().getPassword()));
+      if(passwordEncoder.matches(password,user.get().getPassword())){
+        
+        return "Config password success";
+      }else{
+        return "Config password faile";
+      }
+    }
+  }
+
+  public String changePassword(String jwt, String password){
+    String jwtToken = jwt.substring(7);
+    Optional<User> user = userRepository.findByUsername(jwtService.extractUsername(jwtToken));
+    if(user.isEmpty()){
+      return "User not found";
+    }else{
+      User u = user.get();
+      u.setPassword(passwordEncoder.encode(password));
+      userRepository.save(u);
+      return "Change password success";
+    }
+  }
+
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     String userName = request.getUserName();
     String pass = request.getPassword();

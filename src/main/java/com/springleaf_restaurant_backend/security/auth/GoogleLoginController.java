@@ -39,15 +39,15 @@ public class GoogleLoginController {
     TokenRepository tokenRepository;
     ClientRegistrationRepository clientRegistrationRepository;
 
-    @GetMapping("/login")
+    @GetMapping("/auth/login")
     public void loginWithGoogle() {
         // Tạo URL callback cho endpoint "/login/oauth2/code/google"
-        System.out.println("Vô đây rồi");
-        NetHttpTransport transport = new NetHttpTransport();
-            JacksonFactory factory = JacksonFactory.getDefaultInstance();
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, factory)
-                    .setAudience(Collections.singletonList("709298806232-0gqc6kn27s7653irqbdv8l0iv4ro9rr5.apps.googleusercontent.com"))
-                    .build();
+        // System.out.println("Vô đây rồi");
+        // NetHttpTransport transport = new NetHttpTransport();
+        //     JacksonFactory factory = JacksonFactory.getDefaultInstance();
+        //     GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, factory)
+        //             .setAudience(Collections.singletonList("709298806232-0gqc6kn27s7653irqbdv8l0iv4ro9rr5.apps.googleusercontent.com"))
+        //             .build();
         
     }
 

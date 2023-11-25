@@ -24,10 +24,13 @@ public class WebConfig {
         config.setAllowCredentials(true);
         config.addAllowedOrigin("http://localhost:4200");
         config.addAllowedOrigin("https://springleafrestaurant.onrender.com");
+        // Cho phép các điểm cuối Google OAuth2
         config.addAllowedOrigin("https://accounts.google.com");
         config.addAllowedOrigin("https://console.cloud.google.com");
         config.addAllowedOrigin("https://oauth2.googleapis.com");
         config.addAllowedOrigin("https://www.googleapis.com");
+        config.addAllowedOrigin("https://web.facebook.com");
+        config.addAllowedOrigin("https://facebook.com");
         config.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,
                 HttpHeaders.CONTENT_TYPE,
