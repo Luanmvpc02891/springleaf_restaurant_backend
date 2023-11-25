@@ -45,7 +45,7 @@ public class AuthenticationService {
   public AuthenticationResponse register(RegisterRequest request) throws Exception {
     User existingUserByEmail = userRepository.findByEmail(request.getEmail());
     Optional<User> existingUserByUsername = userRepository.findByUsername(request.getUsername());
-    if(!jwtService.isTokenRegisterValid(request.getJwtToken(), request.getUsername())){
+    if(jwtService.isTokenRegisterValid(request.getJwtToken(), request.getUsername())){
       return AuthenticationResponse.builder()
           .error("JWT is valid")
           .build();
