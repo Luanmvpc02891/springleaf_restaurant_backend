@@ -26,7 +26,7 @@ public class ReservationStatusRestController {
     }
 
     @GetMapping("/public/reservationStatus/{reservationStatusId}")
-    public ReservationStatus getRestaurantById(@PathVariable("reservationStatusId") Integer reservationStatusId) {
+    public ReservationStatus getReservationStatusById(@PathVariable("reservationStatusId") String reservationStatusId) {
         return reservationStatusService.getReservationStatusById(reservationStatusId);
     }
 
@@ -41,7 +41,7 @@ public class ReservationStatusRestController {
     }
 
     @DeleteMapping("/public/delete/reservationStatus/{reservationStatusId}")
-    public void deleteReservationStatusById(@PathVariable("reservationStatusId") Integer reservationStatusId) {
+    public void deleteReservationStatusById(@PathVariable("reservationStatusId") String reservationStatusId) {
         reservationStatusService.deleteReservationStatus(reservationStatusId);
     }
 

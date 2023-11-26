@@ -8,9 +8,9 @@ public interface ReservationStatusService {
 
     List<ReservationStatus> getAllReservationStatuses();
 
-    ReservationStatus getReservationStatusById(Integer id);
+    ReservationStatus getReservationStatusById(String id);
 
     ReservationStatus saveReservationStatus(ReservationStatus reservationStatus);
 
-    void deleteReservationStatus(Integer id);
+    void deleteReservationStatus(String id);
 }

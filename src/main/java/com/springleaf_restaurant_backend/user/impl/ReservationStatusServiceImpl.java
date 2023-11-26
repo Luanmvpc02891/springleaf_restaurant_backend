@@ -23,7 +23,7 @@ public class ReservationStatusServiceImpl implements ReservationStatusService {
     }
 
     @Override
-    public ReservationStatus getReservationStatusById(Integer id) {
+    public ReservationStatus getReservationStatusById(String id) {
         return reservationStatusRepository.findById(id).orElse(null); 
     }
 
@@ -33,7 +33,7 @@ public class ReservationStatusServiceImpl implements ReservationStatusService {
     }
 
     @Override
-    public void deleteReservationStatus(Integer id) {
+    public void deleteReservationStatus(String id) {
         reservationStatusRepository.deleteById(id);
     }
     

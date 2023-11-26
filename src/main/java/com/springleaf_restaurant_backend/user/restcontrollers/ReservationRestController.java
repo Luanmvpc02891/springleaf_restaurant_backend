@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -49,44 +50,29 @@ public class ReservationRestController {
         return ResponseEntity.ok(userReservations);
     }
 
-    @Scheduled(fixedRate = 1000) // Chạy mỗi giây
+    // @Scheduled(fixedRate = 1000) // Chạy mỗi giây
     public void updateReservationStatus() {
         List<Reservation> reservations = reservationService.getAllReservations();
 
-        // Kiểm tra xem có đặt chỗ hay không
-        if (reservations.isEmpty()) {
-            // Nếu không có đặt chỗ, bạn có thể thực hiện các xử lý khác hoặc đơn giản là
-            // trả về
-            return;
-        }
+        // Lọc ra các đặt chỗ đang sử dụng hoặc đang đợi
+        List<Reservation> reservationsToUpdate = reservations.stream()
+                .filter(reservation -> !"Đã sử dụng xong".equals(reservation.getReservationStatusName()))
+                .peek(reservation -> {
+                    Instant reservationDateTime = Instant.parse(reservation.getReservationDate());
+                    Instant currentDateTime = Instant.now();
 
-        Instant currentDateTime = Instant.now();
+                    // Kiểm tra nếu đang sử dụng và thời gian hiện tại >= reservationDate + 2 giờ
+                    if ("Đang sử dụng".equals(reservation.getReservationStatusName()) &&
+                            currentDateTime.isAfter(reservationDateTime.plus(2, ChronoUnit.HOURS))) {
+                        reservation.setReservationStatusName("Đã sử dụng xong");
+                    }
 
-        // Tạo danh sách để lưu trữ các bản ghi cần cập nhật
-        List<Reservation> reservationsToUpdate = new ArrayList<>();
-
-        for (Reservation reservation : reservations) {
-            Instant reservationDateTime = Instant.parse(reservation.getReservationDate());
-
-            // Bỏ qua nếu đã sử dụng xong
-            if (reservation.getReservationStatusId() != null && reservation.getReservationStatusId() == 2) {
-                continue;
-            }
-
-            // Kiểm tra nếu đã sử dụng xong và thời gian hiện tại >= reservationDate + 2 giờ
-            if (reservation.getReservationStatusId() != null &&
-                    reservation.getReservationStatusId() == 1 &&
-                    currentDateTime.isAfter(reservationDateTime.plus(2, ChronoUnit.HOURS))) {
-                reservation.setReservationStatusId(2); // Đã sử dụng xong
-                reservationsToUpdate.add(reservation); // Thêm vào danh sách cần cập nhật
-            }
-
-            // Kiểm tra nếu thời gian hiện tại >= reservationDate
-            if (currentDateTime.isAfter(reservationDateTime)) {
-                reservation.setReservationStatusId(3); // Đang đợi
-                reservationsToUpdate.add(reservation); // Thêm vào danh sách cần cập nhật
-            }
-        }
+                    // Kiểm tra nếu thời gian hiện tại >= reservationDate
+                    if (currentDateTime.isAfter(reservationDateTime)) {
+                        reservation.setReservationStatusName("Đang đợi");
+                    }
+                })
+                .collect(Collectors.toList());
 
         // Lưu cập nhật vào cơ sở dữ liệu (nếu cần)
         if (!reservationsToUpdate.isEmpty()) {

@@ -29,7 +29,7 @@ public class Reservation {
     @Column(name = "number_of_guest")
     private Long numberOfGuests;
 
-    @Column(name = "reservation_status")
-    private Integer reservationStatusId;
+    @Column(name = "reservation_status_name")
+    private String reservationStatusName;
 
 }

@@ -12,9 +12,7 @@ public interface DeliveryOrderStatusService {
 
     DeliveryOrderStatus getDeliveryOrderStatusByName(String deliveryOrderStatusName);
 
-    DeliveryOrderStatus createDeliveryOrderStatus(DeliveryOrderStatus deliveryOrderStatus);
-
-    DeliveryOrderStatus updateDeliveryOrderStatus(DeliveryOrderStatus updatedDeliveryOrderStatus);
+    DeliveryOrderStatus saveDeliveryOrderStatus(DeliveryOrderStatus deliveryOrderStatus);
 
     void deleteDeliveryOrderStatus(Long id);
 }
