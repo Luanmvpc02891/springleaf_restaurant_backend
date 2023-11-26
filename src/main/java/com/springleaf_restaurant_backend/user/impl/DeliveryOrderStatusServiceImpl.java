@@ -26,7 +26,7 @@ public class DeliveryOrderStatusServiceImpl implements DeliveryOrderStatusServic
     }
 
     @Override
-    public DeliveryOrderStatus createDeliveryOrderStatus(DeliveryOrderStatus deliveryOrderStatus) {
+    public DeliveryOrderStatus saveDeliveryOrderStatus(DeliveryOrderStatus deliveryOrderStatus) {
         return deliveryOrderStatusRepository.save(deliveryOrderStatus);
     }
 
@@ -41,8 +41,4 @@ public class DeliveryOrderStatusServiceImpl implements DeliveryOrderStatusServic
         throw new UnsupportedOperationException("Unimplemented method 'getDeliveryOrderStatusByName'");
     }
 
-    @Override
-    public DeliveryOrderStatus updateDeliveryOrderStatus(DeliveryOrderStatus updatedDeliveryOrderStatus) {
-        return deliveryOrderStatusRepository.save(updatedDeliveryOrderStatus);
-    }
 }
