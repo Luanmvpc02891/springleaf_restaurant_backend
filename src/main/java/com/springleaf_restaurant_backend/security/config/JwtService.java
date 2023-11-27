@@ -10,14 +10,24 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.springleaf_restaurant_backend.security.entities.User;
+import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
+import com.springleaf_restaurant_backend.security.repositories.UserRepository;
+
 @Service
 public class JwtService {
+  @Autowired
+  TokenRepository tokenRepository;
+  @Autowired
+  UserRepository userRepository;
 
   @Value("${application.security.jwt.secret-key}")
   private String secretKey;
@@ -69,9 +79,22 @@ public class JwtService {
             .compact();
   }
 
+  public boolean isTokenRevoked(String token){
+    Optional<User> user = userRepository.findByUsername(extractUsername(token));
+    if(!user.isEmpty()){
+      if(!tokenRepository.findAllValidTokensByUserId(user.get().getUserId()).isEmpty()){
+        return true;
+      }else{
+        return false;
+      }
+    }else{
+      return false;
+    }
+  }
+
   public boolean isTokenValid(String token, UserDetails userDetails) {
     final String username = extractUsername(token);
-    return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    return (username.equals(userDetails.getUsername())) && !isTokenExpired(token) && isTokenRevoked(token);
   }
 
   public boolean isTokenExpired(String token) {

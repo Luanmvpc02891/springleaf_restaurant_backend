@@ -14,9 +14,11 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import com.springleaf_restaurant_backend.security.auth.GoogleLoginController;
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
+import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,9 +31,10 @@ public class SecurityConfiguration {
   private final JwtAuthenticationFilter jwtAuthFilter;
   private final AuthenticationProvider authenticationProvider;
   private final LogoutHandler logoutHandler;
+  private final GoogleLoginController googleLoginController;
+  private final LogoutService logoutService;
   @Autowired
   RoleRepository roleRepository;
-  private final GoogleLoginController googleLoginController;
 
   
   @Bean
@@ -49,7 +52,8 @@ public class SecurityConfiguration {
             "/api/**",
             "https://accounts.google.com/**",
             "http://localhost:8082/public/api/Callback",
-            "/login/oauth2/code/google"
+            "/login/oauth2/code/google",
+            "/auth2/**"
           )
             .permitAll()
         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
@@ -77,11 +81,13 @@ public class SecurityConfiguration {
             })
         )
         .logout()
-        .logoutUrl("/auth/logout")
-        .addLogoutHandler(logoutHandler)
+        .logoutRequestMatcher(new AntPathRequestMatcher("/auth2/logout", "POST"))
+        .addLogoutHandler((request, response, authentication) -> logoutService.logout(request, response, authentication))
+        //.addLogoutHandler((request, response, authentication) -> logoutService.logout(request, response, authentication))
         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
         
     ;
     return http.build();
   }
+
 }

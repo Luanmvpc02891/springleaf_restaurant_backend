@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -70,7 +71,7 @@ public class AuthenticationService {
             .fullName(request.getFullName())
             .email(request.getEmail())
             .phone(request.getPhone())
-            //.status(true)
+            .status(true)
             .build();
           var savedUser = userRepository.save(user);
           var jwtToken = jwtService.generateToken(user);
@@ -85,9 +86,9 @@ public class AuthenticationService {
     }
   }
 
-  public String accessCode(String email){
+  public String accessCode(String email, String typeCode){
     User existingUserByEmail = userRepository.findByEmail(email);
-    if (existingUserByEmail != null) {
+    if (existingUserByEmail != null && typeCode.equals("register")) {
       return "User with this email already exists";
     }else{
       List<Integer> keys = generateRandomAccessCode();
@@ -141,10 +142,28 @@ public class AuthenticationService {
     }
   }
 
+  public String forgotPassword(String jwt, String password){
+    String jwt2 = jwt.substring(7);
+    String email = jwtService.extractUsername(jwt2);
+    System.out.println(email);
+    User user = userRepository.findByEmail(email);
+    if(user == null){
+      return "User not found";
+    }else{
+      User u = user;
+      u.setPassword(passwordEncoder.encode(password));
+      userRepository.save(u);
+      return "Change password success";
+    }
+  }
+
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
     String userName = request.getUserName();
     String pass = request.getPassword();
     System.out.println(userName + pass);
+    try {
+      
+    
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
             request.getUserName(),
@@ -156,19 +175,34 @@ public class AuthenticationService {
         .orElseThrow();
     var jwtToken = jwtService.generateToken(user);
     if(user != null){
+      if(!user.isStatus()){
+        return AuthenticationResponse.builder()
+          .error("Account is disabled")
+        .build();
+      }
       List<String> role_name = userRepository.findRoleNamesByUserId(user.getUserId());
       if (role_name != null) {
         user.setRoleName(role_name);
       } else {
           System.out.println("Không có role nào cho người dùng này.");
       }
+      revokeAllUserTokens(user);
+      saveUserToken(user, jwtToken);
+      return AuthenticationResponse.builder()
+          .accessToken(jwtToken)
+          .user(user)
+        .build();
+    }else{
+      return AuthenticationResponse.builder()
+          .error("User not found")
+        .build();
     }
-    revokeAllUserTokens(user);
-    saveUserToken(user, jwtToken);
-    return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
-        .user(user)
-      .build();
+  } catch (Exception e) {
+      return AuthenticationResponse.builder()
+          .error("Invalid username or password")
+        .build();
+    }
+    
   }
   // ---- Login google -- //
   public AuthenticationResponse authenticateGoogleLogin(User user) {
@@ -199,14 +233,23 @@ public class AuthenticationService {
   public AuthenticationResponse authenticateAutoByToken(String authorizationHeader) {
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
         String accessToken = authorizationHeader.substring(7);
+        var user = userRepository.findByUsername(this.jwtService.extractUsername(accessToken))
+                    .orElseThrow();
+        var userDetails = User.builder()
+            .username(user.getUsername())
+            .password(passwordEncoder.encode(user.getPassword()))
+            .fullName(user.getFullName())
+            .email(user.getEmail())
+            .phone(user.getPhone())
+            .status(true)
+            .build();
         try {
-            if (jwtService.isTokenExpired(accessToken)) {
+            if (!jwtService.isTokenValid(accessToken, userDetails)) {
                 return AuthenticationResponse.builder()
                     .error("Session has expired")
                     .build();
             } else {
-                var user = userRepository.findByUsername(this.jwtService.extractUsername(accessToken))
-                    .orElseThrow();
+                
                 if(user != null){
                   List<String> role_name = userRepository.findRoleNamesByUserId(user.getUserId());
                   if (role_name != null) {
@@ -217,7 +260,6 @@ public class AuthenticationService {
                 }
                 return AuthenticationResponse.builder()
                     .accessToken(accessToken)
-                    //.refreshToken(accessToken)
                     .user(user)
                     .build();
             }
@@ -280,32 +322,4 @@ public class AuthenticationService {
         return randomNumbers;
   }
 
-
-  // public void refreshToken(
-  //         HttpServletRequest request,
-  //         HttpServletResponse response
-  // ) throws IOException {
-  //   final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-  //   final String refreshToken;
-  //   final String userName;
-  //   if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-  //     return;
-  //   }
-  //   refreshToken = authHeader.substring(7);
-  //   userName = jwtService.extractUsername(refreshToken);
-  //   if (userName != null) {
-  //     var user = this.userRepository.findByUsername(userName)
-  //             .orElseThrow();
-  //     if (jwtService.isTokenValid(refreshToken, user)) {
-  //       var accessToken = jwtService.generateToken(user);
-  //       revokeAllUserTokens(user);
-  //       saveUserToken(user, accessToken);
-  //       var authResponse = AuthenticationResponse.builder()
-  //               .accessToken(accessToken)
-  //               .refreshToken(refreshToken)
-  //               .build();
-  //       new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-  //     }
-  //   }
-  // }
 }

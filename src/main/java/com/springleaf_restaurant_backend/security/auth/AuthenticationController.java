@@ -28,9 +28,9 @@ public class AuthenticationController {
   }
 
   @PostMapping("/access-code")
-  public ResponseEntity<String> accessCode(@RequestParam String email){
-    System.out.println("API calling...");
-    return ResponseEntity.ok(service.accessCode(email));
+  public ResponseEntity<String> accessCode(@RequestParam String email, @RequestParam String typeCode){
+    System.out.println(typeCode);
+    return ResponseEntity.ok(service.accessCode(email, typeCode));
   }
   
   @PostMapping("/authenticate")
@@ -40,14 +40,6 @@ public class AuthenticationController {
     
     return ResponseEntity.ok(service.authenticate(request)); 
   }
-  
-  // @PostMapping("/refresh-token")
-  // public void refreshToken(
-  //     HttpServletRequest request,
-  //     HttpServletResponse response
-  // ) throws IOException {
-  //   service.refreshToken(request, response);
-  // }
 
     @PostMapping("/auto-login")
     public ResponseEntity<AuthenticationResponse> getUsername(@RequestHeader("Authorization") String authorizationHeader) 
@@ -69,6 +61,14 @@ public class AuthenticationController {
         @RequestBody String password
     ){
         return ResponseEntity.ok(service.changePassword(authorizationHeader, password));
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<String> forgotPassword(
+        @RequestHeader("Authorization") String authorizationHeader,
+        @RequestBody String password
+    ){
+        return ResponseEntity.ok(service.forgotPassword(authorizationHeader, password));
     }
 
     @GetMapping("/your-profile")

@@ -51,8 +51,8 @@ public class User implements UserDetails {
     @Column(name = "restaurant_brach_id")
     private Long restaurantBrachId;
 
-    // @Column(name = "status")
-    // private boolean status;
+    @Column(name = "status")
+    private boolean status;
 
     @Transient
     private List<String> roleName;

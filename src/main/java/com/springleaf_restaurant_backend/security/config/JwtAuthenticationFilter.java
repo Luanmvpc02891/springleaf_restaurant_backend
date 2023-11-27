@@ -64,7 +64,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
       if(user != null){
         List<String> roleNames = userRepository.findRoleNamesByUserId(user.get().getUserId());
         user.get().setRoleName(roleNames);
-        System.out.println("Đây: " + user.get().getRoleName().get(0));
         if(roleNames != null){
             for (String roleName : roleNames) {
               authoritiesList.add(new SimpleGrantedAuthority(roleName)); 
@@ -82,7 +81,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             null,
             authoritiesList
         );
-        System.out.println("Test" + authToken.getAuthorities());
         authToken.setDetails(
             new WebAuthenticationDetailsSource().buildDetails(request)
         );
