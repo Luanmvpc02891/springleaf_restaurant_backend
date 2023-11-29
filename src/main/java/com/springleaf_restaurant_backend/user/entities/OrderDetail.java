@@ -20,5 +20,5 @@ public class OrderDetail {
     private Long menuItemId;
 
     @Column(name = "quantity")
-    private Long quantity;
+    private Integer quantity;
 }
