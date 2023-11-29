@@ -69,15 +69,26 @@ public class WebSockerRestController {
     // return "I am " + message.getName();
     // }
 
+    // @MessageMapping("/public")
+    // @SendTo("/public/greetings")
+    // public WebSocketMessage handleStompMessagePublic(WebSocketMessage message) {
+    //     // Xử lý tin nhắn STOMP ở đây
+    //     System.out.println("Received login: " + message.getName());
+    //     System.out.println("Received name: " + message.getObjects());
+
+    //     // Trả về tin nhắn trả lời
+    //     return message;
+    // }
+
     @MessageMapping("/public")
-    @SendTo("/public/greetings")
-    public WebSocketMessage handleStompMessagePublic(WebSocketMessage message) {
+    public void handleStompMessagePublic(WebSocketMessage message) {
         // Xử lý tin nhắn STOMP ở đây
         System.out.println("Received login: " + message.getName());
         System.out.println("Received name: " + message.getObjects());
 
-        // Trả về tin nhắn trả lời
-        return message;
+        // Gửi tin nhắn trả lời bằng simple message template
+        //String response = "Hello, " + message.getName() + "!";
+        simpMessagingTemplate.convertAndSend("/public/" + message.getName(), message);
     }
 
     @MessageMapping("/private/{userId}")
