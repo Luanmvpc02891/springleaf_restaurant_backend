@@ -1,8 +1,9 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import com.springleaf_restaurant_backend.user.entities.Inventory;
-
 import java.util.List;
+
+import com.springleaf_restaurant_backend.user.entities.Inventory;
+import com.springleaf_restaurant_backend.user.entities.OrderThreshold;
 
 public interface InventoryService {
     List<Inventory> getAllInventories();
@@ -13,4 +14,9 @@ public interface InventoryService {
     Inventory saveInventory(Inventory inventory);
 
     void deleteInventory(Long id);
+
+    Long getTotalIngredientsInInventory();
+
+   
+
 }

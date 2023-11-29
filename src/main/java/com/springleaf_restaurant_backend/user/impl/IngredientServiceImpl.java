@@ -1,12 +1,12 @@
 package com.springleaf_restaurant_backend.user.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
 import com.springleaf_restaurant_backend.user.entities.Ingredient;
 import com.springleaf_restaurant_backend.user.repositories.IngredientRepository;
 import com.springleaf_restaurant_backend.user.service.IngredientService;
-
-import java.util.List;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
@@ -31,7 +31,7 @@ public class IngredientServiceImpl implements IngredientService {
         return ingredientRepository.save(ingredient);
     }
 
-    @Override 
+    @Override
     public void deleteIngredient(Long id) {
         ingredientRepository.deleteById(id);
     }

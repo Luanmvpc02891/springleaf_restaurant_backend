@@ -12,4 +12,6 @@ public interface MenuItemIngredientService {
     MenuItemIngredient saveMenuItemIngredient(MenuItemIngredient menuItemIngredient);
 
     void deleteMenuItemIngredient(Long id);
+
+    List<MenuItemIngredient> getIngredientsForMenuItem(Long menuItemId);
 }

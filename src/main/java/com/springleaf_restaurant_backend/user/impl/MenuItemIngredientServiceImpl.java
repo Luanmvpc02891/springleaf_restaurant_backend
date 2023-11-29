@@ -35,4 +35,9 @@ public class MenuItemIngredientServiceImpl implements MenuItemIngredientService 
     public void deleteMenuItemIngredient(Long id) { 
         menuItemIngredientRepository.deleteById(id);
     }
+
+    @Override
+    public List<MenuItemIngredient> getIngredientsForMenuItem(Long menuItemId) {
+        return menuItemIngredientRepository.findByMenuItemId(menuItemId);
+    }
 }
