@@ -87,7 +87,7 @@ public class ReservationRestController {
         message.setObjects(reservationArray);
     
         // Sử dụng mảng chứa đối tượng khi gửi thông điệp
-        messagingTemplate.convertAndSend("/public/" + reservations, message);
+        messagingTemplate.convertAndSend("/public/" + "reservations", message);
     }
 
     @Scheduled(fixedRate = 1000) // Run every second
