@@ -38,4 +38,9 @@ public class CartDetailRestController {
         System.out.println(cartDetailId);
         orderDetailService.deleteOrderDetail(cartDetailId);
     }
+
+    @GetMapping("/public/top5")
+    public List<Object[]> getTop5MostOrderedItems() {
+        return orderDetailService.getTop5MostOrderedItems();
+    }
 }

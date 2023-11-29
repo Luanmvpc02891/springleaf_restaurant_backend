@@ -1,5 +1,6 @@
 package com.springleaf_restaurant_backend.user.impl;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -44,5 +45,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public List<Reservation> getReservationsByUserId(Long userId) {
         return reservationRepository.findByUserId(userId);
+    }
+
+    @Override
+    public List<Reservation> getReservationsByDateList(String date) {
+        return reservationRepository.findByReservationDateList(date);
     }
 }

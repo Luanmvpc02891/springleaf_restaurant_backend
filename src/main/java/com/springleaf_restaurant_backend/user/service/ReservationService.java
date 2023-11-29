@@ -1,5 +1,6 @@
 package com.springleaf_restaurant_backend.user.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.springleaf_restaurant_backend.user.entities.Reservation;
@@ -17,4 +18,5 @@ public interface ReservationService {
 
     void saveAllReservations(List<Reservation> reservations);
 
+    List<Reservation> getReservationsByDateList(String date);
 }

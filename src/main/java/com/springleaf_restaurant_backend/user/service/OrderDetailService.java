@@ -14,4 +14,6 @@ public interface OrderDetailService {
     void deleteOrderDetail(Long id);
 
     List<OrderDetail> getOrderDetailsByOrderId(Long orderId);
+
+    List<Object[]> getTop5MostOrderedItems();
 }

@@ -40,4 +40,9 @@ public class OrderDetailServiceImpl implements OrderDetailService {
     public List<OrderDetail> getOrderDetailsByOrderId(Long orderId) {
         return orderDetailRepository.findByOrderId(orderId);
     }
+
+    @Override
+    public List<Object[]> getTop5MostOrderedItems() {
+        return orderDetailRepository.findTop5MostOrderedItems();
+    }
 }
