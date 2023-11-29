@@ -90,7 +90,7 @@ public class ReservationRestController {
         messagingTemplate.convertAndSend("/public/" + "reservations", message);
     }
 
-    @Scheduled(fixedRate = 1000) // Run every second
+    @Scheduled(fixedRate = 5000) // Run every second
     public void updateReservationStatusAndSend() {
 
         // System.out.println("Scheduled task started.");
@@ -126,7 +126,7 @@ public class ReservationRestController {
 
     Integer checkDateTime(String reservationDateTime) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         try {
             // Chuyển đổi chuỗi thành đối tượng LocalDateTime
