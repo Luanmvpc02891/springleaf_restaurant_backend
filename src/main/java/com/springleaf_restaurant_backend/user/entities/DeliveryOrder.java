@@ -24,5 +24,8 @@ public class DeliveryOrder {
 
     @Column(name = "delivery_order_status_id")
     private Integer deliveryOrderStatusId;
+
+    @Column(name = "active")
+    private boolean active;
 }
  

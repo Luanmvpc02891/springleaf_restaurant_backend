@@ -40,8 +40,13 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     }
 
     @Override
-    public void findByCustomerId(Long id) {
-        deliveryOrderRepository.findByCustomerId(id);
+    public DeliveryOrder findByCustomerId(Long id) {
+        return deliveryOrderRepository.findByCustomerId(id);
     } 
+
+    @Override
+    public Optional<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActive(Long userId, Integer deliveryOrderTypeId, boolean active) {
+        return deliveryOrderRepository.findByCustomerIdAndDeliveryOrderTypeIdAndActive(userId, deliveryOrderTypeId , active);
+    }
     
 }

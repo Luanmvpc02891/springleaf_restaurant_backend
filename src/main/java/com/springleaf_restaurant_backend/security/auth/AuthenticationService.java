@@ -162,8 +162,6 @@ public class AuthenticationService {
     String pass = request.getPassword();
     System.out.println(userName + pass);
     try {
-      
-    
     authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
             request.getUserName(),
@@ -173,7 +171,6 @@ public class AuthenticationService {
     
     var user = userRepository.findByUsername(request.getUserName())
         .orElseThrow();
-    var jwtToken = jwtService.generateToken(user);
     if(user != null){
       if(!user.isStatus()){
         return AuthenticationResponse.builder()
@@ -187,6 +184,7 @@ public class AuthenticationService {
           System.out.println("Không có role nào cho người dùng này.");
       }
       revokeAllUserTokens(user);
+      var jwtToken = jwtService.generateToken(user);
       saveUserToken(user, jwtToken);
       return AuthenticationResponse.builder()
           .accessToken(jwtToken)

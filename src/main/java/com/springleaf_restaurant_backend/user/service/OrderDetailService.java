@@ -12,4 +12,6 @@ public interface OrderDetailService {
     OrderDetail saveOrderDetail(OrderDetail orderDetail);
 
     void deleteOrderDetail(Long id);
+
+    List<OrderDetail> getOrderDetailsByOrderId(Long orderId);
 }

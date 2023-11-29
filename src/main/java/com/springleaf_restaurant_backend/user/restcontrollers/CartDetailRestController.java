@@ -35,6 +35,7 @@ public class CartDetailRestController {
 
     @DeleteMapping("/public/delete/cartDetail/{cartDetailId}")
     public void deleteOrderDetail(@PathVariable("cartDetailId") Long cartDetailId){
+        System.out.println(cartDetailId);
         orderDetailService.deleteOrderDetail(cartDetailId);
     }
 }

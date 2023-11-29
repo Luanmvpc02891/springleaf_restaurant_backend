@@ -1,21 +1,45 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import com.springleaf_restaurant_backend.security.config.websocket.WebSocketMessage;
 import com.springleaf_restaurant_backend.user.entities.Reservation;
 import com.springleaf_restaurant_backend.user.service.ReservationService;
 
 @RestController
 public class ReservationRestController {
+
+    private final SimpMessagingTemplate messagingTemplate;
+    private List<Reservation> reservationsToUpdate = new ArrayList<>(); // De
+
+    // Inject the SimpMessagingTemplate in the constructor
+    public ReservationRestController(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
+
     @Autowired
     private ReservationService reservationService;
 
@@ -50,34 +74,90 @@ public class ReservationRestController {
         return ResponseEntity.ok(userReservations);
     }
 
-    // @Scheduled(fixedRate = 1000) // Chạy mỗi giây
-    public void updateReservationStatus() {
+    // Custom method
+
+    private void sendToWebSocket(List<Reservation> reservations) {
+        WebSocketMessage message = new WebSocketMessage();
+        message.setName("reservations");
+    
+        // Chuyển đổi List thành mảng
+        Object[] reservationArray = reservations.toArray();
+    
+        // Gán mảng vào đối tượng WebSocketMessage
+        message.setObjects(reservationArray);
+    
+        // Sử dụng mảng chứa đối tượng khi gửi thông điệp
+        messagingTemplate.convertAndSend("/public/" + "reservations", message);
+    }
+
+    @Scheduled(fixedRate = 1000) // Run every second
+    public void updateReservationStatusAndSend() {
+
+        // System.out.println("Scheduled task started.");
         List<Reservation> reservations = reservationService.getAllReservations();
+        updateReservationStatus(reservations);
+        sendToWebSocket(reservations);
+        System.out.println("WebSocket message sent.");
+        // System.out.println("Scheduled task completed.");
+    }
 
-        // Lọc ra các đặt chỗ đang sử dụng hoặc đang đợi
-        List<Reservation> reservationsToUpdate = reservations.stream()
-                .filter(reservation -> !"Đã sử dụng xong".equals(reservation.getReservationStatusName()))
-                .peek(reservation -> {
-                    Instant reservationDateTime = Instant.parse(reservation.getReservationDate());
-                    Instant currentDateTime = Instant.now();
-
-                    // Kiểm tra nếu đang sử dụng và thời gian hiện tại >= reservationDate + 2 giờ
-                    if ("Đang sử dụng".equals(reservation.getReservationStatusName()) &&
-                            currentDateTime.isAfter(reservationDateTime.plus(2, ChronoUnit.HOURS))) {
-                        reservation.setReservationStatusName("Đã sử dụng xong");
-                    }
-
-                    // Kiểm tra nếu thời gian hiện tại >= reservationDate
-                    if (currentDateTime.isAfter(reservationDateTime)) {
-                        reservation.setReservationStatusName("Đang đợi");
-                    }
-                })
-                .collect(Collectors.toList());
-
-        // Lưu cập nhật vào cơ sở dữ liệu (nếu cần)
-        if (!reservationsToUpdate.isEmpty()) {
-            reservationService.saveAllReservations(reservationsToUpdate);
+    private void updateReservationStatus(List<Reservation> reservations) {
+        for (Reservation reservation : reservations) {
+            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate());
+            if ("Đã sử dụng xong".equalsIgnoreCase(reservation.getReservationStatusName())) {
+                continue;
+            } else if ("Đã hủy".equalsIgnoreCase(reservation.getReservationStatusName())) {
+                continue;
+            } else if ("Đang chờ".equalsIgnoreCase(reservation.getReservationStatusName())) {
+                if (isCurrentBefore == 1) {
+                    continue;
+                } else if (isCurrentBefore == 2) {
+                    reservation.setReservationStatusName("Đang sử dụng");
+                }
+            } else if ("Đang sử dụng".equalsIgnoreCase(reservation.getReservationStatusName())) {
+                if (isCurrentBefore == 2) {
+                    continue;
+                } else if (isCurrentBefore == 3) {
+                    reservation.setReservationStatusName("Đã sử dụng xong");
+                }
+            }
         }
+    }
+
+    Integer checkDateTime(String reservationDateTime) {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+
+        try {
+            // Chuyển đổi chuỗi thành đối tượng LocalDateTime
+            LocalDateTime dateTime1 = LocalDateTime.parse(reservationDateTime, formatter);
+
+            // Lấy ngày giờ hiện tại
+            LocalDateTime currentDateTime = LocalDateTime.now();
+
+            // So sánh ngày giờ
+            int comparisonResult = currentDateTime.compareTo(dateTime1);
+
+            if (comparisonResult < 0) {
+                // System.out.println("Ngày giờ hiện tại nằm trước ngày giờ tới.");
+                return 1;
+            } else if (comparisonResult == 0) {
+                // System.out.println("Ngày giờ hiện tại và ngày giờ tới là giống nhau.");
+                return 2;
+            } else if (currentDateTime.isEqual(dateTime1.plusHours(2))
+                    || currentDateTime.isAfter(dateTime1.plusHours(2))) {
+                return 3;
+                // System.out.println("Ngày giờ hiện tại nằm sau ngày giờ tới.");
+            } else {
+                return 2;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 3;
+
     }
 
 }

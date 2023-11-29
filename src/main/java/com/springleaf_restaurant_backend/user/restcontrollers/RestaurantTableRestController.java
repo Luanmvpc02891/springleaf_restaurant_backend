@@ -19,7 +19,7 @@ public class RestaurantTableRestController {
         return restauranTableService.getAllRestaurantTables();
     }
 
-    @GetMapping("/restaurantTable/{tableId}")
+    @GetMapping("/public/restaurantTable/{tableId}")
     public RestaurantTable getTableById(@PathVariable("tableId") Long tableId) {
         return restauranTableService.getRestaurantTableById(tableId);
     }
