@@ -3,21 +3,38 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.Rating;
-import com.springleaf_restaurant_backend.user.repositories.RatingRepository;
+import com.springleaf_restaurant_backend.user.service.RatingService;
 
 @RestController
-@RequestMapping("/api")
 public class RatingRestController {
     @Autowired
-    private RatingRepository ratingRepository;
+    private RatingService ratingService;
 
-    @GetMapping("/ratings")
+    @GetMapping("/public/ratings")
     public List<Rating> getRatings() {
-        return ratingRepository.findAll();
+        return ratingService.getAllRatings();
+    }
+
+    @GetMapping("/public/rating/{ratingId}")
+    public Rating getRating(@PathVariable("ratingId") Long ratingId){
+        return ratingService.getRatingById(ratingId);
+    }
+
+    @PostMapping("/public/create/rating")
+    public Rating createRating(@RequestBody Rating rating){
+        return ratingService.saveRating(rating);
+    }
+
+    @PutMapping("/public/update/rating")
+    public Rating updateRating(@RequestBody Rating rating){
+        return ratingService.saveRating(rating);
+    }
+
+    @DeleteMapping("/public/delete/rating/{ratingId}")
+    public void deleteRating(@PathVariable("ratingId") Long ratingId){
+        ratingService.deleteRating(ratingId);
     }
 }

@@ -2,8 +2,6 @@ package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-
 import jakarta.persistence.*;
 
 @Data
@@ -20,11 +18,11 @@ public class MenuItem {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "description", columnDefinition = "text")
+    @Column(name = "description")
     private String description;
 
-    @Column(name = "price")
-    private Double price;
+    @Column(name = "unit_price")
+    private Double unitPrice;
 
     @Column(name = "image_url")
     private String imageUrl;
@@ -34,5 +32,4 @@ public class MenuItem {
 
     @Column(name = "status")
     private Boolean status;
-
 }

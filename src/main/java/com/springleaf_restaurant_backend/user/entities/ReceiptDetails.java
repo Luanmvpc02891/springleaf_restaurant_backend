@@ -15,7 +15,7 @@ public class ReceiptDetails {
     private Long receiptDetailId;
 
     @Column(name = "ingredient_id")
-    private Long ingredient;
+    private Long ingredientId;
 
     @Column(name = "quantity")
     private Integer quantity;
@@ -24,6 +24,5 @@ public class ReceiptDetails {
     private Double unitPrice;
 
     @Column(name = "receipt_id")
-    private Long receipt;
-
+    private Long receiptId;
 }

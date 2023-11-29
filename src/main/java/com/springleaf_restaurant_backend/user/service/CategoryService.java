@@ -1,12 +1,15 @@
-// package com.springleaf_restaurant_backend.user.service;
+package com.springleaf_restaurant_backend.user.service;
 
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Category;
 
-// import com.springleaf_restaurant_backend.user.repositories.CategoryRepository;
+import java.util.List;
 
-// @Service
-// public class CategoryService {
-//     @Autowired
-//     CategoryRepository categoryRepository;
-// }
+public interface CategoryService {
+    Category getCategoryById(Long id);
+
+    List<Category> getAllCategories();
+
+    Category saveCategory(Category category);
+
+    void deleteCategory(Long id);
+}

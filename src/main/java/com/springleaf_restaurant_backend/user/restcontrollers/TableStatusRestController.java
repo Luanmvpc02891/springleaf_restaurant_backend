@@ -1,31 +1,41 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.TableStatus;
-import com.springleaf_restaurant_backend.user.repositories.TableStatusRepository;
+import com.springleaf_restaurant_backend.user.service.TableStatusService;
 
 @RestController
-@RequestMapping("/api")
 public class TableStatusRestController {
     @Autowired
-    private TableStatusRepository TableStatusRepository;
+    private TableStatusService tableStatusService;
 
-    @GetMapping("/tableStatuses")
+    @GetMapping("/public/tableStatuses")
     public List<TableStatus> getTableStatuses() {
-        return TableStatusRepository.findAll();
+        return tableStatusService.getAllTableStatuses();
     }
 
-    @GetMapping("/tableStatus/{tableStatusId}")
-    public Optional<TableStatus> getIngredientById(@PathVariable("tableStatusId") Integer tableStatusId) {
-        return TableStatusRepository.findById(tableStatusId);
+    @GetMapping("/public/tableStatus/{tableStatusId}")
+    public TableStatus getTableStatusById(@PathVariable("tableStatusId") Integer tableStatusId) {
+        return tableStatusService.getTableStatusById(tableStatusId);
+    }
+
+    @PostMapping("/public/create/tableStatus")
+    public TableStatus createTableStatus(@RequestBody TableStatus tableStatus){
+        return tableStatusService.saveTableStatus(tableStatus);
+    }
+
+    @PutMapping("/public/update/tableStatus")
+    public TableStatus updateTableStatus(@RequestBody TableStatus tableStatus){
+        return tableStatusService.saveTableStatus(tableStatus);
+    }
+
+    @DeleteMapping("/public/delete/tableStatus/{tableStatusId}")
+    public void deleteTableStatus(@PathVariable("tableStatusId") Integer tableStatusId) {
+        tableStatusService.deleteTableStatus(tableStatusId);
     }
 
 }

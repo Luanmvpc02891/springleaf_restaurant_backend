@@ -11,10 +11,9 @@ import jakarta.persistence.*;
 public class DeliveryOrderStatus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "status_id")
-    private Long statusId;
+    @Column(name = "delivery_order_status_id")
+    private Long deliveryOrderStatusId;
 
-    @Column(name = "name")
-    private String name;
-
+    @Column(name = "delivery_order_status_name")
+    private String deliveryOrderStatusName;
 }

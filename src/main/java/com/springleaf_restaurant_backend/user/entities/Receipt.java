@@ -1,9 +1,6 @@
 package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
-
-import java.util.Date;
-
 import jakarta.persistence.*;
 
 @Data
@@ -18,18 +15,17 @@ public class Receipt {
     private Long receiptId;
 
     @Column(name = "user_id")
-    private String userId;
+    private Long userId;
 
     @Column(name = "supplier_id")
-    private Long supplier;
+    private Long supplierId;
 
     @Column(name = "date")
-    private Date date;
+    private String date;
 
     @Column(name = "total_amount")
     private Double totalAmount;
 
     @Column(name = "inventory_id")
-    private Long inventory;
-
+    private Long inventoryId;
 }

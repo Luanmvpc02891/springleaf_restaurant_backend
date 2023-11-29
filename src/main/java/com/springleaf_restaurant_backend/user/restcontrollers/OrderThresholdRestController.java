@@ -3,23 +3,38 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.OrderThreshold;
-import com.springleaf_restaurant_backend.user.entities.OrderType;
-import com.springleaf_restaurant_backend.user.repositories.OrderThresholdRepository;
-import com.springleaf_restaurant_backend.user.repositories.OrderTypeRepository;
+import com.springleaf_restaurant_backend.user.service.OrderThresholdService;
 
 @RestController
-@RequestMapping("/api")
 public class OrderThresholdRestController {
     @Autowired
-    OrderThresholdRepository orderThresholdRepository;
+    OrderThresholdService orderThresholdService;
 
-    @GetMapping("/orderThresholds")
+    @GetMapping("/public/orderThresholds")
     public List<OrderThreshold> getOrderThresholds() {
-        return orderThresholdRepository.findAll();
+        return orderThresholdService.getAllOrderThresholds();
+    }
+
+    @GetMapping("/public/orderThreshold/{orderThresholdId}")
+    public OrderThreshold getOneOrderThreshold(@PathVariable("orderThresholdId") Long orderThresholdId){
+        return orderThresholdService.getOrderThresholdById(orderThresholdId);
+    }
+
+    @PostMapping("/public/create/orderThreshold")
+    public OrderThreshold createOrderThreshold(@RequestBody OrderThreshold orderThreshold){
+        return orderThresholdService.saveOrderThreshold(orderThreshold);
+    }
+
+    @PutMapping("/public/update/orderThreshold")
+    public OrderThreshold updateOrderThreshold(@RequestBody OrderThreshold orderThreshold){
+        return orderThresholdService.saveOrderThreshold(orderThreshold);
+    }
+
+    @DeleteMapping("/public/delete/{orderThresholdId}")
+    public void deleteOrderThreshold(@PathVariable("orderThresholdId") Long orderThresholdId){
+        orderThresholdService.deleteOrderThreshold(orderThresholdId);
     }
 }

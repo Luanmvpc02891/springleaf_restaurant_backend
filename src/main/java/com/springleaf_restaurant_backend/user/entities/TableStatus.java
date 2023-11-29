@@ -10,10 +10,10 @@ import jakarta.persistence.*;
 @Table(name = "Table_Status")
 public class TableStatus {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "table_status_id")
     private Integer tableStatusId;
 
-    @Column(name = "name")
-    private String name;
-
+    @Column(name = "table_status_name")
+    private String tableStatusName;
 }

@@ -15,7 +15,7 @@ public class ComboDetail {
     private Long comboDetailId;
 
     @Column(name = "combo_id")
-    private Long combo;
+    private Long comboId;
 
     @Column(name = "menu_item_id")
     private Long menuItem;
@@ -27,3 +27,4 @@ public class ComboDetail {
     private Integer comboTypeId;
 
 }
+ 

@@ -1,9 +1,6 @@
 package com.springleaf_restaurant_backend.security.auth;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -15,5 +12,5 @@ public class RegisterRequest {
   private String password;
   private String phone;
   private String email;
-  
+  private String jwtToken;
 }

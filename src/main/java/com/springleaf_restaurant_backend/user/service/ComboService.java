@@ -1,12 +1,15 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Combo;
 
-import com.springleaf_restaurant_backend.user.repositories.ComboRepository;
+import java.util.List;
 
-@Service
-public class ComboService {
-    @Autowired
-    ComboRepository comboRepository;
+public interface ComboService {
+    Combo getComboById(Long id);
+
+    List<Combo> getAllCombos();
+
+    Combo saveCombo(Combo combo);
+
+    void deleteCombo(Long id);
 }

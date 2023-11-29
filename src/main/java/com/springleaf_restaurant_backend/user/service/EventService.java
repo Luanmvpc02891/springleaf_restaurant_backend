@@ -1,12 +1,15 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Event;
 
-import com.springleaf_restaurant_backend.user.repositories.EventRepository;
+import java.util.List;
 
-@Service
-public class EventService {
-    @Autowired
-    EventRepository eventRepository;
+public interface EventService {
+    Event getEventById(Long id);
+
+    List<Event> getAllEvents();
+
+    Event saveEvent(Event event);
+
+    void deleteEvent(Long id);
 }

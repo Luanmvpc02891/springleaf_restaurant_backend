@@ -3,21 +3,38 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
-import com.springleaf_restaurant_backend.user.repositories.OrderDetailRepository;
+import com.springleaf_restaurant_backend.user.service.OrderDetailService;
 
 @RestController
-@RequestMapping("/api")
 public class CartDetailRestController {
     @Autowired
-    private OrderDetailRepository orderDetailRepository;
+    private OrderDetailService orderDetailService;
 
-    @GetMapping("/cartDetails")
+    @GetMapping("/public/cartDetails")
     public List<OrderDetail> getOrderDetails() {
-        return orderDetailRepository.findAll();
+        return orderDetailService.getAllOrderDetails();
+    }
+
+    @GetMapping("/public/cartDetail/{cartDetailId}")
+    public OrderDetail getOneOrderDetail(@PathVariable("cartDetailId") Long cartDetailId){
+        return orderDetailService.getOrderDetailById(cartDetailId);
+    }
+
+    @PostMapping("/public/create/cartDetail")
+    public OrderDetail createCartDetail(@RequestBody OrderDetail orderDetail){
+        return orderDetailService.saveOrderDetail(orderDetail);
+    }
+
+    @PutMapping("/public/update/cartDetail")
+    public OrderDetail updateCartDetail(@RequestBody OrderDetail orderDetail){
+        return orderDetailService.saveOrderDetail(orderDetail);
+    }
+
+    @DeleteMapping("/public/delete/cartDetail/{cartDetailId}")
+    public void deleteOrderDetail(@PathVariable("cartDetailId") Long cartDetailId){
+        orderDetailService.deleteOrderDetail(cartDetailId);
     }
 }

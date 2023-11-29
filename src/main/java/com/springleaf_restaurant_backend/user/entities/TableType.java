@@ -13,7 +13,6 @@ public class TableType {
   @Column(name = "table_type_id")
   private Integer tableTypeId;
 
-  @Column(name = "type_name")
-  private String name;
-
+  @Column(name = "table_type_name")
+  private String tableTypeName;
 }

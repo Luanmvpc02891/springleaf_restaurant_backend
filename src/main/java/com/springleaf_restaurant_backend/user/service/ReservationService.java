@@ -1,12 +1,20 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import java.util.List;
 
-import com.springleaf_restaurant_backend.user.repositories.ReservationRepository;
+import com.springleaf_restaurant_backend.user.entities.Reservation;
 
-@Service
-public class ReservationService {
-    @Autowired
-    ReservationRepository reservationRepository;
+public interface ReservationService {
+    List<Reservation> getAllReservations();
+
+    Reservation getReservationById(Long id);
+
+    Reservation saveReservation(Reservation reservation);
+
+    void deleteReservation(Long id);
+
+    List<Reservation> getReservationsByUserId(Long userId);
+
+    void saveAllReservations(List<Reservation> reservations);
+
 }

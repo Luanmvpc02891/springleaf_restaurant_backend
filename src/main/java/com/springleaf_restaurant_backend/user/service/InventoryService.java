@@ -1,12 +1,16 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Inventory;
 
-import com.springleaf_restaurant_backend.user.repositories.InventoryRepository;
+import java.util.List;
 
-@Service
-public class InventoryService {
-    @Autowired
-    InventoryRepository inventoryRepository;
+public interface InventoryService {
+    List<Inventory> getAllInventories();
+
+    // List<Object[]> getInventoryInfo();
+    Inventory getInventoryById(Long id);
+
+    Inventory saveInventory(Inventory inventory);
+
+    void deleteInventory(Long id);
 }

@@ -24,7 +24,7 @@ import java.util.List;
 
 @Component
 public class GoogleDriveConfig {
-    private static final String APPLICATION_NAME = "Quickstart"; // Application name
+    private static final String APPLICATION_NAME = "login-google-api"; // Application name
     private static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "tokens";
     /**

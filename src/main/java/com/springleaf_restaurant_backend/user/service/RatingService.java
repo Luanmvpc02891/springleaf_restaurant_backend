@@ -1,12 +1,15 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Rating;
 
-import com.springleaf_restaurant_backend.user.repositories.RatingRepository;
+import java.util.List;
 
-@Service
-public class RatingService {
-    @Autowired
-    RatingRepository ratingRepository;
+public interface RatingService {
+    List<Rating> getAllRatings();
+
+    Rating getRatingById(Long id);
+
+    Rating saveRating(Rating rating);
+
+    void deleteRating(Long id);
 }

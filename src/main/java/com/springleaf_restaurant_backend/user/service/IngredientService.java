@@ -1,12 +1,15 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.springleaf_restaurant_backend.user.entities.Ingredient;
 
-import com.springleaf_restaurant_backend.user.repositories.IngredientRepository;
+import java.util.List;
 
-@Service
-public class IngredientService {
-    @Autowired
-    IngredientRepository ingredientRepository;
+public interface IngredientService {
+    List<Ingredient> getAllIngredients();
+
+    Ingredient getIngredientById(Long id);
+
+    Ingredient saveIngredient(Ingredient ingredient);
+
+    void deleteIngredient(Long id);
 }

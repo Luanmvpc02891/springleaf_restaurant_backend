@@ -30,5 +30,4 @@ public class Event {
 
     @Column(name = "order_id")
     private Long order;
-
 }

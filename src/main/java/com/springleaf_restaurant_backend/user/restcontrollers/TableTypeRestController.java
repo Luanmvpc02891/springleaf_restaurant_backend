@@ -1,32 +1,42 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.springleaf_restaurant_backend.user.entities.TableType;
-import com.springleaf_restaurant_backend.user.repositories.TableTypeRepository;
+import com.springleaf_restaurant_backend.user.service.TableTypeService;
 
 @RestController
-@RequestMapping("/api")
 public class TableTypeRestController {
 
   @Autowired
-  private TableTypeRepository tableTypeRepository;
+  private TableTypeService tableTypeService;
 
-  @GetMapping("/tableTypes")
+  @GetMapping("/public/tableTypes")
   public List<TableType> getTableTypes() {
-    return tableTypeRepository.findAll();
+    return tableTypeService.getAllTableTypes();
   }
 
-  @GetMapping("/tableType/{tableTypeId}")
-  public Optional<TableType> getTableTypeById(@PathVariable("tableTypeId") Integer tableTypeId) {
-    return tableTypeRepository.findById(tableTypeId);
+  @GetMapping("/public/tableType/{tableTypeId}")
+  public TableType getTableTypeById(@PathVariable("tableTypeId") Integer tableTypeId) {
+    return tableTypeService.getTableTypeById(tableTypeId);
+  }
+
+  @PostMapping("/public/create/tableType")
+  public TableType createTableType(@RequestBody TableType tableType){
+    return tableTypeService.saveTableType(tableType);
+  }
+
+  @PutMapping("/public/update/tableType")
+  public TableType updateTableType(@RequestBody TableType tableType){
+    return tableTypeService.saveTableType(tableType);
+  }
+
+  @DeleteMapping("/public/delete/tableType/{tableTypeId}")
+  public void deleteTableTypeById(@PathVariable("tableTypeId") Integer tableTypeId) {
+    tableTypeService.deleteTableType(tableTypeId);
   }
 
 }

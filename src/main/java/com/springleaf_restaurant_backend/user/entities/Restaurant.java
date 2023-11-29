@@ -25,5 +25,4 @@ public class Restaurant {
 
     @Column(name = "email")
     private String email;
-
 }

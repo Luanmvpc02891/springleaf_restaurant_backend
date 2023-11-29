@@ -3,8 +3,6 @@ package com.springleaf_restaurant_backend.user.entities;
 import lombok.*;
 import jakarta.persistence.*;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,12 +15,11 @@ public class MergeTable {
     private Long id;
 
     @Column(name = "table_id")
-    private Long table;
+    private Long tableId;
 
     @Column(name = "merge_table_id")
     private String mergeTableId;
 
     @Column(name = "merge_time")
-    private Date mergeTime;
-
+    private String mergeTime;
 }

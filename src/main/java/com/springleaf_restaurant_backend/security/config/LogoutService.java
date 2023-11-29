@@ -14,7 +14,7 @@ import com.springleaf_restaurant_backend.security.repositories.TokenRepository;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-  private final TokenRepository tokenRepository;
+  private final TokenRepository tokenRepository; 
 
   @Override
   public void logout(
@@ -25,8 +25,10 @@ public class LogoutService implements LogoutHandler {
     final String authHeader = request.getHeader("Authorization");
     final String jwt;
     if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+      System.out.println("K truyen duoc header");
       return;
     }
+    System.out.println("Dô");
     jwt = authHeader.substring(7);
     var storedToken = tokenRepository.findByToken(jwt)
         .orElse(null);
@@ -36,5 +38,7 @@ public class LogoutService implements LogoutHandler {
       tokenRepository.save(storedToken);
       SecurityContextHolder.clearContext();
     }
-  }
+  
+    }
+    
 }

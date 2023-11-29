@@ -1,12 +1,9 @@
 package com.springleaf_restaurant_backend.security.auth;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.springleaf_restaurant_backend.user.entities.User;
+import com.springleaf_restaurant_backend.security.entities.User;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
@@ -16,8 +13,8 @@ public class AuthenticationResponse {
 
   @JsonProperty("access_token")
   private String accessToken;
-  @JsonProperty("refresh_token")
-  private String refreshToken;
+  // @JsonProperty("refresh_token")
+  // private String refreshToken;
   private User user;
   private String error;
 
@@ -25,9 +22,11 @@ public class AuthenticationResponse {
     this.error = error;
 }
 
-  public AuthenticationResponse(String accessToken, String refreshToken, User user) {
+  public AuthenticationResponse(String accessToken, 
+  //String refreshToken,
+   User user) {
       this.accessToken = accessToken;
-      this.refreshToken = refreshToken;
+      //this.refreshToken = refreshToken;
       this.user = user;
   }
   

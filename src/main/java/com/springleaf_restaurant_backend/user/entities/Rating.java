@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.user.entities;
 
 import lombok.*;
+
 import jakarta.persistence.*;
 
 @Data
@@ -18,9 +19,8 @@ public class Rating {
     private Long menuItem;
 
     @Column(name = "user_id")
-    private Long user;
+    private Long userId;
 
     @Column(name = "rating")
     private Integer rating;
-
 }
