@@ -70,7 +70,7 @@ public class ProductRestController {
 
     @PostMapping("/public/product/addToCart")
     public ResponseEntity<String> addToCart(
-        @RequestHeader("header") String header, @RequestBody List<Long> body)
+        @RequestHeader String header, @RequestBody List<Long> body)
         {
         String jwt = header.substring(7);
         if(jwtService.isTokenExpired(jwt)){
