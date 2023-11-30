@@ -176,8 +176,8 @@ public class ReservationRestController {
                 // System.out.println("Ngày giờ hiện tại và ngày giờ tới là giống nhau.");
                 return 2;
             } else if (currentDateTime.isEqual(outTime1) || currentDateTime.isAfter(outTime1) ) { // nếu giờ hiện tại bằng hoặc vượt qua outTime1
+                System.out.println("Đã sử dụng xong");
                 return 3;
-                // System.out.println("Ngày giờ hiện tại nằm sau ngày giờ tới.");
             } else {
                 return 2;
             }
