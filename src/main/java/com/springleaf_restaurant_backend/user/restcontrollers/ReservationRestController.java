@@ -1,5 +1,6 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -25,15 +27,26 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
+import com.springleaf_restaurant_backend.security.config.JwtService;
 import com.springleaf_restaurant_backend.security.config.websocket.WebSocketMessage;
+import com.springleaf_restaurant_backend.security.entities.User;
+import com.springleaf_restaurant_backend.security.repositories.UserRepository;
+import com.springleaf_restaurant_backend.user.entities.MailInfo;
 import com.springleaf_restaurant_backend.user.entities.Reservation;
 import com.springleaf_restaurant_backend.user.service.ReservationService;
+import com.springleaf_restaurant_backend.user.service.mail.MailerService;
 
 @RestController
 public class ReservationRestController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private List<Reservation> reservationsToUpdate = new ArrayList<>(); // De
+    @Autowired
+    MailerService mailerService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    JwtService jwtService;
 
     // Inject the SimpMessagingTemplate in the constructor
     public ReservationRestController(SimpMessagingTemplate messagingTemplate) {
@@ -74,18 +87,40 @@ public class ReservationRestController {
         return ResponseEntity.ok(userReservations);
     }
 
+    @PostMapping("/public/create/sendMail")
+    public ResponseEntity<String> sendMail(
+            @RequestHeader("Authorization") String jwtToken,
+            @RequestBody String email) {
+        String token = jwtToken.substring(7);
+        Optional<User> user = userRepository.findByUsername(jwtService.extractUsername(token));
+        if (user.isPresent()) {
+            try {
+                String emailTo = email;
+                String subject = (
+                        new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                String body = ""; // Ngày giờ, nội dung muốn gửi
+                mailerService.send(emailTo, subject, body, token );
+                return ResponseEntity.ok("Email is sending");
+            } catch (Exception e) {
+                return ResponseEntity.ok("Email cant not send ! Please config email again");
+            }
+        }else{
+            return ResponseEntity.ok("User with JWT not found");
+        }
+    }
+
     // Custom method
 
     private void sendToWebSocket(List<Reservation> reservations) {
         WebSocketMessage message = new WebSocketMessage();
         message.setName("reservations");
-    
+
         // Chuyển đổi List thành mảng
         Object[] reservationArray = reservations.toArray();
-    
+
         // Gán mảng vào đối tượng WebSocketMessage
         message.setObjects(reservationArray);
-    
+
         // Sử dụng mảng chứa đối tượng khi gửi thông điệp
         messagingTemplate.convertAndSend("/public/greetings", message);
     }

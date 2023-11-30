@@ -117,8 +117,8 @@ public class DeliveryOrderRestController {
             return ResponseEntity.ok(null);
         }
     }
-
-    @PostMapping("/public/user/addToCart")
+    
+    @PostMapping("/public/create/addToCart")
     public ResponseEntity<String> addToCart(
         @RequestHeader("Authorization") String jwtToken, // Người dùng
         @RequestParam("menuItemId") Long menuItemId, // Sản phẩm
@@ -126,7 +126,7 @@ public class DeliveryOrderRestController {
         @RequestParam("orderId") Long orderId // Order
     ){
         // Kiểm tra người dùng theo jwt
-        String username = jwtService.extractUsername(jwtToken);
+        String username = jwtService.extractUsername(jwtToken.substring(7));
         Optional<User> userByToken = userService.findByUsername(username);
         if(userByToken.isEmpty()){
             return ResponseEntity.ok("User is not found");
@@ -135,16 +135,23 @@ public class DeliveryOrderRestController {
         if(type.isEmpty()){
             return ResponseEntity.ok("Order type not found");
         }
-        Order orderUser ;
+        Order orderUser = orderService.getOrderById(orderId);
         if(orderId == null){
             orderUser = new Order();
         }else{
             orderUser = orderService.getOrdersByDeliveryOrderId(deliveryOrderId).get();
         }
+        List<OrderDetail> listOrderDetail = orderDetailService.getOrderDetailsByOrderId(orderId);
+        for (OrderDetail orderDetail : listOrderDetail) {
+            if(orderDetail.getMenuItemId() == menuItemId){
+                return ResponseEntity.ok("Item in cart");
+            }
+        }
         OrderDetail orderDetail = new OrderDetail();
         orderDetail.setMenuItemId(menuItemId);
         orderDetail.setOrderId(orderUser.getOrderId());
         orderDetail.setQuantity(1);
+        orderDetailService.saveOrderDetail(orderDetail);
         return ResponseEntity.ok("Add to cart is success");
     }
 

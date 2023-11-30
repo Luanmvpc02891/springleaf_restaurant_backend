@@ -117,9 +117,6 @@ public class AuthenticationService {
       return "User not found";
     }else{
       String pass = passwordEncoder.encode(password);
-      System.out.println(user.get().getPassword());
-      System.out.println(pass);
-      System.out.println(passwordEncoder.matches(password,user.get().getPassword()));
       if(passwordEncoder.matches(password,user.get().getPassword())){
         
         return "Config password success";
