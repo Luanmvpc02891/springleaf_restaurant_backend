@@ -188,7 +188,7 @@ public class DeliveryOrderRestController {
         message.setObjects(deliveryOrderArray);
 
         // Sử dụng mảng chứa đối tượng khi gửi thông điệp
-        messagingTemplate.convertAndSend("/public/greetings", message);
+        messagingTemplate.convertAndSend("/public/cartDetails", message);
     }
 
     
