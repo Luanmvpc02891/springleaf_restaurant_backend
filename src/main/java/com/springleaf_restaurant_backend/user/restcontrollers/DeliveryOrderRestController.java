@@ -5,13 +5,17 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import com.springleaf_restaurant_backend.security.config.websocket.WebSocketMessage;
 
 import com.springleaf_restaurant_backend.security.config.JwtService;
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.service.UserService;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
 import com.springleaf_restaurant_backend.user.entities.DeliveryOrderType;
+import com.springleaf_restaurant_backend.user.entities.MessageResponse;
 import com.springleaf_restaurant_backend.user.entities.Order;
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
@@ -22,6 +26,10 @@ import com.springleaf_restaurant_backend.user.service.OrderService;
 
 @RestController
 public class DeliveryOrderRestController {
+    private final SimpMessagingTemplate messagingTemplate;
+    public DeliveryOrderRestController(SimpMessagingTemplate messagingTemplate) {
+        this.messagingTemplate = messagingTemplate;
+    }
     @Autowired
     DeliveryOrderService deliveryOrderService;
     @Autowired
@@ -118,22 +126,25 @@ public class DeliveryOrderRestController {
         }
     }
     
-    @PostMapping("/public/create/addToCart")
-    public ResponseEntity<String> addToCart(
+    @PostMapping("/public/create/addToCart/{menuItemId}/{deliveryOrderId}/{orderId}")
+    public ResponseEntity<?> addToCart(
         @RequestHeader("Authorization") String jwtToken, // Người dùng
-        @RequestParam("menuItemId") Long menuItemId, // Sản phẩm
-        @RequestParam("deliveryOrderId") Long deliveryOrderId, // Giỏ hàng
-        @RequestParam("orderId") Long orderId // Order
+        @PathVariable("menuItemId") Long menuItemId, // Sản phẩm
+        @PathVariable("deliveryOrderId") Long deliveryOrderId, // Giỏ hàng
+        @PathVariable("orderId") Long orderId // Order
     ){
+        MessageResponse message = new MessageResponse();
         // Kiểm tra người dùng theo jwt
         String username = jwtService.extractUsername(jwtToken.substring(7));
         Optional<User> userByToken = userService.findByUsername(username);
         if(userByToken.isEmpty()){
-            return ResponseEntity.ok("User is not found");
+            message.setMessage("User not found"); 
+            return ResponseEntity.ok(message);
         }
         Optional<DeliveryOrderType> type = deliveryOrderTypeService.getDeliveryOrderTypeByName("Delivery Order");
         if(type.isEmpty()){
-            return ResponseEntity.ok("Order type not found");
+            message.setMessage("Type not found"); 
+            return ResponseEntity.ok(message);
         }
         Order orderUser = orderService.getOrderById(orderId);
         if(orderId == null){
@@ -144,7 +155,8 @@ public class DeliveryOrderRestController {
         List<OrderDetail> listOrderDetail = orderDetailService.getOrderDetailsByOrderId(orderId);
         for (OrderDetail orderDetail : listOrderDetail) {
             if(orderDetail.getMenuItemId() == menuItemId){
-                return ResponseEntity.ok("Item in cart");
+                message.setMessage("MenuItem in cart"); 
+                return ResponseEntity.ok(message);
             }
         }
         OrderDetail orderDetail = new OrderDetail();
@@ -152,7 +164,31 @@ public class DeliveryOrderRestController {
         orderDetail.setOrderId(orderUser.getOrderId());
         orderDetail.setQuantity(1);
         orderDetailService.saveOrderDetail(orderDetail);
-        return ResponseEntity.ok("Add to cart is success");
+        List<OrderDetail> newUserorderDetails = orderDetailService.getOrderDetailsByOrderId(orderId);
+        DeliveryOrder deliveryOrder = deliveryOrderService.getDeliveryOrderById(deliveryOrderId);
+        deliveryOrder.setDeliveryOrderStatusId(1);
+        deliveryOrderService.saveDeliveryOrder(deliveryOrder);
+        return ResponseEntity.ok(newUserorderDetails);
+    }
+
+
+    //@Scheduled(fixedRate = 1000)
+    public void getDeliveryOrderAndSend(){
+        List<OrderDetail> listOrderDetail = orderDetailService.getAllOrderDetails();
+        sendToWebSocket(listOrderDetail);
+    }
+
+    private void sendToWebSocket(List<OrderDetail> listOrderDetail) {
+        WebSocketMessage message = new WebSocketMessage();
+
+        // Chuyển đổi List thành mảng
+        Object[] deliveryOrderArray = listOrderDetail.toArray();
+
+        // Gán mảng vào đối tượng WebSocketMessage
+        message.setObjects(deliveryOrderArray);
+
+        // Sử dụng mảng chứa đối tượng khi gửi thông điệp
+        messagingTemplate.convertAndSend("/public/greetings", message);
     }
 
     
