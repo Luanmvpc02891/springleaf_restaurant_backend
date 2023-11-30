@@ -135,7 +135,7 @@ public class ReservationRestController {
                 continue;
             } else if ("Đã hủy".equalsIgnoreCase(reservation.getReservationStatusName())) {
                 continue;
-            } else if ("Đang chờ".equalsIgnoreCase(reservation.getReservationStatusName())) {
+            } else if ("Đang đợi".equalsIgnoreCase(reservation.getReservationStatusName())) {
                 if (isCurrentBefore == 1) {
                     continue;
                 } else if (isCurrentBefore == 2) {
