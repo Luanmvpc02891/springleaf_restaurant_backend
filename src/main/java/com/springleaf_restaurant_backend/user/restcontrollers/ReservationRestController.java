@@ -140,12 +140,14 @@ public class ReservationRestController {
                     continue;
                 } else if (isCurrentBefore == 2) {
                     reservation.setReservationStatusName("Đang sử dụng");
+                    updateReservation(reservation);
                 }
             } else if ("Đang sử dụng".equalsIgnoreCase(reservation.getReservationStatusName())) {
                 if (isCurrentBefore == 2) {
                     continue;
                 } else if (isCurrentBefore == 3) {
                     reservation.setReservationStatusName("Đã sử dụng xong");
+                    updateReservation(reservation);
                 }
             }
         }
@@ -162,6 +164,8 @@ public class ReservationRestController {
             // Lấy ngày giờ hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now();
 
+            LocalDateTime outTime1 = LocalDateTime.now();
+
             // So sánh ngày giờ
             int comparisonResult = currentDateTime.compareTo(dateTime1);
 
@@ -171,8 +175,7 @@ public class ReservationRestController {
             } else if (comparisonResult == 0) {
                 // System.out.println("Ngày giờ hiện tại và ngày giờ tới là giống nhau.");
                 return 2;
-            } else if (currentDateTime.isEqual(dateTime1.plusHours(2))
-                    || currentDateTime.isAfter(dateTime1.plusHours(2))) {
+            } else if (currentDateTime.isEqual(outTime1) || currentDateTime.isAfter(outTime1) ) { // nếu giờ hiện tại bằng hoặc vượt qua outTime1
                 return 3;
                 // System.out.println("Ngày giờ hiện tại nằm sau ngày giờ tới.");
             } else {
