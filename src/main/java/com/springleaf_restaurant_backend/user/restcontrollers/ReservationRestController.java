@@ -117,7 +117,7 @@ public class ReservationRestController {
         messagingTemplate.convertAndSend("/public/" + "reservations", message);
     }
 
-    @Scheduled(fixedRate = 5000) // Run every second
+    @Scheduled(fixedRate = 10000) // Run every 10 second
     public void updateReservationStatusAndSend() {
 
         // System.out.println("Scheduled task started.");
