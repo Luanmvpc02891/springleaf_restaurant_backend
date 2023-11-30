@@ -1,32 +1,44 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
+import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import com.springleaf_restaurant_backend.security.config.JwtService;
 import com.springleaf_restaurant_backend.security.config.websocket.WebSocketMessage;
+import com.springleaf_restaurant_backend.security.entities.User;
+import com.springleaf_restaurant_backend.security.repositories.UserRepository;
+import com.springleaf_restaurant_backend.user.entities.MailInfo;
 import com.springleaf_restaurant_backend.user.entities.Reservation;
 import com.springleaf_restaurant_backend.user.service.ReservationService;
+import com.springleaf_restaurant_backend.user.service.mail.MailerService;
 
 @RestController
 public class ReservationRestController {
 
     private final SimpMessagingTemplate messagingTemplate;
     private List<Reservation> reservationsToUpdate = new ArrayList<>(); // De
+    @Autowired
+    MailerService mailerService;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    JwtService jwtService;
 
     // Inject the SimpMessagingTemplate in the constructor
     public ReservationRestController(SimpMessagingTemplate messagingTemplate) {
@@ -65,6 +77,28 @@ public class ReservationRestController {
     public ResponseEntity<List<Reservation>> getReservationsByUser(@PathVariable Long userId) {
         List<Reservation> userReservations = reservationService.getReservationsByUserId(userId);
         return ResponseEntity.ok(userReservations);
+    }
+
+    @PostMapping("/public/create/sendMail")
+    public ResponseEntity<String> sendMail(
+            @RequestHeader("Authorization") String jwtToken,
+            @RequestBody String email) {
+        String token = jwtToken.substring(7);
+        Optional<User> user = userRepository.findByUsername(jwtService.extractUsername(token));
+        if (user.isPresent()) {
+            try {
+                String emailTo = email;
+                String subject = (
+                        new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                String body = ""; // Ngày giờ, nội dung muốn gửi
+                mailerService.send(emailTo, subject, body, token );
+                return ResponseEntity.ok("Email is sending");
+            } catch (Exception e) {
+                return ResponseEntity.ok("Email cant not send ! Please config email again");
+            }
+        }else{
+            return ResponseEntity.ok("User with JWT not found");
+        }
     }
 
     // Custom method

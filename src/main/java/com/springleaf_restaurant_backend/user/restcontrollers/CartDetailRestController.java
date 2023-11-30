@@ -3,8 +3,10 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.springleaf_restaurant_backend.user.entities.MessageResponse;
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 import com.springleaf_restaurant_backend.user.service.OrderDetailService;
 
@@ -34,9 +36,11 @@ public class CartDetailRestController {
     }
 
     @DeleteMapping("/public/delete/cartDetail/{cartDetailId}")
-    public void deleteOrderDetail(@PathVariable("cartDetailId") Long cartDetailId){
-        System.out.println(cartDetailId);
+    public ResponseEntity<?> deleteOrderDetail(@PathVariable("cartDetailId") Long cartDetailId){
+        MessageResponse message = new MessageResponse();
         orderDetailService.deleteOrderDetail(cartDetailId);
+        message.setMessage("Delete is success"); 
+        return ResponseEntity.ok(message);
     }
 
     @GetMapping("/public/top5")
