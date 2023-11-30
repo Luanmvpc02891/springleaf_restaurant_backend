@@ -25,4 +25,8 @@ public class RestaurantTable {
 
     @Column(name = "restaurant_id")
     private Long restaurantId;
+
+    @Column(name = "seating_capacity")
+    private Integer seatingCapacity;
+
 }

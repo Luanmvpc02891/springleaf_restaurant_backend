@@ -130,7 +130,7 @@ public class ReservationRestController {
 
     private void updateReservationStatus(List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
-            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate());
+            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate(), reservation.getOutTime());
             if ("Đã sử dụng xong".equalsIgnoreCase(reservation.getReservationStatusName())) {
                 continue;
             } else if ("Đã hủy".equalsIgnoreCase(reservation.getReservationStatusName())) {
@@ -153,7 +153,7 @@ public class ReservationRestController {
         }
     }
 
-    Integer checkDateTime(String reservationDateTime) {
+    Integer checkDateTime(String reservationDateTime, String outTime) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -164,7 +164,7 @@ public class ReservationRestController {
             // Lấy ngày giờ hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now();
 
-            LocalDateTime outTime1 = LocalDateTime.now();
+            LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
 
             // So sánh ngày giờ
             int comparisonResult = currentDateTime.compareTo(dateTime1);
@@ -176,8 +176,8 @@ public class ReservationRestController {
                 // System.out.println("Ngày giờ hiện tại và ngày giờ tới là giống nhau.");
                 return 2;
             } else if (currentDateTime.isEqual(outTime1) || currentDateTime.isAfter(outTime1) ) { // nếu giờ hiện tại bằng hoặc vượt qua outTime1
+                System.out.println("Đã sử dụng xong");
                 return 3;
-                // System.out.println("Ngày giờ hiện tại nằm sau ngày giờ tới.");
             } else {
                 return 2;
             }
