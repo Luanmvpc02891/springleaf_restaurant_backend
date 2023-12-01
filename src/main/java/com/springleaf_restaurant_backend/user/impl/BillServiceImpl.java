@@ -37,4 +37,14 @@ public class BillServiceImpl implements BillService {
     public void deleteBill(Long id) {
         billRepository.deleteById(id);
     }
+
+    @Override
+    public List<Object[]> getRevenueByTimeRange(String startDate, String endDate) {
+        return billRepository.getRevenueByTimeRange(startDate, endDate);
+    }
+
+    @Override
+    public List<Bill> getBillsByTimeRange(String startDate, String endDate) {
+        return billRepository.getBillsByTimeRange(startDate, endDate);
+    }
 }

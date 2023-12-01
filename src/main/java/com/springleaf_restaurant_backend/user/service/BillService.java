@@ -12,4 +12,9 @@ public interface BillService {
     Bill saveBill(Bill bill);
 
     void deleteBill(Long id);
+
+    List<Object[]> getRevenueByTimeRange(String startDate, String endDate);
+
+    List<Bill> getBillsByTimeRange(String startDate, String endDate);
+
 }

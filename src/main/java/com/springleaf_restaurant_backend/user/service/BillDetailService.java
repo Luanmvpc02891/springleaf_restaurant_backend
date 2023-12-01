@@ -12,4 +12,6 @@ public interface BillDetailService {
     BillDetail saveBillDetail(BillDetail billDetail);
 
     void deleteBillDetail(Long id);
+
+    List<BillDetail> getBillDetailsByBillId(Long billId);
 }

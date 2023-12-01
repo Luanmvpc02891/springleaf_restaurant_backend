@@ -37,4 +37,9 @@ public class BillDetailServiceImpl implements BillDetailService {
     public void deleteBillDetail(Long id) {
         billDetailRepository.deleteById(id);
     }
+
+    @Override
+    public List<BillDetail> getBillDetailsByBillId(Long billId) {
+        return billDetailRepository.getBillDetailsByBillId(billId);
+    }
 }

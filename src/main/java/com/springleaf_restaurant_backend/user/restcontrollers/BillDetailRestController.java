@@ -3,13 +3,16 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.springleaf_restaurant_backend.user.entities.BillDetail;
 import com.springleaf_restaurant_backend.user.service.BillDetailService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 
 @RestController
 public class BillDetailRestController {
@@ -22,7 +25,7 @@ public class BillDetailRestController {
     }
 
     @GetMapping("/public/billDetail/{id}")
-    public BillDetail getOneBillDetail(@RequestBody BillDetail billDetail){
+    public BillDetail getOneBillDetail(@RequestBody BillDetail billDetail) {
         return billDetailService.getBillDetailById(billDetail.getBillDetailId());
     }
 
@@ -37,8 +40,13 @@ public class BillDetailRestController {
     }
 
     @DeleteMapping("/public/delete/billDetail/{billDetailId}")
-    public void deleteBillDetail(@PathVariable("billDetailId") Long billDetailId){
+    public void deleteBillDetail(@PathVariable("billDetailId") Long billDetailId) {
         billDetailService.deleteBillDetail(billDetailId);
     }
-    
+
+    @GetMapping("/public/billDetails/{billId}/billDetails")
+    public List<BillDetail> getBillDetailsByBillId(@PathVariable Long billId) {
+        return billDetailService.getBillDetailsByBillId(billId);
+    }
+
 }

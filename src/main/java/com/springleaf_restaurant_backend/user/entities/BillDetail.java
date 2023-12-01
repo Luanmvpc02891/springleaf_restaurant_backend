@@ -16,7 +16,7 @@ public class BillDetail {
     private Long billDetailId;
 
     @Column(name = "menu_item_id")
-    private Long menuItem;
+    private Long menuItemId;
 
     @Column(name = "quantity")
     private Long quantity;
