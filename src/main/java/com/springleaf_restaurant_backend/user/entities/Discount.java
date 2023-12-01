@@ -30,4 +30,7 @@ public class Discount {
 
     @Column(name = "discount_code")
     private String discountCode;
+
+    @Column(name = "active")
+    private boolean active;
 }
