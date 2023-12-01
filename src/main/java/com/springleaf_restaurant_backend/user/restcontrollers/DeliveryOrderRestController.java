@@ -96,6 +96,7 @@ public class DeliveryOrderRestController {
             newCart.setDeliveryOrderTypeId(type.get().getDeliveryOrderTypeId());
             newCart.setActive(true);
             deliveryOrderService.saveDeliveryOrder(newCart);
+            System.out.println("cart new");
             return ResponseEntity.ok(newCart);
         }
     }

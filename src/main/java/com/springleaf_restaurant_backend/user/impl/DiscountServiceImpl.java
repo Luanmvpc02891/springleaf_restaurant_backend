@@ -35,4 +35,9 @@ public class DiscountServiceImpl implements DiscountService {
     public void deleteDiscount(Integer id) {
         discountRepository.deleteById(id);
     }
+
+    @Override
+    public Discount getDiscountByDiscountCode(String discountCode){
+        return discountRepository.findByDiscountCode(discountCode);
+    }
 }
