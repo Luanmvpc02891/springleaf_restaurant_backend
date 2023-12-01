@@ -12,4 +12,6 @@ public interface DiscountService {
     Discount saveDiscount(Discount discount);
 
     void deleteDiscount(Integer id);
+
+    Discount getDiscountByDiscountCode(String discountCode);
 }
