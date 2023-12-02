@@ -1,5 +1,7 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -142,6 +144,7 @@ public class DeliveryOrderRestController {
             message.setMessage("User not found"); 
             return ResponseEntity.ok(message);
         }
+        // Kiểm tra type mua mang đi
         Optional<DeliveryOrderType> type = deliveryOrderTypeService.getDeliveryOrderTypeByName("Delivery Order");
         if(type.isEmpty()){
             message.setMessage("Type not found"); 
@@ -149,7 +152,16 @@ public class DeliveryOrderRestController {
         }
         Order orderUser = orderService.getOrderById(orderId);
         if(orderId == null){
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(date);
             orderUser = new Order();
+            orderUser.setDeliveryOrderId(deliveryOrderId);
+            orderUser.setOrderDate(formattedDate);
+            orderUser.setCombo(null);
+            orderUser.setReservationId(null);
+            orderUser.setStatus(true);
+            orderService.saveOrder(orderUser);
         }else{
             orderUser = orderService.getOrdersByDeliveryOrderId(deliveryOrderId).get();
         }

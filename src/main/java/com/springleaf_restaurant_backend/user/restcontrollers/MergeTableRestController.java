@@ -23,7 +23,7 @@ public class MergeTableRestController {
         return mergeTableService.getMergeTableById(mergeTableId);
     }
 
-    @PostMapping("/public/create/mergeTables")
+    @PostMapping("/public/create/mergeTable")
     public MergeTable createMergeTable(@RequestBody MergeTable mergeTable){
         return mergeTableService.saveMergeTable(mergeTable);
     }
