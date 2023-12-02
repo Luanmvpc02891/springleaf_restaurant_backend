@@ -29,4 +29,7 @@ public class RestaurantTable {
     @Column(name = "seating_capacity")
     private Integer seatingCapacity;
 
+    @Column(name = "description")
+    private String description;
+
 }
