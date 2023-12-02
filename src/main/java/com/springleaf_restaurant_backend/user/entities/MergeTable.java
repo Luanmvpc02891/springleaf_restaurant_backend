@@ -22,4 +22,8 @@ public class MergeTable {
 
     @Column(name = "merge_time")
     private String mergeTime;
+
+    @Column(name = "status")
+    private String status;
+
 }
