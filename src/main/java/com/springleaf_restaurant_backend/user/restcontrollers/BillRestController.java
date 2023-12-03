@@ -58,4 +58,9 @@ public class BillRestController {
             @RequestParam("endDate") String endDate) {
         return billService.getBillsByTimeRange(startDate, endDate);
     }
+
+    @GetMapping("/public/totalRevenue")
+    public Double getTotalRevenue() {
+        return billService.calculateTotalRevenue();
+    }
 }
