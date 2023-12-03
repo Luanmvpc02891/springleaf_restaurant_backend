@@ -109,10 +109,14 @@ public class DeliveryOrderRestController {
         @RequestBody Long deliveryOrderId
     ){
         Optional<Order> order = orderService.getOrdersByDeliveryOrderId(deliveryOrderId);
-        if(order.isPresent()){
+        if(order.isPresent() && order.get().isStatus()){
             return ResponseEntity.ok(order.get());
         }else{
-            return ResponseEntity.ok(null);
+            Order newOrder = new Order();
+            newOrder.setDeliveryOrderId(deliveryOrderId);
+            newOrder.setStatus(true);
+            orderService.saveOrder(newOrder);
+            return ResponseEntity.ok(newOrder);
         }
     }
 
@@ -151,7 +155,7 @@ public class DeliveryOrderRestController {
             return ResponseEntity.ok(message);
         }
         Order orderUser = orderService.getOrderById(orderId);
-        if(orderId == null){
+        if(orderUser == null){
             Date date = new Date();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String formattedDate = dateFormat.format(date);

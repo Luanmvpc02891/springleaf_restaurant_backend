@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -23,8 +24,20 @@ import com.springleaf_restaurant_backend.security.config.JwtService;
 import com.springleaf_restaurant_backend.security.config.websocket.WebSocketMessage;
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
+import com.springleaf_restaurant_backend.security.service.UserService;
+import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
+import com.springleaf_restaurant_backend.user.entities.DeliveryOrderType;
 import com.springleaf_restaurant_backend.user.entities.MailInfo;
+import com.springleaf_restaurant_backend.user.entities.MenuItem;
+import com.springleaf_restaurant_backend.user.entities.MessageResponse;
+import com.springleaf_restaurant_backend.user.entities.Order;
+import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 import com.springleaf_restaurant_backend.user.entities.Reservation;
+import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
+import com.springleaf_restaurant_backend.user.service.DeliveryOrderStatusService;
+import com.springleaf_restaurant_backend.user.service.DeliveryOrderTypeService;
+import com.springleaf_restaurant_backend.user.service.OrderDetailService;
+import com.springleaf_restaurant_backend.user.service.OrderService;
 import com.springleaf_restaurant_backend.user.service.ReservationService;
 import com.springleaf_restaurant_backend.user.service.mail.MailerService;
 
@@ -39,6 +52,18 @@ public class ReservationRestController {
     UserRepository userRepository;
     @Autowired
     JwtService jwtService;
+    @Autowired
+    DeliveryOrderService deliveryOrderService;
+    @Autowired
+    UserService userService;
+    @Autowired
+    DeliveryOrderStatusService deliveryOrderStatusService;
+    @Autowired
+    DeliveryOrderTypeService deliveryOrderTypeService;
+    @Autowired
+    OrderService orderService;
+    @Autowired
+    OrderDetailService orderDetailService;
 
     // Inject the SimpMessagingTemplate in the constructor
     public ReservationRestController(SimpMessagingTemplate messagingTemplate) {
@@ -77,6 +102,47 @@ public class ReservationRestController {
     public ResponseEntity<List<Reservation>> getReservationsByUser(@PathVariable Long userId) {
         List<Reservation> userReservations = reservationService.getReservationsByUserId(userId);
         return ResponseEntity.ok(userReservations);
+    }
+
+    @PostMapping("/public/create/order/{reservationId}")
+    public ResponseEntity<?> addMenuItem(
+        @RequestHeader("Authorization") String jwtToken, // Người dùng
+        @PathVariable("reservationId") Long reservationId, // bàn đặt
+        @RequestBody List<MenuItem> listMenuItems
+    ){
+        MessageResponse message = new MessageResponse();
+        
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(date);
+            Order orderUser = new Order();
+            orderUser.setReservationId(reservationId);
+            orderUser.setOrderDate(formattedDate);
+            orderUser.setStatus(true);
+            orderService.saveOrder(orderUser);
+        
+        List<OrderDetail> listDetail = orderDetailService.getAllOrderDetails();
+        List<OrderDetail> listOrder = new ArrayList<>();
+        for (OrderDetail detail : listDetail) {
+            for (MenuItem item : listMenuItems) {
+            if(detail.getMenuItemId() == item.getMenuItemId()){
+                message.setMessage("Item was order");
+                return ResponseEntity.ok(message);
+            }else{
+                OrderDetail orderDetail = new OrderDetail();
+                orderDetail.setMenuItemId(item.getMenuItemId());
+                orderDetail.setOrderId(orderUser.getOrderId());
+                orderDetail.setQuantity(1);
+                listOrder.add(orderDetail);
+            }
+            }
+        }
+        for (OrderDetail detail : listOrder) {
+            orderDetailService.saveOrderDetail(detail);
+        }
+        message.setMessage("Order success");
+        System.out.println("ok");
+        return ResponseEntity.ok(message);
     }
 
     @PostMapping("/public/create/sendMail")
