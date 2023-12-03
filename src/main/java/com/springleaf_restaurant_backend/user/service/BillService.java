@@ -17,4 +17,6 @@ public interface BillService {
 
     List<Bill> getBillsByTimeRange(String startDate, String endDate);
 
+    Double calculateTotalRevenue();
+
 }

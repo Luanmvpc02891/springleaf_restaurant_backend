@@ -9,7 +9,7 @@ import com.springleaf_restaurant_backend.user.entities.Combo;
 import com.springleaf_restaurant_backend.user.service.ComboService;
 
 @RestController
-public class ComboRestController {
+public class ComboRestController{
     @Autowired
     private ComboService comboService;
 

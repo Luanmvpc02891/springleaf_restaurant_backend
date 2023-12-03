@@ -1,13 +1,13 @@
 package com.springleaf_restaurant_backend.user.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.springleaf_restaurant_backend.user.entities.Bill;
 import com.springleaf_restaurant_backend.user.repositories.BillRepository;
 import com.springleaf_restaurant_backend.user.service.BillService;
-
-import java.util.List;
 
 @Service
 public class BillServiceImpl implements BillService {
@@ -46,5 +46,15 @@ public class BillServiceImpl implements BillService {
     @Override
     public List<Bill> getBillsByTimeRange(String startDate, String endDate) {
         return billRepository.getBillsByTimeRange(startDate, endDate);
+    }
+
+    @Override
+    public Double calculateTotalRevenue() {
+        List<Bill> bills = billRepository.findAll();
+        Double totalRevenue = 0.0;
+        for (Bill bill : bills) {
+            totalRevenue += bill.getTotalAmount();
+        }
+        return totalRevenue;
     }
 }
