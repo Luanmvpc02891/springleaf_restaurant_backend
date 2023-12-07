@@ -43,7 +43,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(name = "address")
-    private Integer address;
+    private String address;
 
     @Column(name = "image")
     private String image;
