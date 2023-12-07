@@ -48,8 +48,8 @@ public class User implements UserDetails {
     @Column(name = "image")
     private String image;
 
-    @Column(name = "restaurant_brach_id")
-    private Long restaurantBrachId;
+    @Column(name = "restaurant_branch_id")
+    private Long restaurantBranchId;
 
     @Column(name = "status")
     private boolean status;
