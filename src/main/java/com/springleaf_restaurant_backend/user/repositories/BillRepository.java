@@ -19,4 +19,5 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
       "WHERE b.billTime BETWEEN :startDate AND :endDate")
   List<Bill> getBillsByTimeRange(String startDate, String endDate);
 
+  List<Bill> findAllByBillTimeStartingWith(String year);
 }

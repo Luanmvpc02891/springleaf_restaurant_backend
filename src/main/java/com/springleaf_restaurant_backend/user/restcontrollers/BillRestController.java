@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,12 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springleaf_restaurant_backend.user.entities.Bill;
 import com.springleaf_restaurant_backend.user.service.BillService;
+import com.springleaf_restaurant_backend.user.service.MonthlyRevenueService;
 
 @RestController
 public class BillRestController {
     @Autowired
     private BillService billService;
+    @Autowired
+    private MonthlyRevenueService monthlyRevenueService;
 
+   
     @GetMapping("/public/bills")
     public List<Bill> getBills() {
         return billService.getAllBills();
@@ -63,4 +68,9 @@ public class BillRestController {
     public Double getTotalRevenue() {
         return billService.calculateTotalRevenue();
     }
+
+    // @GetMapping("/public/byYear1")
+    // public Map<Integer, Map<Integer, Double>> getMonthlyRevenueByYear() {
+    //     return monthlyRevenueService.calculateMonthlyRevenueByYear();
+    // }
 }
