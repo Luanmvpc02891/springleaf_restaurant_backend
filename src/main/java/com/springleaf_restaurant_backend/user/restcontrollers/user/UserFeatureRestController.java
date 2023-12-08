@@ -61,16 +61,16 @@ public class UserFeatureRestController {
             bill.setBillTime(formattedDate);
             bill.setOrderId(orderId);
             bill.setAddress(null);
-            bill.setPaymentMethod(null);
+            bill.setPaymentMethod(Long.valueOf(1));
             bill.setTotalAmount(totalAmount);
-            //billService.saveBill(bill);
+            billService.saveBill(bill);
             for (OrderDetail orderDetail : listItem) {
                 BillDetail billDetail = new BillDetail();
                 billDetail.setBill(bill.getBillId());
                 billDetail.setMenuItemId(orderDetail.getMenuItemId());
                 billDetail.setQuantity(orderDetail.getQuantity());
-                //billDetailService.saveBillDetail(billDetail);
-                //orderDetailService.deleteOrderDetail(orderDetail.getOrderDetailId());
+                billDetailService.saveBillDetail(billDetail);
+                orderDetailService.deleteOrderDetail(orderDetail.getOrderDetailId());
             }
             MessageResponse mess= new MessageResponse("Checkout success");
             return ResponseEntity.ok(mess);
