@@ -105,6 +105,24 @@ public class AuthenticationController {
             }
     }
 
+    @PutMapping("/choose-restaurant/update")
+    public User updateRestaurant(@RequestHeader("Authorization") String authorizationHeader, 
+        @RequestBody User updatedUserData) 
+        {
+            String token = authorizationHeader.replace("Bearer ", "");
+            String username = jwtService.extractUsername(token);
+            // Tìm người dùng trong cơ sở dữ liệu
+            Optional<User> userRequest = userService.findByUsername(username);
+
+            if (userRequest.isPresent()) {
+                User user = userRequest.get();
+                user.setRestaurantBranchId(updatedUserData.getRestaurantBranchId());
+                return userService.createUser(user);
+            } else {
+                return null;
+            }
+    }
+
     // @PostMapping("/logout")
     // public void logout(){
     //   logoutService.logout(null, null, null);
