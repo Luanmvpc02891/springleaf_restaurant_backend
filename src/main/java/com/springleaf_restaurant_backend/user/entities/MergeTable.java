@@ -26,4 +26,7 @@ public class MergeTable {
     @Column(name = "status")
     private String status;
 
+    @Column(name = "reservationId")
+    private Long reservationId;
+
 }
