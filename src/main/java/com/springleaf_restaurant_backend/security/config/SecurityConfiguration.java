@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import com.springleaf_restaurant_backend.security.auth.GoogleLoginController;
 import com.springleaf_restaurant_backend.security.repositories.RoleRepository;
@@ -36,57 +37,61 @@ public class SecurityConfiguration {
   @Autowired
   RoleRepository roleRepository;
 
-  
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf()
         .disable()
         .authorizeHttpRequests()
-          .requestMatchers(
+        .requestMatchers(
             "/public/**",
             "https://accounts.google.com/**",
             "https://drive.google.com/**",
             "https://springleafrestaurant.onrender.com/**",
             "/auth/**",
             "/api/**",
-            "https://accounts.google.com/**",
-            "http://localhost:8082/public/api/Callback",
+            //"https://accounts.google.com/**",
             "/login/oauth2/code/google",
-            "/auth2/**"
-          )
-            .permitAll()
+            "/auth2/**")
+        .permitAll()
         .requestMatchers("/admin/**").hasAnyAuthority("ADMIN")
-        .requestMatchers("/manager/**").hasAnyAuthority("ADMIN","MANAGER")
+        .requestMatchers("/manager/**").hasAnyAuthority("ADMIN", "MANAGER")
         .anyRequest()
-          .authenticated()
+        .authenticated()
         .and()
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         .and()
         .authenticationProvider(authenticationProvider)
         .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        .oauth2Login(oauth2Login ->
-            oauth2Login
-              .successHandler((request, response, authentication) -> {
-                  try {
-                    googleLoginController.handleGoogleCallback(authentication);
-                  } catch (Exception e) {
-                    e.printStackTrace();
-                  }
-                  OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
-                  OAuth2User oAuth2User = (OAuth2User) oauthToken.getPrincipal();
-                  String email = (String) oAuth2User.getAttribute("email");
-                  String redirectUrl = "http://localhost:4200/user/index?" + email;
-                  response.sendRedirect(redirectUrl);
-            })
-        )
+        .oauth2Login(oauth2Login -> oauth2Login
+            .successHandler((request, response, authentication) -> {
+              try {
+                googleLoginController.handleGoogleCallback(authentication);
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+              OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+              OAuth2User oAuth2User = (OAuth2User) oauthToken.getPrincipal();
+              String email = (String) oAuth2User.getAttribute("email");
+              System.out.println("Dữ liệu: " + oAuth2User);
+              // Thêm dữ liệu vào URL
+              String redirectUrl = UriComponentsBuilder.fromUriString("http://localhost:4200/user/index")
+                  .queryParam("email", email)
+                  .queryParam("additionalData", "yourAdditionalData")
+                  .build().toUriString();
+
+              // Redirect với URL mới
+              response.sendRedirect(redirectUrl);
+            }))
         .logout()
         .logoutRequestMatcher(new AntPathRequestMatcher("/auth2/logout", "POST"))
-        .addLogoutHandler((request, response, authentication) -> logoutService.logout(request, response, authentication))
-        //.addLogoutHandler((request, response, authentication) -> logoutService.logout(request, response, authentication))
+        .addLogoutHandler(
+            (request, response, authentication) -> logoutService.logout(request, response, authentication))
+        // .addLogoutHandler((request, response, authentication) ->
+        // logoutService.logout(request, response, authentication))
         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-        
+
     ;
     return http.build();
   }

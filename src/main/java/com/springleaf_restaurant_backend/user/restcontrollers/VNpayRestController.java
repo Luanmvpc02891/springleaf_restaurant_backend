@@ -50,7 +50,7 @@ public class VNpayRestController {
         paymentDetails.put("paymentTime", paymentTime);
         paymentDetails.put("transactionId", transactionId);
         paymentDetails.put("totalPrice", totalPrice);
-        System.out.println(paymentDetails);
+        System.out.println("here "+paymentDetails);
         return paymentDetails;
     }
 
