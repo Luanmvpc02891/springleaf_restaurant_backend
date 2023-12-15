@@ -45,7 +45,7 @@ public class UserFeatureRestController {
             @RequestHeader("Authorization") String jwtToken,
             @RequestBody List<OrderDetail> listItem,
             @PathVariable("orderId") Long orderId,
-            @PathVariable("totalAmount") Long totalAmount
+            @PathVariable("totalAmount") Double totalAmount
             ) {
                 
         String token = jwtToken.substring(7);

@@ -31,7 +31,6 @@ public class SecurityConfiguration {
 
   private final JwtAuthenticationFilter jwtAuthFilter;
   private final AuthenticationProvider authenticationProvider;
-  private final LogoutHandler logoutHandler;
   private final GoogleLoginController googleLoginController;
   private final LogoutService logoutService;
   @Autowired
