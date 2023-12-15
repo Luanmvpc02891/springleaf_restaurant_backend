@@ -12,4 +12,6 @@ public interface InventoryBranchService {
     InventoryBranch saveInventoryBranch(InventoryBranch inventoryBranch);
 
     void deleteInventoryBranch(Long id);
+
+  
 }

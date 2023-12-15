@@ -1,32 +1,42 @@
 package com.springleaf_restaurant_backend.user.service.mail;
 
-import com.springleaf_restaurant_backend.user.entities.MailInfo;
+import java.io.UnsupportedEncodingException;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 
-import lombok.RequiredArgsConstructor;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeUtility;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import com.springleaf_restaurant_backend.user.entities.MailInfo;
 
-import java.util.Base64;
-import java.util.Properties;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class MailerServiceImpl implements MailerService {
 
-    @Value("${spring.mail.host}")
-    private  String host;
-    @Value("${spring.mail.port}")
-    private  Integer port;
-    @Value("${spring.mail.username}")
-    private  String username;
-    @Value("${spring.mail.password}")
-    private  String password;
+	@Value("${spring.mail.host}")
+	private String host;
+	@Value("${spring.mail.port}")
+	private Integer port;
+	@Value("${spring.mail.username}")
+	private String username;
+	@Value("${spring.mail.password}")
+	private String password;
 
-    @Override
+	@Override
 	public void send(MailInfo mail) throws MessagingException {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -125,22 +135,25 @@ public class MailerServiceImpl implements MailerService {
 				"    <div class=\"a-box a-spacing-extra-large\">\r\n" + //
 				"        <div class=\"a-box-inner\">\r\n" + //
 				"            <div class=\"a-row a-spacing-base\">\r\n" + //
-				"              <img src=\"https://drive.google.com/uc?id=1gMS0KzK8RacdkRWGt8K9huRSOxJsGKA1\" alt=\"#\" class=\"form-image\">\r\n" + //
+				"              <img src=\"https://drive.google.com/uc?id=1gMS0KzK8RacdkRWGt8K9huRSOxJsGKA1\" alt=\"#\" class=\"form-image\">\r\n"
+				+ //
 				"            </div>\r\n" + //
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
 				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Xin chào,</label>\r\n" + //
 				"            </div>\r\n" + //
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
-				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Bạn vui lòng nhập mã trên vào ô xác nhận đăng ký ở website để hoàn thành quá trình đăng ký</label>\r\n" + //
+				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Bạn vui lòng nhập mã trên vào ô xác nhận đăng ký ở website để hoàn thành quá trình đăng ký</label>\r\n"
+				+ //
 				"            </div>\r\n" + //
 				"            <label for=\"ap_customer_name\" class=\"a-form-label\">Mã xác nhận của bạn là:</label>\r\n" + //
-				"            <div class=\"a-row a-spacing-base\">\r\n" ;
+				"            <div class=\"a-row a-spacing-base\">\r\n";
 		for (Integer key : mail.getKeys()) {
 			htmlContent += "<label class=\"a-input-text\">" + key + "</label>";
 		}
 		htmlContent += "   </div>\r\n" + //
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
-				"                <label for=\"ap_customer_name\" class=\"a-form-label\"><h3 style=\"color: red; display: inline-block;\">LƯU Ý: </h3> Vui lòng không cung cấp mã trên cho bất kỳ ai, kể cả nhân viên của cửa hàng.</label>\r\n" + //
+				"                <label for=\"ap_customer_name\" class=\"a-form-label\"><h3 style=\"color: red; display: inline-block;\">LƯU Ý: </h3> Vui lòng không cung cấp mã trên cho bất kỳ ai, kể cả nhân viên của cửa hàng.</label>\r\n"
+				+ //
 				"            </div>\r\n" + //
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
 				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Trân trọng,</label>\r\n" + //
@@ -149,14 +162,13 @@ public class MailerServiceImpl implements MailerService {
 				"      </div>\r\n" + //
 				"</body>\r\n" + //
 				"</html>\r\n";
-				message.setContent(htmlContent, "text/html; charset=utf-8");
+		message.setContent(htmlContent, "text/html; charset=utf-8");
 		Transport.send(message);
 	}
 
-
-    @Override
-    public void send(String to, String subject, String body, String token) throws MessagingException{
-        Properties props = new Properties();
+	@Override
+	public void send(String to, String subject, String body, String token) throws MessagingException {
+		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
 		props.put("mail.smtp.starttls.enable", "true");
 		props.put("mail.smtp.host", host);
@@ -253,20 +265,23 @@ public class MailerServiceImpl implements MailerService {
 				"    <div class=\"a-box a-spacing-extra-large\">\r\n" + //
 				"        <div class=\"a-box-inner\">\r\n" + //
 				"            <div class=\"a-row a-spacing-base\">\r\n" + //
-				"              <img src=\"https://drive.google.com/uc?id=1gMS0KzK8RacdkRWGt8K9huRSOxJsGKA1\" alt=\"#\" class=\"form-image\">\r\n" + //
+				"              <img src=\"https://drive.google.com/uc?id=1gMS0KzK8RacdkRWGt8K9huRSOxJsGKA1\" alt=\"#\" class=\"form-image\">\r\n"
+				+ //
 				"            </div>\r\n" + //
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
 				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Xin chào,</label>\r\n" + //
 				"            </div>\r\n" + //
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
-				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Bạn có lịch hẹn đặt bàn ở nhà hàng lúc : </label>\r\n" + //
+				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Bạn có lịch hẹn đặt bàn ở nhà hàng lúc : </label>\r\n"
+				+ //
 				"            </div>\r\n" + //
-// ------Nội dung giờ hoặc ngày tháng---------- // 
+				// ------Nội dung giờ hoặc ngày tháng---------- //
 				body +
 				"            <div class=\"a-row a-spacing-base\">\r\n" + //
-		
+
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
-				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Vui lòng đến cửa hàng đúng thời gian trên.</label>\r\n" + //
+				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Vui lòng đến cửa hàng đúng thời gian trên.</label>\r\n"
+				+ //
 				"            </div>\r\n" + //
 				"            <div class=\"a-section a-spacing-extra-large\">\r\n" + //
 				"                <label for=\"ap_customer_name\" class=\"a-form-label\">Trân trọng,</label>\r\n" + //
@@ -275,7 +290,76 @@ public class MailerServiceImpl implements MailerService {
 				"      </div>\r\n" + //
 				"</body>\r\n" + //
 				"</html>\r\n";
-				message.setContent(htmlContent, "text/html; charset=utf-8");
+		message.setContent(htmlContent, "text/html; charset=utf-8");
 		Transport.send(message);
+	}
+
+	@Override
+	public void sendMissingIngredientsNotification(List<String> missingIngredients, List<String> restaurantNames,List<String> userNames)
+			throws MessagingException {
+		Properties props = new Properties();
+		props.put("mail.smtp.auth", "true");
+		props.put("mail.smtp.starttls.enable", "true");
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.port", port);
+
+		Session session = Session.getInstance(props, new Authenticator() {
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		});
+
+		Message message = new MimeMessage(session);
+		message.setFrom(new InternetAddress(username));
+		message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("vuluan01248@gmail.com"));
+		String subject = "Thông báo: Nguyên liệu dưới ngưỡng đặt lại";
+		try {
+			message.setSubject(MimeUtility.encodeText(subject, "UTF-8", "B"));
+		} catch (UnsupportedEncodingException | MessagingException e) {
+			e.printStackTrace();
+		}
+
+		// Tạo nội dung HTML cho email với thông tin nguyên liệu, nhà hàng và tên người dùng
+    StringBuilder htmlContent = new StringBuilder();
+    htmlContent.append("<html><head><style>");
+    // CSS style code
+    htmlContent.append("table { width: 100%; border-collapse: collapse; }");
+    htmlContent.append("th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }");
+    htmlContent.append("th { background-color: #f2f2f2; }");
+    htmlContent.append("h1 { font-family: 'Arial', sans-serif; color: #333333; }");
+    htmlContent.append("p { font-family: 'Arial', sans-serif; color: #555555; }");
+    htmlContent.append(".footer { margin-top: 20px; font-family: 'Arial', sans-serif; color: #888888; }");
+    htmlContent.append("</style></head><body>");
+    htmlContent.append("<h1>Danh sách nguyên liệu dưới ngưỡng đặt lại:</h1>");
+    htmlContent.append("<table>");
+    htmlContent.append("<tr><th>STT</th><th>Nguyên liệu</th><th>Nhà hàng</th><th>Nhân Viên</th></tr>");
+
+    int count = 1;
+    Iterator<String> ingredientIterator = missingIngredients.iterator();
+    Iterator<String> restaurantIterator = restaurantNames.iterator();
+    Iterator<String> userIterator = userNames.iterator();
+    while (ingredientIterator.hasNext() && restaurantIterator.hasNext() && userIterator.hasNext()) {
+        String ingredient = ingredientIterator.next();
+        String restaurant = restaurantIterator.next();
+        String userName = userIterator.next();
+        htmlContent.append("<tr><td>").append(count).append("</td><td>").append(ingredient).append("</td><td>")
+                .append(restaurant).append("</td><td>").append(userName).append("</td></tr>");
+        count++;
     }
+
+    htmlContent.append("</table>");
+		htmlContent.append("<p>Vui lòng kiểm tra và thực hiện các hành động cần thiết.</p>");
+		// Thêm chữ ký và thông tin liên hệ của nhà hàng
+		htmlContent.append("<div class=\"footer\">");
+		htmlContent.append("<b>Trân trọng,<br>Quản trị nhà hàng SPRINGLEAF RESTAURANT</b>");
+		htmlContent.append(
+				"<p>Địa chỉ: Số 288, Đường Nguyễn Văn Linh, Phường An Khánh, Quận Ninh Kiều, TP Cần Thơ<br>Số điện thoại: 0702807905</p>");
+		htmlContent.append("</div>");
+		htmlContent.append("</body></html>");
+
+		// Thiết lập nội dung và gửi email
+		message.setContent(htmlContent.toString(), "text/html; charset=utf-8");
+		Transport.send(message);
+	}
+
 }

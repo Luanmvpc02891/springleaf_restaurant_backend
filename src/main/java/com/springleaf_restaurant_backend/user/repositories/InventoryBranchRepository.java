@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.springleaf_restaurant_backend.user.entities.InventoryBranch;
 
 public interface InventoryBranchRepository extends JpaRepository<InventoryBranch, Long> {
-
+  InventoryBranch findByInventoryBranchId(Long inventoryBranchId);
 }

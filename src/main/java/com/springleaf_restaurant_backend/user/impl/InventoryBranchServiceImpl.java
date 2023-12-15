@@ -35,4 +35,6 @@ public class InventoryBranchServiceImpl implements InventoryBranchService {
     public void deleteInventoryBranch(Long id) { 
         inventoryBranchRepository.deleteById(id);
     }
+
+   
 }

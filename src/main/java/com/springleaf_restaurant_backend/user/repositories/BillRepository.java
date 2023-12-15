@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.user.repositories;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,5 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
   List<Bill> getBillsByTimeRange(String startDate, String endDate);
 
   List<Bill> findAllByBillTimeStartingWith(String year);
+
 }

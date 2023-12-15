@@ -1,5 +1,7 @@
 package com.springleaf_restaurant_backend.user.service.mail;
 
+import java.util.List;
+
 import javax.mail.MessagingException;
 
 import com.springleaf_restaurant_backend.user.entities.MailInfo;
@@ -19,5 +21,5 @@ public interface MailerService {
 	* @throws MessagingException lỗi gửi email
 	*/
 	void send(String to, String subject, String body, String token) throws MessagingException;
-	
+	void sendMissingIngredientsNotification(List<String> missingIngredients, List<String> restaurantNames,List<String> userNames) throws MessagingException;
 }

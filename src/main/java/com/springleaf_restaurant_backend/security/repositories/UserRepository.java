@@ -19,5 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
            "WHERE u.userId = :userId")
     List<String> findRoleNamesByUserId(@Param("userId") Long userId);
 
-
+    List<User> findByRestaurantBranchIdIn(List<Long> restaurantBranchIds);
+    
 }

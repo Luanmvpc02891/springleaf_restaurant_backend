@@ -5,6 +5,7 @@ import com.springleaf_restaurant_backend.user.entities.Ingredient;
 import java.util.List;
 
 public interface IngredientService {
+
     List<Ingredient> getAllIngredients();
 
     Ingredient getIngredientById(Long id);

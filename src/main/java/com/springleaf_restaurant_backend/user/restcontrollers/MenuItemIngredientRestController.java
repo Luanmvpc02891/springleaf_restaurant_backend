@@ -33,7 +33,17 @@ public class MenuItemIngredientRestController {
 
     @PostMapping("/public/create/menuItemIngredient")
     public MenuItemIngredient createMenuItemIngredient(@RequestBody MenuItemIngredient menuItemIngredient) {
-        return menuItemIngredientService.saveMenuItemIngredient(menuItemIngredient);
+        // return menuItemIngredientService.saveMenuItemIngredient(menuItemIngredient);
+        MenuItemIngredient savedMenuItemIngredient = menuItemIngredientService
+                .saveMenuItemIngredient(menuItemIngredient);
+
+        // Giảm orderThreshold của ingredient tương ứng dựa trên số lượng của
+        // menuItemIngredient
+        Long ingredientId = savedMenuItemIngredient.getIngredientId();
+        Double quantity = savedMenuItemIngredient.getQuantity();
+        menuItemIngredientService.decreaseIngredientOrderThreshold(ingredientId, quantity);
+
+        return savedMenuItemIngredient;
     }
 
     @PutMapping("/public/update/menuItemIngredient")

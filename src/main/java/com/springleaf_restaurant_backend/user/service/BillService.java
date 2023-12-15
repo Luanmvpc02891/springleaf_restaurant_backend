@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.user.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.springleaf_restaurant_backend.user.entities.Bill;
 
@@ -18,5 +19,7 @@ public interface BillService {
     List<Bill> getBillsByTimeRange(String startDate, String endDate);
 
     Double calculateTotalRevenue();
+   
+    
 
 }

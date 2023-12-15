@@ -1,19 +1,48 @@
 package com.springleaf_restaurant_backend.user.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
+
+import com.springleaf_restaurant_backend.user.entities.Ingredient;
+import com.springleaf_restaurant_backend.user.entities.InventoryBranch;
+import com.springleaf_restaurant_backend.user.entities.InventoryBranchIngredient;
+import com.springleaf_restaurant_backend.user.entities.InventoryIngredient;
+import com.springleaf_restaurant_backend.user.entities.OrderThreshold;
 import com.springleaf_restaurant_backend.user.entities.Restaurant;
+import com.springleaf_restaurant_backend.user.repositories.IngredientRepository;
+import com.springleaf_restaurant_backend.user.repositories.InventoryBranchIngredientRepository;
+import com.springleaf_restaurant_backend.user.repositories.InventoryBranchRepository;
+import com.springleaf_restaurant_backend.user.repositories.InventoryIngredientRepository;
+import com.springleaf_restaurant_backend.user.repositories.OrderThresholdRepository;
 import com.springleaf_restaurant_backend.user.repositories.RestaurantRepository;
 import com.springleaf_restaurant_backend.user.service.RestaurantService;
 
-import java.util.List;
-
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
+    private final InventoryBranchRepository inventoryBranchRepository;
     private final RestaurantRepository restaurantRepository;
+    private final OrderThresholdRepository orderThresholdRepository;
+    private final IngredientRepository ingredientRepository;
+    private final InventoryBranchIngredientRepository inventoryBranchIngredientRepository;
+    private final InventoryIngredientRepository inventoryIngredientRepository;
 
-    public RestaurantServiceImpl(RestaurantRepository restaurantRepository) {
+    // Constructor injection
+    public RestaurantServiceImpl(InventoryBranchRepository inventoryBranchRepository,
+            OrderThresholdRepository orderThresholdRepository, IngredientRepository ingredientRepository,
+            InventoryBranchIngredientRepository inventoryBranchIngredientRepository,InventoryIngredientRepository inventoryIngredientRepository,
+            RestaurantRepository restaurantRepository) {
+        this.inventoryBranchRepository = inventoryBranchRepository;
         this.restaurantRepository = restaurantRepository;
+        this.orderThresholdRepository = orderThresholdRepository;
+        this.ingredientRepository = ingredientRepository;
+        this.inventoryBranchIngredientRepository = inventoryBranchIngredientRepository;
+        this.inventoryIngredientRepository = inventoryIngredientRepository;
+
     }
 
     @Override
@@ -23,7 +52,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public Restaurant getRestaurantById(Long id) {
-        return restaurantRepository.findById(id).orElse(null); 
+        return restaurantRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -40,4 +69,39 @@ public class RestaurantServiceImpl implements RestaurantService {
     public void deleteRestaurant(Long id) {
         restaurantRepository.deleteById(id);
     }
+
+    @Override
+    public Restaurant getRestaurantByInventoryBranchId(Long inventoryBranchId) {
+        Optional<InventoryBranch> inventoryBranchOptional = inventoryBranchRepository.findById(inventoryBranchId);
+        if (inventoryBranchOptional.isPresent()) {
+            InventoryBranch inventoryBranch = inventoryBranchOptional.get();
+            Long restaurantId = inventoryBranch.getRestaurantId();
+            return restaurantRepository.findById(restaurantId).orElse(null);
+        }
+        return null;
+    }
+
+    @Override
+    public List<Map<String, Object>> getIngredientsToReorderWithNames(Long inventoryId) {
+        List<OrderThreshold> orderThresholds = orderThresholdRepository.findByInventoryId(inventoryId);
+        List<Map<String, Object>> ingredientsToReorder = new ArrayList<>();
+
+        for (OrderThreshold orderThreshold : orderThresholds) {
+            InventoryBranchIngredient inventoryBranchIngredient = inventoryBranchIngredientRepository
+                    .findByInventoryIdAndIngredientId(inventoryId, orderThreshold.getIngredientId());
+            if (inventoryBranchIngredient != null
+                    && inventoryBranchIngredient.getQuantity() <= orderThreshold.getReorderPoint()) {
+                Ingredient ingredient = ingredientRepository.findById(orderThreshold.getIngredientId()).orElse(null);
+                if (ingredient != null) {
+                    Map<String, Object> ingredientInfo = new HashMap<>();
+                    ingredientInfo.put("ingredientName", ingredient.getName());
+                    ingredientInfo.put("reorderQuantity", inventoryBranchIngredient.getQuantity());
+                    ingredientsToReorder.add(ingredientInfo);
+                }
+            }
+        }
+
+        return ingredientsToReorder;
+    }
+
 }

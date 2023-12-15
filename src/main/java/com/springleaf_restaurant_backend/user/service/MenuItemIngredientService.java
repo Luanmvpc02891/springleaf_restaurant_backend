@@ -14,4 +14,6 @@ public interface MenuItemIngredientService {
     void deleteMenuItemIngredient(Long id);
 
     List<MenuItemIngredient> getIngredientsForMenuItem(Long menuItemId);
+
+    void decreaseIngredientOrderThreshold(Long ingredientId, Double quantity);
 }

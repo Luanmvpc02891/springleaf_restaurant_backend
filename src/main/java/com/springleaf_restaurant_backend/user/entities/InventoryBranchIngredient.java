@@ -14,24 +14,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "inventory_Branchs")
-public class InventoryBranch {
-
+@Table(name = "inventory_Branch_Ingredients")
+public class InventoryBranchIngredient {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "inventory_branch_id")
-  private Long inventoryBranchId;
+  @Column(name = "inventory_Branch_ingredient_id")
+  private Long inventoryBranchIngredientId;
 
-  @Column(name = "restaurant_id")
-  private Long restaurantId;
+  @Column(name = "ingredient_id")
+  private Long ingredientId;
 
-  // @Column(name = "ingredient_id")
-  // private Long ingredientId;
+  @Column(name = "inventory_id")
+  private Long inventoryId;
 
-  // @Column(name = "supplier_id")
-  // private Long supplierId;
-
-  // public Optional<InventoryBranch> findById(Long inventoryBranchId2) {
-  // return null;
-  // }
+  @Column(name = "quantity")
+  private Double quantity;
 }
