@@ -23,7 +23,7 @@ public class Bill {
     private String billTime;
 
     @Column(name = "total_amount")
-    private Long totalAmount;
+    private Double totalAmount;
 
     @Column(name = "payment_method")
     private Long paymentMethod;

@@ -14,7 +14,7 @@ import java.util.*;
 @Component
 public class VNPayConfig {
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-    public static String vnp_Returnurl = "/vnpay-payment";
+    public static String vnp_Returnurl = "/public/vnpay-payment";
     public static String vnp_TmnCode = "NO0N28A7";
     public static String vnp_HashSecret = "XRRFFUYNNOCXCVEXCLCXJVPRYRXIPOOX";
     public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
