@@ -2,18 +2,12 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +20,12 @@ import com.springleaf_restaurant_backend.security.config.websocket.WebSocketMess
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 import com.springleaf_restaurant_backend.security.service.UserService;
-import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
-import com.springleaf_restaurant_backend.user.entities.DeliveryOrderType;
-import com.springleaf_restaurant_backend.user.entities.MailInfo;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
 import com.springleaf_restaurant_backend.user.entities.MessageResponse;
 import com.springleaf_restaurant_backend.user.entities.Order;
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 import com.springleaf_restaurant_backend.user.entities.Reservation;
+import com.springleaf_restaurant_backend.user.repositories.OrderDetailRepository;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderStatusService;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderTypeService;
@@ -109,40 +101,77 @@ public class ReservationRestController {
     public ResponseEntity<?> addMenuItem(
             @RequestHeader("Authorization") String jwtToken, // Người dùng
             @PathVariable("reservationId") Long reservationId, // bàn đặt
-            @RequestBody List<MenuItem> listMenuItems) {
+            @RequestBody List<OrderDetail> listMenuItems) {
         MessageResponse message = new MessageResponse();
-
         Date date = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String formattedDate = dateFormat.format(date);
-        Order orderUser = new Order();
-        orderUser.setReservationId(reservationId);
-        orderUser.setOrderDate(formattedDate);
-        orderUser.setStatus(true);
-        orderService.saveOrder(orderUser);
-
-        List<OrderDetail> listDetail = orderDetailService.getAllOrderDetails();
-        List<OrderDetail> listOrder = new ArrayList<>();
-        for (OrderDetail detail : listDetail) {
-            for (MenuItem item : listMenuItems) {
-                if (detail.getMenuItemId() == item.getMenuItemId()) {
-                    message.setMessage("Item was order");
-                    return ResponseEntity.ok(message);
-                } else {
+        String jwt = jwtToken.substring(7);
+        String userName = jwtService.extractUsername(jwt);
+        Optional<User> user = userService.findByUsername(userName);
+        if (user.isPresent()) {
+            Order orderUser = new Order();
+            Optional<Order> orderByReservation = orderService.getOrdersByReservationId(reservationId);
+            if (orderByReservation.isPresent() && orderByReservation.get().isStatus()) {
+                orderUser = orderByReservation.get();
+            } else {
+                // Tạo order mới khi bàn chưa có order
+                orderUser.setReservationId(reservationId);
+                orderUser.setOrderDate(formattedDate);
+                orderUser.setStatus(true);
+                orderService.saveOrder(orderUser);
+            }
+            List<OrderDetail> listDetail = orderDetailService.getOrderDetailsByOrderId(orderUser.getOrderId());
+            if (listDetail.size() <= 0) {
+                for (OrderDetail menuItem : listMenuItems) {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setMenuItemId(menuItem.getMenuItemId());
+                    orderDetail.setOrderId(orderUser.getOrderId());
+                    orderDetail.setQuantity(menuItem.getQuantity());
+                    orderDetailService.saveOrderDetail(orderDetail);
+                }
+                System.out.println("1");
+                return null;
+            } else {
+                List<OrderDetail> list = listMenuItems;
+                for (OrderDetail detail : listDetail) {
+                    for (OrderDetail item : listMenuItems) {
+                        // Nếu order Detail đã có
+                        if (detail.getMenuItemId() == item.getMenuItemId() && item.getQuantity() != detail.getQuantity()) {
+                            detail.setQuantity(item.getQuantity());
+                            orderDetailService.saveOrderDetail(detail);
+                            list.remove(item);
+                            break;
+                        } 
+                        // else {
+                        //     // Nếu orderDetail chưa có
+                        //     OrderDetail orderDetail = new OrderDetail();
+                        //     orderDetail.setMenuItemId(item.getMenuItemId());
+                        //     orderDetail.setOrderId(orderUser.getOrderId());
+                        //     orderDetail.setQuantity(item.getQuantity());
+                        //     orderDetailService.saveOrderDetail(orderDetail);
+                        //     System.out.println("3");
+                        //     break;
+                        // }
+                    }
+                }
+                for (OrderDetail item : list) {
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setMenuItemId(item.getMenuItemId());
-                    orderDetail.setOrderId(orderUser.getOrderId());
-                    orderDetail.setQuantity(1);
-                    listOrder.add(orderDetail);
+                            orderDetail.setOrderId(orderUser.getOrderId());
+                            orderDetail.setQuantity(item.getQuantity());
+                            orderDetailService.saveOrderDetail(orderDetail);
                 }
+                message.setMessage("Order success");
+                System.out.println("ok");
+             return ResponseEntity.ok(message);
             }
+
+            
+        } else {
+            return null;
         }
-        for (OrderDetail detail : listOrder) {
-            orderDetailService.saveOrderDetail(detail);
-        }
-        message.setMessage("Order success");
-        System.out.println("ok");
-        return ResponseEntity.ok(message);
+
     }
 
     @PostMapping("/public/create/sendMail")

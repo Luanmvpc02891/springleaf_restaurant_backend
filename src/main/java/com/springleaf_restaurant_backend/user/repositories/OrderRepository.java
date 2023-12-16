@@ -8,4 +8,6 @@ import com.springleaf_restaurant_backend.user.entities.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByDeliveryOrderId(Long deliveryOrderId);
+
+    Optional<Order> findByReservationId(Long reservationId);
 }
