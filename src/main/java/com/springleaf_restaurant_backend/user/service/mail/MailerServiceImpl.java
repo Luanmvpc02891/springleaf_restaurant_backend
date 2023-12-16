@@ -295,7 +295,8 @@ public class MailerServiceImpl implements MailerService {
 	}
 
 	@Override
-	public void sendMissingIngredientsNotification(List<String> missingIngredients, List<String> restaurantNames,List<String> userNames)
+	public void sendMissingIngredientsNotification(List<String> missingIngredients, List<String> restaurantNames,
+			List<String> userNames)
 			throws MessagingException {
 		Properties props = new Properties();
 		props.put("mail.smtp.auth", "true");
@@ -309,57 +310,58 @@ public class MailerServiceImpl implements MailerService {
 			}
 		});
 
-		Message message = new MimeMessage(session);
-		message.setFrom(new InternetAddress(username));
-		message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("vuluan01248@gmail.com"));
-		String subject = "Thông báo: Nguyên liệu dưới ngưỡng đặt lại";
 		try {
+			Message message = new MimeMessage(session);
+			message.setFrom(new InternetAddress(username));
+			message.setRecipients(Message.RecipientType.TO, InternetAddress.parse("vuluan01248@gmail.com"));
+			String subject = "Thông báo: Nguyên liệu dưới ngưỡng đặt lại";
 			message.setSubject(MimeUtility.encodeText(subject, "UTF-8", "B"));
+
+			// Tạo nội dung HTML cho email với thông tin nguyên liệu, nhà hàng và tên người
+			StringBuilder htmlContent = new StringBuilder();
+			htmlContent.append("<html><head><style>");
+			// CSS style code
+			htmlContent.append("h1, h2 { font-family: 'Arial', sans-serif; color: #333333; }");
+			htmlContent.append("table { width: 100%; border-collapse: collapse; margin-top: 20px; }");
+			htmlContent.append("th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }");
+			htmlContent.append("th { background-color: #f2f2f2; }");
+			htmlContent.append(".footer { margin-top: 20px; font-family: 'Arial', sans-serif; color: #888888; }");
+			htmlContent.append("</style></head><body>");
+			htmlContent.append("<h1>Các nguyên liệu dưới ngưỡng đặt lại: ").append("</h1>");
+
+			// Khởi tạo thông tin nhà hàng và tên người
+			htmlContent.append("<h2>Nhà hàng: ").append(restaurantNames.get(0)).append("</h2>");
+			htmlContent.append("<h2>Khách hàng: ").append(userNames.get(0)).append("</h2>");
+
+			// Bảng danh sách nguyên liệu dưới ngưỡng
+			htmlContent.append("<table>");
+			htmlContent.append("<tr><th>STT</th><th>Nguyên liệu</th></tr>");
+
+			int count = 1;
+			Iterator<String> ingredientIterator = missingIngredients.iterator();
+			while (ingredientIterator.hasNext()) {
+				String ingredient = ingredientIterator.next();
+				htmlContent.append("<tr><td>").append(count).append("</td><td>").append(ingredient).append("</td></tr>");
+				count++;
+			}
+
+			htmlContent.append("</table>");
+			htmlContent.append("<p>Vui lòng kiểm tra và thực hiện các hành động cần thiết.</p>");
+			// Thêm chữ ký và thông tin liên hệ của nhà hàng
+			htmlContent.append("<div class=\"footer\">");
+			htmlContent.append("<b>Trân trọng,<br>Quản trị nhà hàng SPRINGLEAF RESTAURANT</b>");
+			htmlContent.append(
+					"<p>Địa chỉ: Số 288, Đường Nguyễn Văn Linh, Phường An Khánh, Quận Ninh Kiều, TP Cần Thơ<br>Số điện thoại: 0702807905</p>");
+			htmlContent.append("</div>");
+			htmlContent.append("</body></html>");
+
+			// Thiết lập nội dung và gửi email
+			message.setContent(htmlContent.toString(), "text/html; charset=utf-8");
+			Transport.send(message);
 		} catch (UnsupportedEncodingException | MessagingException e) {
 			e.printStackTrace();
+			// Xử lý exception khi gửi email không thành công
 		}
-
-		// Tạo nội dung HTML cho email với thông tin nguyên liệu, nhà hàng và tên người dùng
-    StringBuilder htmlContent = new StringBuilder();
-    htmlContent.append("<html><head><style>");
-    // CSS style code
-    htmlContent.append("table { width: 100%; border-collapse: collapse; }");
-    htmlContent.append("th, td { border: 1px solid #dddddd; text-align: left; padding: 8px; }");
-    htmlContent.append("th { background-color: #f2f2f2; }");
-    htmlContent.append("h1 { font-family: 'Arial', sans-serif; color: #333333; }");
-    htmlContent.append("p { font-family: 'Arial', sans-serif; color: #555555; }");
-    htmlContent.append(".footer { margin-top: 20px; font-family: 'Arial', sans-serif; color: #888888; }");
-    htmlContent.append("</style></head><body>");
-    htmlContent.append("<h1>Danh sách nguyên liệu dưới ngưỡng đặt lại:</h1>");
-    htmlContent.append("<table>");
-    htmlContent.append("<tr><th>STT</th><th>Nguyên liệu</th><th>Nhà hàng</th><th>Nhân Viên</th></tr>");
-
-    int count = 1;
-    Iterator<String> ingredientIterator = missingIngredients.iterator();
-    Iterator<String> restaurantIterator = restaurantNames.iterator();
-    Iterator<String> userIterator = userNames.iterator();
-    while (ingredientIterator.hasNext() && restaurantIterator.hasNext() && userIterator.hasNext()) {
-        String ingredient = ingredientIterator.next();
-        String restaurant = restaurantIterator.next();
-        String userName = userIterator.next();
-        htmlContent.append("<tr><td>").append(count).append("</td><td>").append(ingredient).append("</td><td>")
-                .append(restaurant).append("</td><td>").append(userName).append("</td></tr>");
-        count++;
-    }
-
-    htmlContent.append("</table>");
-		htmlContent.append("<p>Vui lòng kiểm tra và thực hiện các hành động cần thiết.</p>");
-		// Thêm chữ ký và thông tin liên hệ của nhà hàng
-		htmlContent.append("<div class=\"footer\">");
-		htmlContent.append("<b>Trân trọng,<br>Quản trị nhà hàng SPRINGLEAF RESTAURANT</b>");
-		htmlContent.append(
-				"<p>Địa chỉ: Số 288, Đường Nguyễn Văn Linh, Phường An Khánh, Quận Ninh Kiều, TP Cần Thơ<br>Số điện thoại: 0702807905</p>");
-		htmlContent.append("</div>");
-		htmlContent.append("</body></html>");
-
-		// Thiết lập nội dung và gửi email
-		message.setContent(htmlContent.toString(), "text/html; charset=utf-8");
-		Transport.send(message);
 	}
 
 }

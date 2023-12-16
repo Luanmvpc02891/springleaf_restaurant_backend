@@ -11,9 +11,11 @@ import com.springleaf_restaurant_backend.user.service.InventoryIngredientService
 @Service
 public class InventoryIngredientServiceImpl implements InventoryIngredientService {
   private final InventoryIngredientRepository inventoryIngredientService;
+  private final InventoryIngredientRepository inventoryIngredientRepository;
 
   public InventoryIngredientServiceImpl(InventoryIngredientRepository inventoryIngredientRepository) {
     this.inventoryIngredientService = inventoryIngredientRepository;
+    this.inventoryIngredientRepository = inventoryIngredientRepository;
   }
 
   @Override
@@ -35,4 +37,6 @@ public class InventoryIngredientServiceImpl implements InventoryIngredientServic
   public void deleteInventoryIngredient(Long id) {
     inventoryIngredientService.deleteById(id);
   }
+
+     
 }

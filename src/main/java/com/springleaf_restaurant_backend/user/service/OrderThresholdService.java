@@ -12,4 +12,9 @@ public interface OrderThresholdService {
     OrderThreshold saveOrderThreshold(OrderThreshold orderThreshold);
 
     void deleteOrderThreshold(Long id);
+   
+    List<String> checkThresholdForRestaurant(Long restaurantId);
+    
+    List<String> checkThresholdForInventoryBranch(Long inventoryBranchId);
+
 }

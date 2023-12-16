@@ -28,7 +28,7 @@ import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 import com.springleaf_restaurant_backend.security.service.UserService;
 import com.springleaf_restaurant_backend.user.entities.Ingredient;
 import com.springleaf_restaurant_backend.user.entities.InventoryBranch;
-import com.springleaf_restaurant_backend.user.entities.InventoryIngredient;
+import com.springleaf_restaurant_backend.user.entities.InventoryBranchIngredient;
 import com.springleaf_restaurant_backend.user.entities.OrderThreshold;
 import com.springleaf_restaurant_backend.user.entities.Restaurant;
 import com.springleaf_restaurant_backend.user.repositories.IngredientRepository;
@@ -37,7 +37,9 @@ import com.springleaf_restaurant_backend.user.repositories.InventoryBranchReposi
 import com.springleaf_restaurant_backend.user.repositories.OrderThresholdRepository;
 import com.springleaf_restaurant_backend.user.repositories.RestaurantRepository;
 import com.springleaf_restaurant_backend.user.service.IngredientService;
+import com.springleaf_restaurant_backend.user.service.InventoryIngredientService;
 import com.springleaf_restaurant_backend.user.service.InventoryService;
+import com.springleaf_restaurant_backend.user.service.OrderThresholdService;
 import com.springleaf_restaurant_backend.user.service.RestaurantService;
 import com.springleaf_restaurant_backend.user.service.mail.MailerService;
 
@@ -69,13 +71,20 @@ public class IngredientRestController {
 
     @Autowired
     private InventoryBranchIngredientRepository inventoryBranchIngredientRepository;
+
     @Autowired
     private InventoryService inventoryService;
+
+    @Autowired
+    private InventoryIngredientService inventoryIngredientService;
 
     @Autowired
     JwtService jwtService;
     @Autowired
     UserService userService;
+
+    @Autowired
+    private OrderThresholdService orderThresholdService;
 
     @GetMapping("/public/ingredients")
     public List<Ingredient> getIngredients() {
@@ -205,7 +214,7 @@ public class IngredientRestController {
     // }
     // }
 
-    @GetMapping("/public/user/getLoggedInUser")
+    @GetMapping("/public/user/getLoggedInUser222")
     public ResponseEntity<Map<String, Object>> getLoggedInUserInfoAndIngredientsToReorder(
             Authentication authentication) {
         Map<String, Object> response = new HashMap<>();
@@ -218,20 +227,12 @@ public class IngredientRestController {
             Restaurant restaurant = restaurantService.getRestaurantByInventoryBranchId(inventoryId);
             response.put("restaurantName", restaurant.getRestaurantName());
 
-            // Lấy danh sách nguyên liệu cần đặt hàng lại với tên nguyên liệu
-            List<Map<String, Object>> ingredientsToReorder = restaurantService
-                    .getIngredientsToReorderWithNames(inventoryId);
+            response.put("loggedInUserName", loggedInUser.getFullName());
 
-            if (!ingredientsToReorder.isEmpty()) {
-                response.put("loggedInUserName", loggedInUser.getFullName());
-                response.put("ingredientsToReorder", ingredientsToReorder);
-                return ResponseEntity.ok(response);
-            } else {
-                // Trả về thông báo hoặc response tùy thuộc vào yêu cầu
-                response.put("loggedInUserName", loggedInUser.getFullName());
-                response.put("ingredientsToReorder", Collections.emptyList());
-                return ResponseEntity.ok(response);
-            }
+            return ResponseEntity.ok(response);
+
+            // Trả về thông báo hoặc response tùy thuộc vào yêu cầu
+
         } else {
             // Nếu không có người dùng đăng nhập, trả về thông báo hoặc response tùy thuộc
             // vào yêu cầu
@@ -255,6 +256,99 @@ public class IngredientRestController {
         }
     }
 
-    
+    @GetMapping("/public/branch/{branchId}/ingredients")
+    public List<InventoryBranchIngredient> getIngredientsInBranch(@PathVariable Long branchId) {
+        return inventoryService.getIngredientsInBranch(branchId);
+    }
+
+    @GetMapping("/public/restaurant/{restaurantId}/check")
+    public List<String> checkThresholdForRestaurant(@PathVariable Long restaurantId) {
+        return orderThresholdService.checkThresholdForRestaurant(restaurantId);
+    }
+
+    @GetMapping("/public/user/getLoggedInUserOK")
+    public ResponseEntity<Object> getLoggedInUserInventoryBranchq(Authentication authentication) {
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User loggedInUser = (User) authentication.getPrincipal();
+            Long inventoryBranchId = loggedInUser.getRestaurantBranchId();
+
+            // Truy vấn thông tin nhà hàng dựa trên inventoryBranchId
+            Restaurant restaurant = restaurantService.getRestaurantByInventoryBranchId(inventoryBranchId);
+
+            if (restaurant != null) {
+                Long restaurantId = restaurant.getRestaurantId();
+                // Lấy thông tin InventoryBranch từ thông tin nhà hàng
+                InventoryBranch inventoryBranch = restaurantService.getInventoryBranchByRestaurantId(restaurantId);
+
+                if (inventoryBranch != null) {
+                    // Tạo một đối tượng Map để đóng gói thông tin người dùng, nhà hàng và
+                    // inventoryBranch
+                    Map<String, Object> responseMap = new HashMap<>();
+                    responseMap.put("user", loggedInUser);
+                    responseMap.put("restaurant", restaurant);
+                    responseMap.put("inventoryBranch", inventoryBranch);
+
+                    return ResponseEntity.ok(responseMap);
+                } else {
+                    // Trả về thông báo hoặc response tùy thuộc vào yêu cầu
+                    return ResponseEntity.notFound().build();
+                }
+            } else {
+                // Trả về thông báo hoặc response tùy thuộc vào yêu cầu
+                return ResponseEntity.notFound().build();
+            }
+        } else {
+            // Nếu không có người dùng đăng nhập, trả về thông báo hoặc response tùy thuộc
+            // vào yêu cầu
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @GetMapping("/public/user/getLoggedInUser")
+    public Map<String, Object> checkThresholdForLoggedInUserRestaurant(Authentication authentication) {
+        Map<String, Object> responseMap = new HashMap<>();
+
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User loggedInUser = (User) authentication.getPrincipal();
+            Long inventoryBranchId = loggedInUser.getRestaurantBranchId();
+
+            // Truy vấn thông tin nhà hàng dựa trên inventoryBranchId
+            Restaurant restaurant = restaurantService.getRestaurantByInventoryBranchId(inventoryBranchId);
+
+            if (restaurant != null) {
+                // Lấy thông tin InventoryBranch từ thông tin nhà hàng
+                InventoryBranch inventoryBranch = restaurantService
+                        .getInventoryBranchByRestaurantId(restaurant.getRestaurantId());
+
+                if (inventoryBranch != null) {
+                    List<String> ingredientsBelowThreshold = orderThresholdService
+                            .checkThresholdForInventoryBranch(inventoryBranch.getInventoryBranchId());
+
+                    responseMap.put("user", loggedInUser);
+                    responseMap.put("restaurant", restaurant);
+                    responseMap.put("inventoryBranch", inventoryBranch);
+                    responseMap.put("ingredientsBelowThreshold", ingredientsBelowThreshold);
+
+                    try {
+                        // Gửi email thông báo nguyên liệu dưới ngưỡng đặt lại
+                        List<String> missingIngredients = ingredientsBelowThreshold;
+                        List<String> restaurantNames = Collections.singletonList(restaurant.getRestaurantName());
+                        List<String> userNames = Collections.singletonList(loggedInUser.getFullName());
+
+                        notificationService.sendMissingIngredientsNotification(missingIngredients, restaurantNames,
+                                userNames);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                        // Xử lý exception khi gửi email không thành công
+                    }
+
+                    return responseMap;
+                }
+            }
+        }
+        // Nếu không có người dùng đăng nhập hoặc thông tin không khớp, trả về null hoặc
+        // thông báo tùy thuộc vào yêu cầu
+        return null;
+    }
 
 }

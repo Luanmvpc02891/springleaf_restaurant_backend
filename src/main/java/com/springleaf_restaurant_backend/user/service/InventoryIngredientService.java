@@ -13,4 +13,5 @@ public interface InventoryIngredientService {
     InventoryIngredient saveInventoryIngredient(InventoryIngredient inventoryIngredient);
 
     void deleteInventoryIngredient(Long id);
+
 }

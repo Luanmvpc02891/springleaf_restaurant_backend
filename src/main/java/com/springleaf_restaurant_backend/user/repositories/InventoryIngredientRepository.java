@@ -12,5 +12,5 @@ public interface InventoryIngredientRepository extends JpaRepository<InventoryIn
 
   InventoryIngredient findByInventoryIdAndIngredientId(Long inventoryId, Long ingredientId);
 
- 
+  List<InventoryIngredient> findByIngredientIdAndRestaurantId(Long ingredientId, Long restaurantId);
 }

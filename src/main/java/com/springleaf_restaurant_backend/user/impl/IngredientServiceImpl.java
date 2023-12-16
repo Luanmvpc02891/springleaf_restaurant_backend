@@ -6,14 +6,18 @@ import org.springframework.stereotype.Service;
 
 import com.springleaf_restaurant_backend.user.entities.Ingredient;
 import com.springleaf_restaurant_backend.user.repositories.IngredientRepository;
+import com.springleaf_restaurant_backend.user.repositories.InventoryBranchIngredientRepository;
 import com.springleaf_restaurant_backend.user.service.IngredientService;
 
 @Service
 public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository ingredientRepository;
+    private final InventoryBranchIngredientRepository inventoryBranchIngredientRepository;
 
-    public IngredientServiceImpl(IngredientRepository ingredientRepository) {
+    public IngredientServiceImpl(IngredientRepository ingredientRepository,
+            InventoryBranchIngredientRepository inventoryBranchIngredientRepository) {
         this.ingredientRepository = ingredientRepository;
+        this.inventoryBranchIngredientRepository = inventoryBranchIngredientRepository;
     }
 
     @Override
@@ -36,5 +40,4 @@ public class IngredientServiceImpl implements IngredientService {
         ingredientRepository.deleteById(id);
     }
 
-  
 }

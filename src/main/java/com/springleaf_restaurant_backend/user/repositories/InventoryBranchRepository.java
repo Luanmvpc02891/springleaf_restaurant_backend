@@ -6,4 +6,7 @@ import com.springleaf_restaurant_backend.user.entities.InventoryBranch;
 
 public interface InventoryBranchRepository extends JpaRepository<InventoryBranch, Long> {
   InventoryBranch findByInventoryBranchId(Long inventoryBranchId);
+
+  InventoryBranch findByRestaurantId(Long restaurantId);
+
 }
