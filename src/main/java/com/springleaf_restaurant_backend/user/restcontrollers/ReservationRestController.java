@@ -137,37 +137,37 @@ public class ReservationRestController {
                 for (OrderDetail detail : listDetail) {
                     for (OrderDetail item : listMenuItems) {
                         // Nếu order Detail đã có
-                        if (detail.getMenuItemId() == item.getMenuItemId() && item.getQuantity() != detail.getQuantity()) {
+                        if (detail.getMenuItemId() == item.getMenuItemId()
+                                && item.getQuantity() != detail.getQuantity()) {
                             detail.setQuantity(item.getQuantity());
                             orderDetailService.saveOrderDetail(detail);
                             list.remove(item);
                             break;
-                        } 
+                        }
                         // else {
-                        //     // Nếu orderDetail chưa có
-                        //     OrderDetail orderDetail = new OrderDetail();
-                        //     orderDetail.setMenuItemId(item.getMenuItemId());
-                        //     orderDetail.setOrderId(orderUser.getOrderId());
-                        //     orderDetail.setQuantity(item.getQuantity());
-                        //     orderDetailService.saveOrderDetail(orderDetail);
-                        //     System.out.println("3");
-                        //     break;
+                        // // Nếu orderDetail chưa có
+                        // OrderDetail orderDetail = new OrderDetail();
+                        // orderDetail.setMenuItemId(item.getMenuItemId());
+                        // orderDetail.setOrderId(orderUser.getOrderId());
+                        // orderDetail.setQuantity(item.getQuantity());
+                        // orderDetailService.saveOrderDetail(orderDetail);
+                        // System.out.println("3");
+                        // break;
                         // }
                     }
                 }
                 for (OrderDetail item : list) {
                     OrderDetail orderDetail = new OrderDetail();
                     orderDetail.setMenuItemId(item.getMenuItemId());
-                            orderDetail.setOrderId(orderUser.getOrderId());
-                            orderDetail.setQuantity(item.getQuantity());
-                            orderDetailService.saveOrderDetail(orderDetail);
+                    orderDetail.setOrderId(orderUser.getOrderId());
+                    orderDetail.setQuantity(item.getQuantity());
+                    orderDetailService.saveOrderDetail(orderDetail);
                 }
                 message.setMessage("Order success");
                 System.out.println("ok");
-             return ResponseEntity.ok(message);
+                return ResponseEntity.ok(message);
             }
 
-            
         } else {
             return null;
         }
@@ -235,17 +235,18 @@ public class ReservationRestController {
                 continue;
             } else if ("Hết thời gian đợi".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            } else if ("Chưa tới".equalsIgnoreCase(resevationStatusName)) {
-                if (isCurrentBefore == 1) {
-                    continue;
-                } else if (isCurrentBefore == 2) {
-                    reservation.setReservationStatusName("Đang đợi");
-                    updateReservation(reservation);
-                }
-            } else if ("Đang đợi".equalsIgnoreCase(resevationStatusName)) {
+            } else if ("Đang đợi".equalsIgnoreCase(resevationStatusName)
+                    || "Chưa tới".equalsIgnoreCase(resevationStatusName)) {
                 if (isCurrentBefore == 3) {
                     reservation.setReservationStatusName("Hết thời gian đợi");
                     updateReservation(reservation);
+                } else if ("Chưa tới".equalsIgnoreCase(resevationStatusName)) {
+                    if (isCurrentBefore == 1) {
+                        continue;
+                    } else if (isCurrentBefore == 2) {
+                        reservation.setReservationStatusName("Đang đợi");
+                        updateReservation(reservation);
+                    }
                 }
             }
         }
