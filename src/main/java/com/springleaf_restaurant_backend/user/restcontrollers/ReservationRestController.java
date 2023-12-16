@@ -216,6 +216,7 @@ public class ReservationRestController {
             } else if ("Đang đợi".equalsIgnoreCase(resevationStatusName)) {
                 if (isCurrentBefore == 3) {
                     reservation.setReservationStatusName("Hết thời gian đợi");
+                    updateReservation(reservation);
                 }
             }
         }
