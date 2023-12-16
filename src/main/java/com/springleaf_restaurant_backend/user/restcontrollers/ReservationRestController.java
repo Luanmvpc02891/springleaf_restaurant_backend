@@ -197,30 +197,41 @@ public class ReservationRestController {
 
     private void updateReservationStatus(List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
-            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate(), reservation.getOutTime());
-            if ("Đã sử dụng xong".equalsIgnoreCase(reservation.getReservationStatusName())) {
+            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate());
+            String resevationStatusName = reservation.getReservationStatusName();
+            if ("Đã sử dụng xong".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            } else if ("Đã hủy".equalsIgnoreCase(reservation.getReservationStatusName())) {
+            } else if ("Đã hủy".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            } else if ("Đang đợi".equalsIgnoreCase(reservation.getReservationStatusName())) {
+            } else if("Đang sử dụng".equalsIgnoreCase(resevationStatusName)){
+                continue;
+            } else if("Hết thời gian đợi".equalsIgnoreCase(resevationStatusName)){
+                continue;
+            }
+             else if ("Chưa tới".equalsIgnoreCase(resevationStatusName)) {
                 if (isCurrentBefore == 1) {
                     continue;
                 } else if (isCurrentBefore == 2) {
-                    reservation.setReservationStatusName("Đang sử dụng");
+                    reservation.setReservationStatusName("Đang đợi");
                     updateReservation(reservation);
                 }
-            } else if ("Đang sử dụng".equalsIgnoreCase(reservation.getReservationStatusName())) {
-                if (isCurrentBefore == 2) {
-                    continue;
-                } else if (isCurrentBefore == 3) {
-                    reservation.setReservationStatusName("Đã sử dụng xong");
-                    updateReservation(reservation);
+            } else if("Đang đợi".equalsIgnoreCase(resevationStatusName)){
+                if(isCurrentBefore == 3){
+                    reservation.setReservationStatusName("Hết thời gian đợi");
                 }
             }
+            // } else if ("Đang sử dụng".equalsIgnoreCase(reservation.getReservationStatusName())) {
+            //     if (isCurrentBefore == 2) {
+            //         continue;
+            //     } else if (isCurrentBefore == 3) {
+            //         reservation.setReservationStatusName("Đã sử dụng xong");
+            //         updateReservation(reservation);
+            //     }
+            // }
         }
     }
 
-    Integer checkDateTime(String reservationDateTime, String outTime) {
+    Integer checkDateTime(String reservationDateTime) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -231,7 +242,7 @@ public class ReservationRestController {
             // Lấy ngày giờ hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now();
 
-            LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
+            //LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
 
             // So sánh ngày giờ
             int comparisonResult = currentDateTime.compareTo(dateTime1);
@@ -241,12 +252,11 @@ public class ReservationRestController {
                 return 1;
             } else if (comparisonResult == 0) {
                 // System.out.println("Ngày giờ hiện tại và ngày giờ tới là giống nhau.");
-                return 2;
-            } else if (currentDateTime.isEqual(outTime1) || currentDateTime.isAfter(outTime1) ) { // nếu giờ hiện tại bằng hoặc vượt qua outTime1
-                System.out.println("Đã sử dụng xong");
-                return 3;
+                return 2;  // Ngày giờ hiện tại và giờ tới là giống nhau
+            } else if (currentDateTime.isAfter(dateTime1.plusMinutes(30)) ) { // nếu giờ hiện tại bằng hoặc vượt qua thời gian đợi
+                return 3; // Hết thời gian đợi
             } else {
-                return 2;
+                return 2; // Ngày giờ hiện tại lớn hơn thời gian đến
             }
 
         } catch (Exception e) {
