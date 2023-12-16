@@ -174,6 +174,19 @@ public class ReservationRestController {
 
     }
 
+    @PostMapping("/public/create/getOrderByReservation")
+    public ResponseEntity<List<OrderDetail>> getOrderByReservation(
+        @RequestHeader("Authorization") String jwtToken,
+        @RequestBody Long reservationId
+    ){
+        Optional<Order> order = orderService.getOrdersByReservationId(reservationId);
+        if(order.isPresent()){
+            List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrderId(order.get().getOrderId());
+            return ResponseEntity.ok(orderDetails);
+        }
+        return ResponseEntity.ok(null);
+    }
+
     @PostMapping("/public/create/sendMail")
     public ResponseEntity<String> sendMail(
             @RequestHeader("Authorization") String jwtToken,
