@@ -15,4 +15,6 @@ public interface OrderService {
     void deleteOrder(Long id);
 
     Optional<Order> getOrdersByDeliveryOrderId(Long deliveryOrderId);
+
+    Optional<Order> getOrdersByReservationId(Long reservationId);
 }

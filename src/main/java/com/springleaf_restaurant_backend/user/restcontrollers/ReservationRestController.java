@@ -2,18 +2,12 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +20,12 @@ import com.springleaf_restaurant_backend.security.config.websocket.WebSocketMess
 import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 import com.springleaf_restaurant_backend.security.service.UserService;
-import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
-import com.springleaf_restaurant_backend.user.entities.DeliveryOrderType;
-import com.springleaf_restaurant_backend.user.entities.MailInfo;
 import com.springleaf_restaurant_backend.user.entities.MenuItem;
 import com.springleaf_restaurant_backend.user.entities.MessageResponse;
 import com.springleaf_restaurant_backend.user.entities.Order;
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 import com.springleaf_restaurant_backend.user.entities.Reservation;
+import com.springleaf_restaurant_backend.user.repositories.OrderDetailRepository;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderStatusService;
 import com.springleaf_restaurant_backend.user.service.DeliveryOrderTypeService;
@@ -107,43 +99,79 @@ public class ReservationRestController {
 
     @PostMapping("/public/create/order/{reservationId}")
     public ResponseEntity<?> addMenuItem(
-        @RequestHeader("Authorization") String jwtToken, // Người dùng
-        @PathVariable("reservationId") Long reservationId, // bàn đặt
-        @RequestBody List<MenuItem> listMenuItems
-    ){
+            @RequestHeader("Authorization") String jwtToken, // Người dùng
+            @PathVariable("reservationId") Long reservationId, // bàn đặt
+            @RequestBody List<OrderDetail> listMenuItems) {
         MessageResponse message = new MessageResponse();
-        
-            Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formattedDate = dateFormat.format(date);
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dateFormat.format(date);
+        String jwt = jwtToken.substring(7);
+        String userName = jwtService.extractUsername(jwt);
+        Optional<User> user = userService.findByUsername(userName);
+        if (user.isPresent()) {
             Order orderUser = new Order();
-            orderUser.setReservationId(reservationId);
-            orderUser.setOrderDate(formattedDate);
-            orderUser.setStatus(true);
-            orderService.saveOrder(orderUser);
-        
-        List<OrderDetail> listDetail = orderDetailService.getAllOrderDetails();
-        List<OrderDetail> listOrder = new ArrayList<>();
-        for (OrderDetail detail : listDetail) {
-            for (MenuItem item : listMenuItems) {
-            if(detail.getMenuItemId() == item.getMenuItemId()){
-                message.setMessage("Item was order");
+            Optional<Order> orderByReservation = orderService.getOrdersByReservationId(reservationId);
+            if (orderByReservation.isPresent() && orderByReservation.get().isStatus()) {
+                orderUser = orderByReservation.get();
+            } else {
+                // Tạo order mới khi bàn chưa có order
+                orderUser.setReservationId(reservationId);
+                orderUser.setOrderDate(formattedDate);
+                orderUser.setStatus(true);
+                orderService.saveOrder(orderUser);
+            }
+            List<OrderDetail> listDetail = orderDetailService.getOrderDetailsByOrderId(orderUser.getOrderId());
+            if (listDetail.size() <= 0) {
+                for (OrderDetail menuItem : listMenuItems) {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setMenuItemId(menuItem.getMenuItemId());
+                    orderDetail.setOrderId(orderUser.getOrderId());
+                    orderDetail.setQuantity(menuItem.getQuantity());
+                    orderDetailService.saveOrderDetail(orderDetail);
+                }
+                System.out.println("1");
+                return null;
+            } else {
+                List<OrderDetail> list = listMenuItems;
+                for (OrderDetail detail : listDetail) {
+                    for (OrderDetail item : listMenuItems) {
+                        // Nếu order Detail đã có
+                        if (detail.getMenuItemId() == item.getMenuItemId()
+                                && item.getQuantity() != detail.getQuantity()) {
+                            detail.setQuantity(item.getQuantity());
+                            orderDetailService.saveOrderDetail(detail);
+                            list.remove(item);
+                            break;
+                        }
+                        // else {
+                        // // Nếu orderDetail chưa có
+                        // OrderDetail orderDetail = new OrderDetail();
+                        // orderDetail.setMenuItemId(item.getMenuItemId());
+                        // orderDetail.setOrderId(orderUser.getOrderId());
+                        // orderDetail.setQuantity(item.getQuantity());
+                        // orderDetailService.saveOrderDetail(orderDetail);
+                        // System.out.println("3");
+                        // break;
+                        // }
+                    }
+                }
+                for (OrderDetail item : list) {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setMenuItemId(item.getMenuItemId());
+                    orderDetail.setOrderId(orderUser.getOrderId());
+                    orderDetail.setQuantity(item.getQuantity());
+                    orderDetailService.saveOrderDetail(orderDetail);
+                }
+                message.setMessage("Order success");
+                System.out.println("ok");
                 return ResponseEntity.ok(message);
-            }else{
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setMenuItemId(item.getMenuItemId());
-                orderDetail.setOrderId(orderUser.getOrderId());
-                orderDetail.setQuantity(1);
-                listOrder.add(orderDetail);
             }
-            }
+
+        } else {
+            return null;
         }
-        for (OrderDetail detail : listOrder) {
-            orderDetailService.saveOrderDetail(detail);
-        }
-        message.setMessage("Order success");
-        System.out.println("ok");
-        return ResponseEntity.ok(message);
+
     }
 
     @PostMapping("/public/create/sendMail")
@@ -155,15 +183,15 @@ public class ReservationRestController {
         if (user.isPresent()) {
             try {
                 String emailTo = email;
-                String subject = (
-                        new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                String subject = (new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8),
+                        StandardCharsets.UTF_8));
                 String body = ""; // Ngày giờ, nội dung muốn gửi
-                mailerService.send(emailTo, subject, body, token );
+                mailerService.send(emailTo, subject, body, token);
                 return ResponseEntity.ok("Email is sending");
             } catch (Exception e) {
                 return ResponseEntity.ok("Email cant not send ! Please config email again");
             }
-        }else{
+        } else {
             return ResponseEntity.ok("User with JWT not found");
         }
     }
@@ -197,30 +225,34 @@ public class ReservationRestController {
 
     private void updateReservationStatus(List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
-            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate(), reservation.getOutTime());
-            if ("Đã sử dụng xong".equalsIgnoreCase(reservation.getReservationStatusName())) {
+            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate());
+            String resevationStatusName = reservation.getReservationStatusName();
+            if ("Đã sử dụng xong".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            } else if ("Đã hủy".equalsIgnoreCase(reservation.getReservationStatusName())) {
+            } else if ("Đã hủy".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            } else if ("Đang đợi".equalsIgnoreCase(reservation.getReservationStatusName())) {
-                if (isCurrentBefore == 1) {
-                    continue;
-                } else if (isCurrentBefore == 2) {
-                    reservation.setReservationStatusName("Đang sử dụng");
+            } else if ("Đang sử dụng".equalsIgnoreCase(resevationStatusName)) {
+                continue;
+            } else if ("Hết thời gian đợi".equalsIgnoreCase(resevationStatusName)) {
+                continue;
+            } else if ("Đang đợi".equalsIgnoreCase(resevationStatusName)
+                    || "Chưa tới".equalsIgnoreCase(resevationStatusName)) {
+                if (isCurrentBefore == 3) {
+                    reservation.setReservationStatusName("Hết thời gian đợi");
                     updateReservation(reservation);
-                }
-            } else if ("Đang sử dụng".equalsIgnoreCase(reservation.getReservationStatusName())) {
-                if (isCurrentBefore == 2) {
-                    continue;
-                } else if (isCurrentBefore == 3) {
-                    reservation.setReservationStatusName("Đã sử dụng xong");
-                    updateReservation(reservation);
+                } else if ("Chưa tới".equalsIgnoreCase(resevationStatusName)) {
+                    if (isCurrentBefore == 1) {
+                        continue;
+                    } else if (isCurrentBefore == 2) {
+                        reservation.setReservationStatusName("Đang đợi");
+                        updateReservation(reservation);
+                    }
                 }
             }
         }
     }
 
-    Integer checkDateTime(String reservationDateTime, String outTime) {
+    Integer checkDateTime(String reservationDateTime) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -231,7 +263,7 @@ public class ReservationRestController {
             // Lấy ngày giờ hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now();
 
-            LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
+            // LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
 
             // So sánh ngày giờ
             int comparisonResult = currentDateTime.compareTo(dateTime1);
@@ -241,12 +273,12 @@ public class ReservationRestController {
                 return 1;
             } else if (comparisonResult == 0) {
                 // System.out.println("Ngày giờ hiện tại và ngày giờ tới là giống nhau.");
-                return 2;
-            } else if (currentDateTime.isEqual(outTime1) || currentDateTime.isAfter(outTime1) ) { // nếu giờ hiện tại bằng hoặc vượt qua outTime1
-                System.out.println("Đã sử dụng xong");
-                return 3;
+                return 2; // Ngày giờ hiện tại và giờ tới là giống nhau
+            } else if (currentDateTime.isAfter(dateTime1.plusMinutes(30))) { // nếu giờ hiện tại bằng hoặc vượt qua thời
+                                                                             // gian đợi
+                return 3; // Hết thời gian đợi
             } else {
-                return 2;
+                return 2; // Ngày giờ hiện tại lớn hơn thời gian đến
             }
 
         } catch (Exception e) {
@@ -262,7 +294,5 @@ public class ReservationRestController {
             @RequestParam("date") String date) {
         return reservationService.getReservationsByDateList(date);
     }
-
-  
 
 }

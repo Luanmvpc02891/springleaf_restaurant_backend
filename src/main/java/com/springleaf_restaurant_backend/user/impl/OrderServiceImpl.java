@@ -42,4 +42,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findByDeliveryOrderId(deliveryOrderId);
     }
 
+    @Override
+    public Optional<Order> getOrdersByReservationId(Long reservationId) {
+        return orderRepository.findByReservationId(reservationId);
+    }
+
 }
