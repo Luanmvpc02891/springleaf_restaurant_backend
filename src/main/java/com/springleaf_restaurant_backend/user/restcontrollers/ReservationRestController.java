@@ -107,35 +107,34 @@ public class ReservationRestController {
 
     @PostMapping("/public/create/order/{reservationId}")
     public ResponseEntity<?> addMenuItem(
-        @RequestHeader("Authorization") String jwtToken, // Người dùng
-        @PathVariable("reservationId") Long reservationId, // bàn đặt
-        @RequestBody List<MenuItem> listMenuItems
-    ){
+            @RequestHeader("Authorization") String jwtToken, // Người dùng
+            @PathVariable("reservationId") Long reservationId, // bàn đặt
+            @RequestBody List<MenuItem> listMenuItems) {
         MessageResponse message = new MessageResponse();
-        
-            Date date = new Date();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            String formattedDate = dateFormat.format(date);
-            Order orderUser = new Order();
-            orderUser.setReservationId(reservationId);
-            orderUser.setOrderDate(formattedDate);
-            orderUser.setStatus(true);
-            orderService.saveOrder(orderUser);
-        
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dateFormat.format(date);
+        Order orderUser = new Order();
+        orderUser.setReservationId(reservationId);
+        orderUser.setOrderDate(formattedDate);
+        orderUser.setStatus(true);
+        orderService.saveOrder(orderUser);
+
         List<OrderDetail> listDetail = orderDetailService.getAllOrderDetails();
         List<OrderDetail> listOrder = new ArrayList<>();
         for (OrderDetail detail : listDetail) {
             for (MenuItem item : listMenuItems) {
-            if(detail.getMenuItemId() == item.getMenuItemId()){
-                message.setMessage("Item was order");
-                return ResponseEntity.ok(message);
-            }else{
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setMenuItemId(item.getMenuItemId());
-                orderDetail.setOrderId(orderUser.getOrderId());
-                orderDetail.setQuantity(1);
-                listOrder.add(orderDetail);
-            }
+                if (detail.getMenuItemId() == item.getMenuItemId()) {
+                    message.setMessage("Item was order");
+                    return ResponseEntity.ok(message);
+                } else {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.setMenuItemId(item.getMenuItemId());
+                    orderDetail.setOrderId(orderUser.getOrderId());
+                    orderDetail.setQuantity(1);
+                    listOrder.add(orderDetail);
+                }
             }
         }
         for (OrderDetail detail : listOrder) {
@@ -155,15 +154,15 @@ public class ReservationRestController {
         if (user.isPresent()) {
             try {
                 String emailTo = email;
-                String subject = (
-                        new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8));
+                String subject = (new String("Mã xác nhận đăng ký".getBytes(StandardCharsets.UTF_8),
+                        StandardCharsets.UTF_8));
                 String body = ""; // Ngày giờ, nội dung muốn gửi
-                mailerService.send(emailTo, subject, body, token );
+                mailerService.send(emailTo, subject, body, token);
                 return ResponseEntity.ok("Email is sending");
             } catch (Exception e) {
                 return ResponseEntity.ok("Email cant not send ! Please config email again");
             }
-        }else{
+        } else {
             return ResponseEntity.ok("User with JWT not found");
         }
     }
@@ -203,31 +202,22 @@ public class ReservationRestController {
                 continue;
             } else if ("Đã hủy".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            } else if("Đang sử dụng".equalsIgnoreCase(resevationStatusName)){
+            } else if ("Đang sử dụng".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            } else if("Hết thời gian đợi".equalsIgnoreCase(resevationStatusName)){
+            } else if ("Hết thời gian đợi".equalsIgnoreCase(resevationStatusName)) {
                 continue;
-            }
-             else if ("Chưa tới".equalsIgnoreCase(resevationStatusName)) {
+            } else if ("Chưa tới".equalsIgnoreCase(resevationStatusName)) {
                 if (isCurrentBefore == 1) {
                     continue;
                 } else if (isCurrentBefore == 2) {
                     reservation.setReservationStatusName("Đang đợi");
                     updateReservation(reservation);
                 }
-            } else if("Đang đợi".equalsIgnoreCase(resevationStatusName)){
-                if(isCurrentBefore == 3){
+            } else if ("Đang đợi".equalsIgnoreCase(resevationStatusName)) {
+                if (isCurrentBefore == 3) {
                     reservation.setReservationStatusName("Hết thời gian đợi");
                 }
             }
-            // } else if ("Đang sử dụng".equalsIgnoreCase(reservation.getReservationStatusName())) {
-            //     if (isCurrentBefore == 2) {
-            //         continue;
-            //     } else if (isCurrentBefore == 3) {
-            //         reservation.setReservationStatusName("Đã sử dụng xong");
-            //         updateReservation(reservation);
-            //     }
-            // }
         }
     }
 
@@ -242,7 +232,7 @@ public class ReservationRestController {
             // Lấy ngày giờ hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now();
 
-            //LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
+            // LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
 
             // So sánh ngày giờ
             int comparisonResult = currentDateTime.compareTo(dateTime1);
@@ -252,8 +242,9 @@ public class ReservationRestController {
                 return 1;
             } else if (comparisonResult == 0) {
                 // System.out.println("Ngày giờ hiện tại và ngày giờ tới là giống nhau.");
-                return 2;  // Ngày giờ hiện tại và giờ tới là giống nhau
-            } else if (currentDateTime.isAfter(dateTime1.plusMinutes(30)) ) { // nếu giờ hiện tại bằng hoặc vượt qua thời gian đợi
+                return 2; // Ngày giờ hiện tại và giờ tới là giống nhau
+            } else if (currentDateTime.isAfter(dateTime1.plusMinutes(30))) { // nếu giờ hiện tại bằng hoặc vượt qua thời
+                                                                             // gian đợi
                 return 3; // Hết thời gian đợi
             } else {
                 return 2; // Ngày giờ hiện tại lớn hơn thời gian đến
@@ -272,7 +263,5 @@ public class ReservationRestController {
             @RequestParam("date") String date) {
         return reservationService.getReservationsByDateList(date);
     }
-
-  
 
 }
