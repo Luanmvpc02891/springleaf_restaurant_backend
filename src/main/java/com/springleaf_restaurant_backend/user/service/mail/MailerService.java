@@ -22,4 +22,5 @@ public interface MailerService {
 	*/
 	void send(String to, String subject, String body, String token) throws MessagingException;
 	void sendMissingIngredientsNotification(List<String> missingIngredients, List<String> restaurantNames,List<String> userNames) throws MessagingException;
+	
 }

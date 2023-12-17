@@ -82,26 +82,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<Map<String, Object>> getIngredientsToReorderWithNames(Long inventoryId) {
-        List<OrderThreshold> orderThresholds = orderThresholdRepository.findByInventoryId(inventoryId);
-        List<Map<String, Object>> ingredientsToReorder = new ArrayList<>();
-
-        for (OrderThreshold orderThreshold : orderThresholds) {
-            InventoryBranchIngredient inventoryBranchIngredient = inventoryBranchIngredientRepository
-                    .findByInventoryIdAndIngredientId(inventoryId, orderThreshold.getIngredientId());
-            if (inventoryBranchIngredient != null
-                    && inventoryBranchIngredient.getQuantity() <= orderThreshold.getReorderPoint()) {
-                Ingredient ingredient = ingredientRepository.findById(orderThreshold.getIngredientId()).orElse(null);
-                if (ingredient != null) {
-                    Map<String, Object> ingredientInfo = new HashMap<>();
-                    ingredientInfo.put("ingredientName", ingredient.getName());
-                    ingredientInfo.put("reorderQuantity", inventoryBranchIngredient.getQuantity());
-                    ingredientsToReorder.add(ingredientInfo);
-                }
-            }
-        }
-
-        return ingredientsToReorder;
+    public InventoryBranch getInventoryBranchByRestaurantId(Long restaurantId) {
+        return inventoryBranchRepository.findByRestaurantId(restaurantId);
     }
 
 }

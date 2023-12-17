@@ -29,4 +29,7 @@ public class InventoryIngredient {
 
   @Column(name = "quantity")
   private Double quantity;
+
+  @Column(name = "restaurant_id")
+  private Long restaurantId; 
 }

@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.user.service;
 
 import com.springleaf_restaurant_backend.user.entities.Ingredient;
+import com.springleaf_restaurant_backend.user.entities.InventoryBranch;
 import com.springleaf_restaurant_backend.user.entities.Restaurant;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public interface RestaurantService {
     void deleteRestaurant(Long id);
 
     Restaurant getRestaurantByInventoryBranchId(Long inventoryBranchId);
-    List<Map<String, Object>> getIngredientsToReorderWithNames(Long inventoryId);
     
+      InventoryBranch getInventoryBranchByRestaurantId(Long restaurantId);
+
 }

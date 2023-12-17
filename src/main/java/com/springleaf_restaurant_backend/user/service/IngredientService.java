@@ -1,8 +1,8 @@
 package com.springleaf_restaurant_backend.user.service;
 
-import com.springleaf_restaurant_backend.user.entities.Ingredient;
-
 import java.util.List;
+
+import com.springleaf_restaurant_backend.user.entities.Ingredient;
 
 public interface IngredientService {
 
@@ -13,5 +13,5 @@ public interface IngredientService {
     Ingredient saveIngredient(Ingredient ingredient);
 
     void deleteIngredient(Long id);
-    
+
 }

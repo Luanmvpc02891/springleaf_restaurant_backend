@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.springleaf_restaurant_backend.user.entities.Ingredient;
 import com.springleaf_restaurant_backend.user.entities.Inventory;
+import com.springleaf_restaurant_backend.user.entities.InventoryBranchIngredient;
 import com.springleaf_restaurant_backend.user.entities.InventoryIngredient;
 import com.springleaf_restaurant_backend.user.entities.OrderThreshold;
 import com.springleaf_restaurant_backend.user.repositories.IngredientRepository;
+import com.springleaf_restaurant_backend.user.repositories.InventoryBranchIngredientRepository;
 import com.springleaf_restaurant_backend.user.repositories.InventoryBranchRepository;
 import com.springleaf_restaurant_backend.user.repositories.InventoryIngredientRepository;
 import com.springleaf_restaurant_backend.user.repositories.InventoryRepository;
@@ -24,16 +26,19 @@ public class InventoryServiceImpl implements InventoryService {
     private final OrderThresholdRepository orderThresholdRepository;
     private final InventoryIngredientRepository inventoryIngredientRepository;
     private final IngredientRepository ingredientRepository;
+    private final InventoryBranchIngredientRepository inventoryBranchIngredientRepository;
 
     public InventoryServiceImpl(InventoryRepository inventoryRepository,
             InventoryBranchRepository inventoryBranchRepository,
             OrderThresholdRepository orderThresholdRepository, IngredientRepository ingredientRepository,
-            InventoryIngredientRepository inventoryIngredientRepository) {
+            InventoryIngredientRepository inventoryIngredientRepository,
+            InventoryBranchIngredientRepository inventoryBranchIngredientRepository) {
         this.inventoryRepository = inventoryRepository;
         this.inventoryBranchRepository = inventoryBranchRepository;
         this.orderThresholdRepository = orderThresholdRepository;
         this.inventoryIngredientRepository = inventoryIngredientRepository;
         this.ingredientRepository = ingredientRepository;
+        this.inventoryBranchIngredientRepository = inventoryBranchIngredientRepository;
 
     }
 
@@ -94,6 +99,9 @@ public class InventoryServiceImpl implements InventoryService {
         return ingredientsBelowThreshold;
     }
 
-
+    @Override
+    public List<InventoryBranchIngredient> getIngredientsInBranch(Long inventoryBranchId) {
+        return inventoryBranchIngredientRepository.findByInventoryBranchId(inventoryBranchId);
+    }
 
 }

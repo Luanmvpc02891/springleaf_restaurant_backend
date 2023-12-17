@@ -29,4 +29,8 @@ public class InventoryBranchIngredient {
 
   @Column(name = "quantity")
   private Double quantity;
+
+  @Column(name = "inventory_branch_id")
+  private Long inventoryBranchId;
+  
 }
