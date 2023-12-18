@@ -9,4 +9,5 @@ import com.springleaf_restaurant_backend.user.entities.MenuItem;
 
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
     List<MenuItem> findByCategoryId(Category categoryId);
+    List<MenuItem> findByCategoryId(Long categoryId);
 }

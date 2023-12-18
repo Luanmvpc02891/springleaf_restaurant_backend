@@ -86,4 +86,9 @@ public class RestaurantServiceImpl implements RestaurantService {
         return inventoryBranchRepository.findByRestaurantId(restaurantId);
     }
 
+
+    @Override
+    public long countRestaurants() {
+        return restaurantRepository.count();
+    }
 }

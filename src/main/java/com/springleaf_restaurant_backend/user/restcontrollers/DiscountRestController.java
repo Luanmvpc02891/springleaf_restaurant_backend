@@ -38,8 +38,8 @@ public class DiscountRestController {
         return discountService.saveDiscount(discount);
     }
 
-    @PostMapping("/public/update/discount")
-    public Discount updateDiscount(@RequestBody Discount discount) {
+    @PutMapping("/public/update/discount")
+    public Discount updateDiscount(@RequestBody Discount discount){
         return discountService.saveDiscount(discount);
     }
 
