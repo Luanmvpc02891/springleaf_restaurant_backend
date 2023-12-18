@@ -25,4 +25,7 @@ public class Restaurant {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "status")
+    private String statusId;
 }

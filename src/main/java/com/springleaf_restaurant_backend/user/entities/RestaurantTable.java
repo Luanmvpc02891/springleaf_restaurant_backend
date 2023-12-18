@@ -21,7 +21,7 @@ public class RestaurantTable {
     private Integer tableTypeId;
 
     @Column(name = "table_status_id")
-    private Integer tableStatusId;
+    private String tableStatusId;
 
     @Column(name = "restaurant_id")
     private Long restaurantId;
