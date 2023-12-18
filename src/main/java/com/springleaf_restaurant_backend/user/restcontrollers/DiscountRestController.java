@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import com.springleaf_restaurant_backend.user.service.DiscountService;
 import com.springleaf_restaurant_backend.user.service.MenuItemService;
 import com.springleaf_restaurant_backend.user.entities.Discount;
-import com.springleaf_restaurant_backend.user.entities.MenuItem;
 import com.springleaf_restaurant_backend.user.entities.MessageResponse;
 
 @RestController
