@@ -93,9 +93,6 @@ public class VNpayRestController {
         } else {
 
         }
-
-        //System.out.println("here " + paymentDetails);
-        // return paymentDetails;
     }
 
     public void orderMethod(String orderInfo, Double totalAmount) {

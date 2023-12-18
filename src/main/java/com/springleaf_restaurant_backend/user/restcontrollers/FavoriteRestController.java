@@ -1,5 +1,7 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,17 @@ public class FavoriteRestController {
     }
 
     @PostMapping("/public/create/favorite")
-    public Favorite createFavorite(@RequestBody Favorite favorite){
-        return favoriteService.saveFavorite(favorite);
+    public Favorite createFavorite(
+        //@RequestHeader("Authorization") String jwtToken, 
+                                        @RequestBody Favorite favorite){
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dateFormat.format(date);
+        Favorite newFavorite = new Favorite();
+        newFavorite.setUser(favorite.getUser());
+        newFavorite.setMenuItem(favorite.getMenuItem());
+        newFavorite.setFavoriteDate(formattedDate);
+        return favoriteService.saveFavorite(newFavorite);
     }
 
     @PutMapping("/public/update/favorite")

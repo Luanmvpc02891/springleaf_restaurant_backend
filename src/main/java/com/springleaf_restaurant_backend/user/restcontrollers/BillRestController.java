@@ -2,8 +2,6 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,14 +21,11 @@ import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.service.UserService;
 import com.springleaf_restaurant_backend.user.entities.Bill;
 import com.springleaf_restaurant_backend.user.service.BillService;
-import com.springleaf_restaurant_backend.user.service.MonthlyRevenueService;
 
 @RestController
 public class BillRestController {
     @Autowired
     private BillService billService;
-    @Autowired
-    private MonthlyRevenueService monthlyRevenueService;
 
     @Autowired
     JwtService jwtService;

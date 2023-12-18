@@ -18,7 +18,7 @@ public class Restaurant {
     private String restaurantName;
 
     @Column(name = "address")
-    private Integer address;
+    private String address;
 
     @Column(name = "phone")
     private String phone;
