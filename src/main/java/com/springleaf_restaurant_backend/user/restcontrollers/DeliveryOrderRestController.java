@@ -60,6 +60,13 @@ public class DeliveryOrderRestController {
         return deliveryOrderService.getAllDeliveryOrders();
     }
 
+    @GetMapping("/manager/deliveryOrders")
+    public List<DeliveryOrder> getManagerDeliveryOrders(
+        @RequestHeader("Authorization") String jwtToken
+    ) {
+        return deliveryOrderService.getAllDeliveryOrders();
+    }
+
     @GetMapping("/public/deliveryOrder/{deliveryOrderId}")
     public DeliveryOrder getOneDeliveryOrder(@PathVariable("deliveryOrderId") Long deliveryOrderId) {
         return deliveryOrderService.getDeliveryOrderById(deliveryOrderId);

@@ -21,7 +21,8 @@ import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController(value = "googleDriveController")
+@RestController
+//(value = "googleDriveController")
 public class GoogleDriveController {
 
     @Autowired
@@ -36,7 +37,7 @@ public class GoogleDriveController {
     @Autowired
     GoogleDriveConfig googleDriveConfig;
     // Get all file on drive
-    @GetMapping("/public/api/")
+    @GetMapping("/public/home/")
     public ModelAndView pageIndex() throws IOException, GeneralSecurityException {
         ModelAndView mav = new ModelAndView("index");
 
