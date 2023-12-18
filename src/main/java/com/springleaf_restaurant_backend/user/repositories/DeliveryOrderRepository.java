@@ -10,4 +10,6 @@ public interface DeliveryOrderRepository extends JpaRepository<DeliveryOrder, Lo
     DeliveryOrder findByCustomerId(Long userId);
     //Optional<DeliveryOrder> findByDeliveryOrderStatusId(Integer deliveryOrderStatusId);
     Optional<DeliveryOrder> findByCustomerIdAndDeliveryOrderTypeIdAndActive(Long customerId, Integer deliveryOrderTypeId, boolean active);
+    Optional<DeliveryOrder> findByCustomerIdAndDeliveryOrderTypeIdAndActiveAndDeliveryRestaurantId(
+            Long customerId, Integer deliveryOrderTypeId, boolean active, Long restaurantId);
 }

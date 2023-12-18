@@ -48,5 +48,11 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     public Optional<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActive(Long userId, Integer deliveryOrderTypeId, boolean active) {
         return deliveryOrderRepository.findByCustomerIdAndDeliveryOrderTypeIdAndActive(userId, deliveryOrderTypeId , active);
     }
+
+    @Override
+    public Optional<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActiveAndDeliveryRestaurantId(Long userId,
+            Integer deliveryOrderTypeId, boolean active, Long restaurantId) {
+        return deliveryOrderRepository.findByCustomerIdAndDeliveryOrderTypeIdAndActiveAndDeliveryRestaurantId(userId, deliveryOrderTypeId, active, restaurantId);
+    }
     
 }

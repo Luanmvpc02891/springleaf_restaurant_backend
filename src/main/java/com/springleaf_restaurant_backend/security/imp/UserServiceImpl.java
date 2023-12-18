@@ -64,4 +64,9 @@ public class UserServiceImpl implements UserService {
     public List<String> findRoleNamesByUserId(Long id){
         return userRepository.findRoleNamesByUserId(id);
     }
+
+    @Override
+    public User findByPhone(String phone) {
+        return userRepository.findByPhone(phone);
+    }
 }
