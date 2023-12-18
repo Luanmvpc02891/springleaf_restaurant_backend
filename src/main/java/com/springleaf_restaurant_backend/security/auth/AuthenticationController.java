@@ -119,6 +119,7 @@ public class AuthenticationController {
             user.setEmail(updatedUserData.getEmail());
             user.setAddress(updatedUserData.getAddress());
             user.setPhone(updatedUserData.getPhone());
+            user.setRestaurantBranchId(updatedUserData.getRestaurantBranchId());
             userService.createUser(user);
             List<String> role_name = userService.findRoleNamesByUserId(user.getUserId());
             if (role_name != null) {

@@ -15,6 +15,7 @@ public interface DeliveryOrderService {
     void deleteDeliveryOrder(Long id);
 
     DeliveryOrder findByCustomerId(Long userId);
+    DeliveryOrder findByCustomerIdAndDeliveryRestaurantId(Long userId, Long restaurantId);
 
     List<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActive(Long userId, Integer deliveryOrderTypeId, boolean active);
     Optional<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActiveAndDeliveryRestaurantId(Long userId, Integer deliveryOrderTypeId, boolean active, Long restaurantId);
