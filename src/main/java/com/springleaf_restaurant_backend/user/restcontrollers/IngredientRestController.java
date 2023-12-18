@@ -111,73 +111,7 @@ public class IngredientRestController {
         ingredientService.deleteIngredient(ingredientId);
     }
 
-    @GetMapping("/public/checkThreshold")
-    public ResponseEntity<List<String>> checkThreshold() {
-        List<String> ingredientsBelowThreshold = new ArrayList<>();
-
-        Iterable<Ingredient> ingredients = ingredientRepository.findAll();
-
-        // Lấy thông tin ngưỡng đặt lại
-        Iterable<OrderThreshold> thresholds = orderThresholdRepository.findAll();
-
-        // Logic kiểm tra và thêm tên nguyên liệu dưới ngưỡng đặt lại vào danh sách
-        for (Ingredient ingredient : ingredients) {
-            for (OrderThreshold threshold : thresholds) {
-                if (ingredient.getIngredientId().equals(threshold.getIngredientId())) {
-                    if (ingredient.getOrderThreshold() <= threshold.getReorderPoint()) {
-                        ingredientsBelowThreshold.add(ingredient.getName());
-                        break; // Thoát vòng lặp ngưỡng khi tìm được nguyên liệu dưới ngưỡng
-                    }
-                }
-            }
-        }
-
-        if (!ingredientsBelowThreshold.isEmpty()) {
-            try {
-                // Lấy thông tin mã chi nhánh kho từ ngưỡng
-                List<Long> inventoryBranchIds = new ArrayList<>();
-                for (OrderThreshold threshold : thresholds) {
-                    if (threshold.getInventoryBranchId() != null) {
-                        inventoryBranchIds.add(threshold.getInventoryBranchId());
-                    }
-                }
-
-                // Lấy thông tin tên nhà hàng từ mã chi nhánh kho
-                List<String> restaurantNames = new ArrayList<>();
-                for (Long inventoryBranchId : inventoryBranchIds) {
-                    Optional<InventoryBranch> inventoryBranch = inventoryBranchRepository.findById(inventoryBranchId);
-                    inventoryBranch.ifPresent(branch -> {
-                        // Assuming you have a method to get the restaurant name by ID
-                        Optional<Restaurant> restaurant = restaurantRepository.findById(branch.getRestaurantId());
-                        restaurant.ifPresent(r -> restaurantNames.add(r.getRestaurantName()));
-                    });
-                }
-
-                // Lấy thông tin người dùng dựa trên restaurantBranchId
-                List<User> users = userRepository.findByRestaurantBranchIdIn(inventoryBranchIds);
-
-                // Lấy thông tin user name của người dùng và hiển thị
-                List<String> userNames = users.stream()
-                        .map(User::getUsername)
-                        .collect(Collectors.toList());
-
-                // Gửi thông báo qua email
-                notificationService.sendMissingIngredientsNotification(ingredientsBelowThreshold, restaurantNames,
-                        userNames);
-            } catch (MessagingException e) {
-                // Xử lý lỗi gửi email
-                e.printStackTrace();
-                return new ResponseEntity<>(Collections.singletonList("Lỗi gửi thông báo qua email."),
-                        HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-
-            // Trả về danh sách nguyên liệu dưới ngưỡng đặt lại
-            return ResponseEntity.ok(ingredientsBelowThreshold);
-        } else {
-            return ResponseEntity.ok(Collections.singletonList("Không có nguyên liệu dưới ngưỡng đặt lại."));
-        }
-    }
-
+  
     // @GetMapping("/public/user/getLoggedInUser")
     // public ResponseEntity<User> getLoggedInUser(Authentication authentication) {
     // if (authentication != null && authentication.getPrincipal() instanceof User)

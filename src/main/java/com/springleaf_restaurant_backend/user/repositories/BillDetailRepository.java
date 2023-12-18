@@ -12,4 +12,7 @@ public interface BillDetailRepository extends JpaRepository<BillDetail, Long> {
       "FROM BillDetail bd " +
       "WHERE bd.bill = :billId")
   List<BillDetail> getBillDetailsByBillId(Long billId);
+
+  List<BillDetail> findByMenuItemId(Long menuItemId);
+
 }

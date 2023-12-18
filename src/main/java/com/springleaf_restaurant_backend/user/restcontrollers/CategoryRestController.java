@@ -1,6 +1,7 @@
 package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -37,4 +38,5 @@ public class CategoryRestController {
     public void deleteCategory(@PathVariable("categoryId") Long categoryId) {
         categoryService.deleteCategory(categoryId);
     }
+
 }

@@ -44,6 +44,9 @@ public class BillDetailRestController {
         billDetailService.deleteBillDetail(billDetailId);
     }
 
-    
+    @GetMapping("/public/billDetails/{billId}/billDetails")
+    public List<BillDetail> getBillDetailsByBillId(@PathVariable Long billId) {
+        return billDetailService.getBillDetailsByBillId(billId);
+    }
 
 }
