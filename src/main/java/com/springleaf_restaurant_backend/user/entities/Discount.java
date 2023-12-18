@@ -13,6 +13,9 @@ public class Discount {
     @Column(name = "discount_id")
     private Integer discountId;
 
+    @Column(name = "user_id")
+    private Long userId;
+
     @Column(name = "limit_value")
     private Double limitValue;
 
