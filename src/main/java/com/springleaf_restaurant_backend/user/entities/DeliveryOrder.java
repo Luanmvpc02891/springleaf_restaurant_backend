@@ -17,7 +17,10 @@ public class DeliveryOrder {
     private Long customerId;
 
     @Column(name = "delivery_address")
-    private Integer deliveryAddress;
+    private String deliveryAddress;
+
+    @Column(name = "delivery_restaurant_id")
+    private Long deliveryRestaurantId;
 
     @Column(name = "delivery_order_type_id")
     private Integer deliveryOrderTypeId;

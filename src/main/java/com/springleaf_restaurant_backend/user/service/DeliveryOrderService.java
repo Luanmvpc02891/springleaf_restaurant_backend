@@ -17,5 +17,6 @@ public interface DeliveryOrderService {
     DeliveryOrder findByCustomerId(Long userId);
 
     Optional<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActive(Long userId, Integer deliveryOrderTypeId, boolean active);
+    Optional<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActiveAndDeliveryRestaurantId(Long userId, Integer deliveryOrderTypeId, boolean active, Long restaurantId);
     // DeliveryOrder findByDeliveryOrderStatusId(Integer deliveryOrderStatusId);
 }

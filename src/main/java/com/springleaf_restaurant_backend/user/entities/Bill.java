@@ -29,7 +29,7 @@ public class Bill {
     private Long paymentMethod;
 
     @Column(name = "address")
-    private Integer address;
+    private String address;
 
     @Column(name = "bank_number")
     private String bankNumber;

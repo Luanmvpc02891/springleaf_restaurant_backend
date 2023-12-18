@@ -22,11 +22,13 @@ import com.springleaf_restaurant_backend.security.entities.User;
 import com.springleaf_restaurant_backend.security.repositories.UserRepository;
 import com.springleaf_restaurant_backend.user.entities.Bill;
 import com.springleaf_restaurant_backend.user.entities.BillDetail;
+import com.springleaf_restaurant_backend.user.entities.DeliveryOrder;
 import com.springleaf_restaurant_backend.user.entities.Discount;
 import com.springleaf_restaurant_backend.user.entities.MessageResponse;
 import com.springleaf_restaurant_backend.user.entities.OrderDetail;
 import com.springleaf_restaurant_backend.user.service.BillDetailService;
 import com.springleaf_restaurant_backend.user.service.BillService;
+import com.springleaf_restaurant_backend.user.service.DeliveryOrderService;
 import com.springleaf_restaurant_backend.user.service.DiscountService;
 import com.springleaf_restaurant_backend.user.service.OrderDetailService;
 
@@ -44,13 +46,16 @@ public class UserFeatureRestController {
     OrderDetailService orderDetailService;
     @Autowired
     DiscountService discountService;
+    @Autowired
+    DeliveryOrderService deliveryOrderService;
 
-    @PostMapping("/public/checkout-cod/{orderId}/{totalAmount}/{discountCode}")
+    @PostMapping("/public/checkout-cod/{orderId}/{totalAmount}/{discountCode}/{deliveryOrderId}")
     public ResponseEntity<MessageResponse> userCheckOut(
             @RequestHeader("Authorization") String jwtToken,
             @RequestBody List<OrderDetail> listItem,
             @PathVariable("orderId") Long orderId,
             @PathVariable("totalAmount") Double totalAmount,
+            @PathVariable("totalAmount") Long deliveryOrderId,
             @PathVariable("discountCode") String discountCode) {
         String token = jwtToken.substring(7);
         String username = jwtService.extractUsername(token);
@@ -66,7 +71,7 @@ public class UserFeatureRestController {
             String formattedDate = formatter.format(currentDate);
             bill.setBillTime(formattedDate);
             bill.setOrderId(orderId);
-            bill.setAddress(null);
+            bill.setAddress(user.get().getAddress());
             bill.setPaymentMethod(Long.valueOf(1));
             bill.setTotalAmount(totalAmount);
             billService.saveBill(bill);
@@ -80,11 +85,14 @@ public class UserFeatureRestController {
                 orderDetailService.deleteOrderDetail(orderDetail.getOrderDetailId());
             }
 
-            if(!discountCode.equals("noDiscount")){
+            if (!discountCode.equals("noDiscount")) {
                 Discount discount = discountService.getDiscountByDiscountCode(discountCode);
                 discount.setActive(false);
                 discountService.saveDiscount(discount);
             }
+            DeliveryOrder deliveryOrder = deliveryOrderService.getDeliveryOrderById(deliveryOrderId);
+            deliveryOrder.setDeliveryOrderStatusId(7);
+            deliveryOrderService.saveDeliveryOrder(deliveryOrder);
 
             MessageResponse mess = new MessageResponse("Checkout success");
             return ResponseEntity.ok(mess);
@@ -93,4 +101,26 @@ public class UserFeatureRestController {
             return ResponseEntity.ok(mess);
         }
     }
+
+    @PostMapping("/public/config-user-cart")
+    public ResponseEntity<MessageResponse> postMethodName(
+            @RequestHeader("Authorization") String jwtToken,
+            @RequestBody List<OrderDetail> listItem) {
+        MessageResponse message = new MessageResponse();
+        String jwt = jwtToken.substring(7);
+        Optional<User> user = userRepository.findByUsername(jwtService.extractUsername(jwt));
+        if (user.isPresent()) {
+            DeliveryOrder delivery = deliveryOrderService.findByCustomerId(user.get().getUserId());
+            delivery.setDeliveryOrderStatusId(2);
+            delivery.setActive(false);
+            //deliveryOrderService.saveDeliveryOrder(delivery);
+
+            message.setMessage("Success");
+            return ResponseEntity.ok(message);
+        } else {
+            message.setMessage("False");
+            return ResponseEntity.ok(message);
+        }
+    }
+
 }

@@ -91,23 +91,26 @@ public class DeliveryOrderRestController {
     @GetMapping("/public/user/getCartByUser")
     public ResponseEntity<DeliveryOrder> getUserCart(
             @RequestHeader("Authorization") String jwtToken) {
+
         String username = jwtService.extractUsername(jwtToken.substring(7));
         Optional<User> userByToken = userService.findByUsername(username);
-        Optional<DeliveryOrderType> type = deliveryOrderTypeService.getDeliveryOrderTypeByName("Delivery Order");
-        Optional<DeliveryOrder> cart = deliveryOrderService.getDeliveryOrdersByUserIdAndTypeAndActive(
-                userByToken.get().getUserId(), type.get().getDeliveryOrderTypeId(), true);
+
+        Optional<DeliveryOrder> cart = deliveryOrderService.getDeliveryOrdersByUserIdAndTypeAndActiveAndDeliveryRestaurantId(
+                userByToken.get().getUserId(), 1, true, userByToken.get().getRestaurantBranchId());
+
         if (userByToken.isEmpty()) {
             return ResponseEntity.ok(null);
-        } else if (type.isEmpty()) {
-            return ResponseEntity.ok(null);
-        } else if (cart.isPresent()) {
+        }
+        else if (cart.isPresent()) {
             // Sử dụng cart đang có trạng thái true
             return ResponseEntity.ok(cart.get());
         } else {
             // Khi không có cart nào true thì sẽ tạo mới
             DeliveryOrder newCart = new DeliveryOrder();
+            newCart.setDeliveryOrderStatusId(1); 
+            newCart.setDeliveryRestaurantId(userByToken.get().getRestaurantBranchId());
             newCart.setCustomerId(userByToken.get().getUserId());
-            newCart.setDeliveryOrderTypeId(type.get().getDeliveryOrderTypeId());
+            newCart.setDeliveryOrderTypeId(1);
             newCart.setActive(true);
             deliveryOrderService.saveDeliveryOrder(newCart);
             System.out.println("cart new");
