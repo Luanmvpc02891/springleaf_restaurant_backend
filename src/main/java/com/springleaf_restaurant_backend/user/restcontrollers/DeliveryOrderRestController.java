@@ -88,6 +88,27 @@ public class DeliveryOrderRestController {
     }
 
     // Load thông tin giỏ hàng user
+    @GetMapping("/public/user/getAllCartByUser")
+    public ResponseEntity<List<DeliveryOrder>> getAllUserCart(
+            @RequestHeader("Authorization") String jwtToken) {
+
+        String username = jwtService.extractUsername(jwtToken.substring(7));
+        Optional<User> userByToken = userService.findByUsername(username);
+
+        List<DeliveryOrder> cart = deliveryOrderService.getDeliveryOrdersByUserIdAndTypeAndActive(
+            userByToken.get().getUserId(), 1, true);
+
+        if (userByToken.isEmpty()) {
+            return ResponseEntity.ok(null);
+        }
+        if (cart != null) {
+            return ResponseEntity.ok(cart);
+        } else {
+            return ResponseEntity.ok(null);
+        }
+    }
+
+    // Load thông tin giỏ hàng user
     @GetMapping("/public/user/getCartByUser")
     public ResponseEntity<DeliveryOrder> getUserCart(
             @RequestHeader("Authorization") String jwtToken) {

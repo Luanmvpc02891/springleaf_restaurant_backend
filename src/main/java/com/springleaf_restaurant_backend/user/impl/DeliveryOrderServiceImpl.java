@@ -45,7 +45,7 @@ public class DeliveryOrderServiceImpl implements DeliveryOrderService {
     } 
 
     @Override
-    public Optional<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActive(Long userId, Integer deliveryOrderTypeId, boolean active) {
+    public List<DeliveryOrder> getDeliveryOrdersByUserIdAndTypeAndActive(Long userId, Integer deliveryOrderTypeId, boolean active) {
         return deliveryOrderRepository.findByCustomerIdAndDeliveryOrderTypeIdAndActive(userId, deliveryOrderTypeId , active);
     }
 
