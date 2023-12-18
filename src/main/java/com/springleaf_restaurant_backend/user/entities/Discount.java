@@ -13,11 +13,8 @@ public class Discount {
     @Column(name = "discount_id")
     private Integer discountId;
 
-    @Column(name = "menu_item_id")
-    private Long menuItemId;
-
-    @Column(name = "discount_type")
-    private String discountType;
+    @Column(name = "limit_value")
+    private Double limitValue;
 
     @Column(name = "discount_value")
     private Integer discountValue;
