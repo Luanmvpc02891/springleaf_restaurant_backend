@@ -78,7 +78,16 @@ public class ReservationRestController {
 
     @PostMapping("/public/create/reservation")
     public Reservation createReservation(@RequestBody Reservation reservation) {
-        return reservationService.saveReservation(reservation);
+        Reservation newReservation = reservationService.saveReservation(reservation);
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formattedDate = dateFormat.format(date);
+        Order order = new Order();
+        order.setReservationId(newReservation.getReservationId());
+        order.setStatus(true);
+        order.setOrderDate(formattedDate);
+        orderService.saveOrder(order);
+        return newReservation;
     }
 
     @PutMapping("/public/update/reservation")
@@ -144,16 +153,6 @@ public class ReservationRestController {
                             list.remove(item);
                             break;
                         }
-                        // else {
-                        // // Nếu orderDetail chưa có
-                        // OrderDetail orderDetail = new OrderDetail();
-                        // orderDetail.setMenuItemId(item.getMenuItemId());
-                        // orderDetail.setOrderId(orderUser.getOrderId());
-                        // orderDetail.setQuantity(item.getQuantity());
-                        // orderDetailService.saveOrderDetail(orderDetail);
-                        // System.out.println("3");
-                        // break;
-                        // }
                     }
                 }
                 for (OrderDetail item : list) {
@@ -176,11 +175,10 @@ public class ReservationRestController {
 
     @PostMapping("/public/create/getOrderByReservation")
     public ResponseEntity<List<OrderDetail>> getOrderByReservation(
-        @RequestHeader("Authorization") String jwtToken,
-        @RequestBody Long reservationId
-    ){
+            @RequestHeader("Authorization") String jwtToken,
+            @RequestBody Long reservationId) {
         Optional<Order> order = orderService.getOrdersByReservationId(reservationId);
-        if(order.isPresent()){
+        if (order.isPresent()) {
             List<OrderDetail> orderDetails = orderDetailService.getOrderDetailsByOrderId(order.get().getOrderId());
             return ResponseEntity.ok(orderDetails);
         }

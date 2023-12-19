@@ -32,4 +32,13 @@ public class Reservation {
     @Column(name = "reservation_status_name")
     private String reservationStatusName;
 
+    @Column(name = "reservation_order_status")
+    private Boolean reservationOrderStatus;
+
+    @Column(name = "username")
+    private String username;
+
+    @Column(name = "userPhone")
+    private String userPhone;
+
 }
