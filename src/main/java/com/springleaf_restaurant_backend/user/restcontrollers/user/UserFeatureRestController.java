@@ -55,7 +55,7 @@ public class UserFeatureRestController {
             @RequestBody List<OrderDetail> listItem,
             @PathVariable("orderId") Long orderId,
             @PathVariable("totalAmount") Double totalAmount,
-            @PathVariable("totalAmount") Long deliveryOrderId,
+            @PathVariable("deliveryOrderId") Long deliveryOrderId,
             @PathVariable("discountCode") String discountCode) {
         String token = jwtToken.substring(7);
         String username = jwtService.extractUsername(token);
@@ -91,7 +91,8 @@ public class UserFeatureRestController {
                 discountService.saveDiscount(discount);
             }
             DeliveryOrder deliveryOrder = deliveryOrderService.getDeliveryOrderById(deliveryOrderId);
-            deliveryOrder.setDeliveryOrderStatusId(7);
+            System.out.println(deliveryOrderId + "Delivery Order: " + deliveryOrder.getDeliveryOrderId());
+            deliveryOrder.setDeliveryOrderStatusId(6);
             deliveryOrderService.saveDeliveryOrder(deliveryOrder);
 
             MessageResponse mess = new MessageResponse("Checkout success");

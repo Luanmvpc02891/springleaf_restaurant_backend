@@ -107,14 +107,12 @@ public class VNpayRestController {
         String[] orderInfoArray = orderInfo.split(",");
         if (orderInfoArray.length > 0) {
             // Lấy giá trị đầu tiên và gán vào biến
-            Long orderId = Long.parseLong(orderInfoArray[0]);
+            Long orderId = Long.parseLong(orderInfoArray[1]);
 
             // Tạo danh sách để lưu các giá trị còn lại
-            List<Long> orderDetailIds = Arrays.asList(orderInfoArray)
-                    .stream()
-                    .skip(1) // Bỏ qua phần tử đầu tiên
-                    .map(Long::parseLong) // Chuyển đổi từ chuỗi sang số
-                    .collect(Collectors.toList());
+            List<Long> orderDetailIds = Arrays.stream(orderInfoArray, 2, orderInfoArray.length)
+            .map(Long::parseLong) // Chuyển đổi từ chuỗi sang số
+            .collect(Collectors.toList());
 
             Bill bill = new Bill();
             bill.setUserId(null);
