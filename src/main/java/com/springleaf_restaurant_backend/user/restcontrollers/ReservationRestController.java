@@ -113,7 +113,7 @@ public class ReservationRestController {
             @RequestBody List<OrderDetail> listMenuItems) {
         MessageResponse message = new MessageResponse();
         Date date = new Date();
-        
+
         String jwt = jwtToken.substring(7);
         String userName = jwtService.extractUsername(jwt);
         Optional<User> user = userService.findByUsername(userName);
@@ -122,7 +122,7 @@ public class ReservationRestController {
             Optional<Order> orderByReservation = orderService.getOrdersByReservationId(reservationId);
             if (orderByReservation.isPresent() && orderByReservation.get().isStatus()) {
                 orderUser = orderByReservation.get();
-            } 
+            }
             List<OrderDetail> listDetail = orderDetailService.getOrderDetailsByOrderId(orderUser.getOrderId());
             if (listDetail.size() <= 0) {
                 for (OrderDetail menuItem : listMenuItems) {
@@ -132,7 +132,7 @@ public class ReservationRestController {
                     orderDetail.setQuantity(menuItem.getQuantity());
                     orderDetailService.saveOrderDetail(orderDetail);
                 }
-                
+
                 return null;
             } else {
                 List<OrderDetail> list = listMenuItems;
@@ -176,6 +176,30 @@ public class ReservationRestController {
             return ResponseEntity.ok(orderDetails);
         }
         return ResponseEntity.ok(null);
+    }
+
+    @PostMapping("/public/create/orderDetail/reservationOrder/{reservationId}")
+    public String addOrderDetail(
+            @RequestHeader("Authorization") String jwtToken,
+            @RequestBody List<OrderDetail> listOrderDetail,
+            @PathVariable("reservationId") Long reservationId
+    ) {
+
+        Optional<Order> order = orderService.getOrdersByReservationId(reservationId);
+        if(order.isPresent()){
+            order.get();
+            for (OrderDetail orderDetail : listOrderDetail) {
+                System.out.println(orderDetail.getMenuItemId());
+                OrderDetail newOrderDetail = new OrderDetail();
+                newOrderDetail.setMenuItemId(orderDetail.getMenuItemId());
+                newOrderDetail.setOrderId(order.get().getOrderId());
+                newOrderDetail.setQuantity(orderDetail.getQuantity());
+                orderDetailService.saveOrderDetail(newOrderDetail);
+            }
+            return "Success";
+        }
+
+        return null;
     }
 
     @PostMapping("/public/create/sendMail")
