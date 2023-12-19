@@ -253,13 +253,21 @@ public class ReservationRestController {
 
     private void updateReservationStatus(List<Reservation> reservations) {
         for (Reservation reservation : reservations) {
-            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate());
+            String outTime = reservation.getOutTime();
+            Integer isCurrentBefore = checkDateTime(reservation.getReservationDate(), outTime);
             String resevationStatusName = reservation.getReservationStatusName();
             if ("Đã sử dụng xong".equalsIgnoreCase(resevationStatusName)) {
                 continue;
             } else if ("Đã hủy".equalsIgnoreCase(resevationStatusName)) {
                 continue;
             } else if ("Đang sử dụng".equalsIgnoreCase(resevationStatusName)) {
+                if (isCurrentBefore == 4) {
+                    continue;
+                } else if (isCurrentBefore == 5) {
+                    reservation.setReservationStatusName("Hết thời gian dùng");
+                    updateReservation(reservation);
+                }
+            } else if ("Hết thời gian dùng".equalsIgnoreCase(resevationStatusName)) {
                 continue;
             } else if ("Hết thời gian đợi".equalsIgnoreCase(resevationStatusName)) {
                 continue;
@@ -280,7 +288,7 @@ public class ReservationRestController {
         }
     }
 
-    Integer checkDateTime(String reservationDateTime) {
+    Integer checkDateTime(String reservationDateTime, String outTime) {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -291,7 +299,14 @@ public class ReservationRestController {
             // Lấy ngày giờ hiện tại
             LocalDateTime currentDateTime = LocalDateTime.now();
 
-            // LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
+            if (!outTime.isEmpty()) {
+                LocalDateTime outTime1 = LocalDateTime.parse(outTime, formatter);
+                if (currentDateTime.compareTo(outTime1) < 0) {
+                    return 4;
+                } else {
+                    return 5;
+                }
+            }
 
             // So sánh ngày giờ
             int comparisonResult = currentDateTime.compareTo(dateTime1);
