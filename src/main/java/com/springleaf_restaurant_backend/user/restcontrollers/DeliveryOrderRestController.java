@@ -87,7 +87,7 @@ public class DeliveryOrderRestController {
         deliveryOrderService.deleteDeliveryOrder(deliveryOrderId);
     }
 
-    // Load thông tin giỏ hàng user
+    // Lấy toàn bộ thông tin giỏ hàng của user chưa thanh toán
     @GetMapping("/public/user/getAllCartByUser")
     public ResponseEntity<List<DeliveryOrder>> getAllUserCart(
             @RequestHeader("Authorization") String jwtToken) {
@@ -108,10 +108,33 @@ public class DeliveryOrderRestController {
         }
     }
 
+    @DeleteMapping("/public/delete/cancelDeliveryOrder")
+    public ResponseEntity<MessageResponse> postMethodName(
+        @RequestHeader("Authorization") String jwtToken,
+        @RequestBody DeliveryOrder deliveryOrder
+    ) {
+        String username = jwtService.extractUsername(jwtToken.substring(7));
+        Optional<User> userByToken = userService.findByUsername(username);
+
+        MessageResponse message = new MessageResponse();
+        
+        if(deliveryOrder.getDeliveryOrderStatusId() == 4){
+            message.setMessage("Cannot cancel");
+            return ResponseEntity.ok(message);
+        }else{
+            deliveryOrderService.deleteDeliveryOrder(deliveryOrder.getDeliveryOrderId());
+            message.setMessage("Succes cancel");
+            return ResponseEntity.ok(message);
+        }
+        
+    }
+    
+
     // Load thông tin giỏ hàng user
     @GetMapping("/public/user/getCartByUser")
     public ResponseEntity<DeliveryOrder> getUserCart(
-            @RequestHeader("Authorization") String jwtToken) {
+            @RequestHeader("Authorization") String jwtToken
+        ) {
 
         String username = jwtService.extractUsername(jwtToken.substring(7));
         Optional<User> userByToken = userService.findByUsername(username);
@@ -122,7 +145,7 @@ public class DeliveryOrderRestController {
         if (userByToken.isEmpty()) {
             return ResponseEntity.ok(null);
         }
-        else if (cart.isPresent()) {
+        else if (cart.isPresent() && cart.get().isActive()) {
             // Sử dụng cart đang có trạng thái true
             return ResponseEntity.ok(cart.get());
         } else {
@@ -132,6 +155,7 @@ public class DeliveryOrderRestController {
             newCart.setDeliveryRestaurantId(userByToken.get().getRestaurantBranchId());
             newCart.setCustomerId(userByToken.get().getUserId());
             newCart.setDeliveryOrderTypeId(1);
+            newCart.setDeliveryAddress(userByToken.get().getAddress());
             newCart.setActive(true);
             deliveryOrderService.saveDeliveryOrder(newCart);
             System.out.println("cart new");
@@ -143,6 +167,7 @@ public class DeliveryOrderRestController {
     public ResponseEntity<Order> getOrderByUser(
             @RequestHeader("Authorization") String jwtToken,
             @RequestBody Long deliveryOrderId) {
+                System.out.println("ve day");
         Optional<Order> order = orderService.getOrdersByDeliveryOrderId(deliveryOrderId);
         if (order.isPresent() && order.get().isStatus()) {
             return ResponseEntity.ok(order.get());

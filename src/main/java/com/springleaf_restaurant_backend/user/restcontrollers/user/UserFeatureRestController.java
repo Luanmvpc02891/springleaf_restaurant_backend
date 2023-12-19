@@ -110,10 +110,10 @@ public class UserFeatureRestController {
         String jwt = jwtToken.substring(7);
         Optional<User> user = userRepository.findByUsername(jwtService.extractUsername(jwt));
         if (user.isPresent()) {
-            DeliveryOrder delivery = deliveryOrderService.findByCustomerId(user.get().getUserId());
+            DeliveryOrder delivery = deliveryOrderService.findByCustomerIdAndDeliveryRestaurantId(user.get().getUserId(), user.get().getRestaurantBranchId());
             delivery.setDeliveryOrderStatusId(2);
             delivery.setActive(false);
-            //deliveryOrderService.saveDeliveryOrder(delivery);
+            deliveryOrderService.saveDeliveryOrder(delivery);
 
             message.setMessage("Success");
             return ResponseEntity.ok(message);
