@@ -76,9 +76,17 @@ public class VNpayRestController {
         paymentDetails.put("transactionId", transactionId);
         paymentDetails.put("totalPrice", totalPrice);
         if (paymentStatus == 1) {
-            if(orderInfo != null){
+            String paymentStyle = "";
+            String[] orderInfoArray = orderInfo.split(",");
+            if (orderInfoArray.length > 0) {
+                paymentStyle = orderInfoArray[0];
+            }
+            if(paymentStyle.equals("CartPayment")){
                 orderMethod(orderInfo, Double.valueOf(totalPrice));
             }
+            // else if(paymentStyle.equals("PayCostOrderTable")){
+            //     orderMethod(orderInfo, Double.valueOf(totalPrice));
+            // }
             
             String queryString = "?paymentStatus="
                     + URLEncoder.encode((String) paymentDetails.get("paymentStatus"), StandardCharsets.UTF_8.toString())
@@ -96,23 +104,16 @@ public class VNpayRestController {
     }
 
     public void orderMethod(String orderInfo, Double totalAmount) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>>>>>" + orderInfo);
         String[] orderInfoArray = orderInfo.split(",");
         if (orderInfoArray.length > 0) {
             // Lấy giá trị đầu tiên và gán vào biến
-            Long orderId = Long.parseLong(orderInfoArray[0]);
+            Long orderId = Long.parseLong(orderInfoArray[1]);
 
             // Tạo danh sách để lưu các giá trị còn lại
-            List<Long> orderDetailIds = Arrays.asList(orderInfoArray)
-                    .stream()
-                    .skip(1) // Bỏ qua phần tử đầu tiên
-                    .map(Long::parseLong) // Chuyển đổi từ chuỗi sang số
-                    .collect(Collectors.toList());
+            List<Long> orderDetailIds = Arrays.stream(orderInfoArray, 2, orderInfoArray.length)
+            .map(Long::parseLong) // Chuyển đổi từ chuỗi sang số
+            .collect(Collectors.toList());
 
-            // Bây giờ firstNumber chứa giá trị đầu tiên, và remainingNumbers chứa các giá
-            // trị còn lại
-            System.out.println("First Number: " + orderId);
-            System.out.println("Remaining Numbers: " + orderDetailIds);
             Bill bill = new Bill();
             bill.setUserId(null);
             bill.setOrderId(orderId);
@@ -134,6 +135,9 @@ public class VNpayRestController {
         } else {
             // Xử lý trường hợp mảng rỗng (nếu cần)
         }
+    }
+
+    public void paymentCostOrderTableMethod(String orderInfo, Double totalAmount){
 
     }
 
