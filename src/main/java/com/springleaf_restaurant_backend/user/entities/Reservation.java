@@ -41,4 +41,7 @@ public class Reservation {
     @Column(name = "userPhone")
     private String userPhone;
 
+    @Column(name = "reservation_deposit")
+    private Double reservationDeposit;
+
 }

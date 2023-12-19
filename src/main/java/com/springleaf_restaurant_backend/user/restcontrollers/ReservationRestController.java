@@ -113,8 +113,7 @@ public class ReservationRestController {
             @RequestBody List<OrderDetail> listMenuItems) {
         MessageResponse message = new MessageResponse();
         Date date = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String formattedDate = dateFormat.format(date);
+        
         String jwt = jwtToken.substring(7);
         String userName = jwtService.extractUsername(jwt);
         Optional<User> user = userService.findByUsername(userName);
@@ -123,13 +122,7 @@ public class ReservationRestController {
             Optional<Order> orderByReservation = orderService.getOrdersByReservationId(reservationId);
             if (orderByReservation.isPresent() && orderByReservation.get().isStatus()) {
                 orderUser = orderByReservation.get();
-            } else {
-                // Tạo order mới khi bàn chưa có order
-                orderUser.setReservationId(reservationId);
-                orderUser.setOrderDate(formattedDate);
-                orderUser.setStatus(true);
-                orderService.saveOrder(orderUser);
-            }
+            } 
             List<OrderDetail> listDetail = orderDetailService.getOrderDetailsByOrderId(orderUser.getOrderId());
             if (listDetail.size() <= 0) {
                 for (OrderDetail menuItem : listMenuItems) {
@@ -139,7 +132,7 @@ public class ReservationRestController {
                     orderDetail.setQuantity(menuItem.getQuantity());
                     orderDetailService.saveOrderDetail(orderDetail);
                 }
-                System.out.println("1");
+                
                 return null;
             } else {
                 List<OrderDetail> list = listMenuItems;
