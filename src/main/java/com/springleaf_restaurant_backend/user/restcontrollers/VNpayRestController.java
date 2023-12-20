@@ -97,7 +97,8 @@ public class VNpayRestController {
                     "&totalPrice=" + URLEncoder.encode(totalPrice, StandardCharsets.UTF_8.toString());
 
             // Chuyển hướng với query parameter
-            response.sendRedirect("http://localhost:4200/user/index/" + queryString);
+            //response.sendRedirect("http://localhost:4200/user/index/" + queryString);
+            response.sendRedirect("https://springleafrestaurant.onrender.com/user/index/" + queryString);
         } else {
 
         }
