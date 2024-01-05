@@ -231,6 +231,8 @@ public class DeliveryOrderRestController {
         List<OrderDetail> listOrderDetail = orderDetailService.getOrderDetailsByOrderId(orderId);
         for (OrderDetail orderDetail : listOrderDetail) {
             if (orderDetail.getMenuItemId() == menuItemId) {
+                orderDetail.setQuantity(orderDetail.getQuantity() + 1);
+                orderDetailService.saveOrderDetail(orderDetail);
                 message.setMessage("MenuItem in cart");
                 return ResponseEntity.ok(message);
             }
