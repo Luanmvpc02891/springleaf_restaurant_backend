@@ -31,6 +31,12 @@ public class AuthenticationController {
         return ResponseEntity.ok(service.register(request));
     }
 
+    @PostMapping("/register2")
+    public ResponseEntity<AuthenticationResponse> register2(
+            @RequestBody RegisterRequest request) throws Exception {
+        return ResponseEntity.ok(service.register2(request));
+    }
+
     @PostMapping("/access-code")
     public ResponseEntity<String> accessCode(@RequestParam String email, @RequestParam String typeCode) {
         System.out.println(typeCode);

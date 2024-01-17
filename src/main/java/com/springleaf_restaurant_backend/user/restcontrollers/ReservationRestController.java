@@ -184,7 +184,7 @@ public class ReservationRestController {
             @RequestBody List<OrderDetail> listOrderDetail,
             @PathVariable("reservationId") Long reservationId
     ) {
-
+        System.out.println("về tới đây");
         Optional<Order> order = orderService.getOrdersByReservationId(reservationId);
         if(order.isPresent()){
             order.get();
