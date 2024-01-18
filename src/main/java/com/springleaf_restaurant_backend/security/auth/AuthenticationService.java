@@ -85,6 +85,46 @@ public class AuthenticationService {
     }
   }
 
+  public AuthenticationResponse register2(RegisterRequest request) throws Exception {
+    User existingUserByEmail = userRepository.findByEmail(request.getEmail());
+    Optional<User> existingUserByUsername = userRepository.findByUsername(request.getUsername());
+    Role role = roleRepository.findByRoleName("USER");
+    
+    if (existingUserByEmail != null) {
+      return AuthenticationResponse.builder()
+          .error("User with this email already exists")
+          .build();
+    } else if (existingUserByUsername.isPresent()) {
+      return AuthenticationResponse.builder()
+            .error("User with this username already exists")
+            .build();
+    } else if(role == null){
+      return AuthenticationResponse.builder()
+            .error("Role not found")
+            .build();
+    }else{
+          var user = User.builder()
+            .username(request.getUsername())
+            .password(passwordEncoder.encode(request.getPassword()))
+            .fullName(request.getFullName())
+            .email(request.getEmail())
+            .phone(request.getPhone())
+            .image(null)
+            .status(true)
+            .build();
+          var savedUser = userRepository.save(user);
+          var jwtToken = jwtService.generateToken(user);
+          saveUserToken(savedUser, jwtToken);
+          UserRole ur = new UserRole();
+          ur.setRoleId(role.getRoleId());
+          ur.setUserId(user.getUserId());
+          userRoleService.createUserRole(ur);
+          return AuthenticationResponse.builder()
+              .accessToken(jwtToken)
+              .build();
+    }
+  }
+
   public String accessCode(String email, String typeCode){
     User existingUserByEmail = userRepository.findByEmail(email);
     if (existingUserByEmail != null && typeCode.equals("register")) {
