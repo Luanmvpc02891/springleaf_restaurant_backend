@@ -2,7 +2,9 @@ package com.springleaf_restaurant_backend.user.restcontrollers;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,6 +117,9 @@ public class VNpayRestController {
             .map(Long::parseLong) // Chuyển đổi từ chuỗi sang số
             .collect(Collectors.toList());
 
+            Date date = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String formattedDate = dateFormat.format(date);
             Bill bill = new Bill();
             bill.setUserId(null);
             bill.setOrderId(orderId);
@@ -122,7 +127,7 @@ public class VNpayRestController {
             bill.setTotalAmount(totalAmount);
             bill.setAddress(null);
             bill.setBankNumber(null);
-            bill.setBillTime(null);
+            bill.setBillTime(formattedDate);
             billService.saveBill(bill);
             BillDetail billDetail = new BillDetail();
             for (Long long1 : orderDetailIds) {
